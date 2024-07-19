@@ -40,7 +40,8 @@ export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
               hashedPassword: hash,
             },
           });
-        } else {
+        }
+         else {
           const isMatch = bcrypt.compareSync(
             credentials.password as string,
             user.hashedPassword

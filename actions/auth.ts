@@ -4,6 +4,8 @@ import { signIn, signOut } from "@/auth";
 import { db } from "@/db";
 import { AuthError } from "next-auth";
 import { revalidatePath } from "next/cache";
+import toast from "react-hot-toast";
+import { NextResponse } from "next/server";
 
 const getUserByEmail = async (email: string) => {
     try {
@@ -55,4 +57,5 @@ export const loginWithCreds = async (formData: FormData) => {
         throw error;
     }
     revalidatePath("/");
+    return NextResponse.json({ msg: "Login Successful." }, { status: 400 })
 };
