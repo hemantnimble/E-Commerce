@@ -1,8 +1,14 @@
-import Image from "next/image";
+'use client'
+import { UserDetails } from "@/actions/auth";
+import { auth } from "@/auth";
 import Link from "next/link";
-import toast, { Toaster } from "react-hot-toast";
+import { useEffect, useState } from "react";
+import { Toaster } from "react-hot-toast";
+import { useSession } from "next-auth/react";
+import AllProducts from "@/components/AllProducts";
 
 export default function Home() {
+  const session = useSession()
   return (
     <main>
       <Toaster />
@@ -10,6 +16,14 @@ export default function Home() {
       <Link href="/signin">
         <button>SignIn</button>
       </Link>
+      {session && (
+        <p>
+          name: {session?.data?.user?.name}
+          <br />
+          email: {session?.data?.user?.email}
+        </p>
+      )}
+      <AllProducts/>
     </main>
   );
 }
