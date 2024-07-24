@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
         const body = await req.json();
         console.log('Request body:', body); // Log request body
         const { id } = body; // Extract `id` from the body
-        const deleteUser = await prisma.user.delete({
+        const deleteUser = await prisma.products.delete({
             where: { id },
         });
         return NextResponse.json(deleteUser, { status: 200 });
