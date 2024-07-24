@@ -10,7 +10,7 @@ import AllProducts from "@/components/AllProducts";
 export default function Home() {
   const session = useSession()
   return (
-    <main>
+    <main className="flex flex-col gap-5">
       <Toaster />
       <p>Landing Page</p>
       <Link href="/signin">
@@ -23,7 +23,13 @@ export default function Home() {
           email: {session?.data?.user?.email}
         </p>
       )}
-      <AllProducts/>
+      <AllProducts />
+      <Link href="/add">
+        <button>Add Products</button>
+      </Link>
+      <Link href="/updateproduct">
+        <button>Update Products</button>
+      </Link>
     </main>
   );
 }

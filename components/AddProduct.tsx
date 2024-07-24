@@ -1,83 +1,78 @@
-import React from 'react';
-import { useFormik } from 'formik';
+'use client'
+import axios from 'axios'
+import React from 'react'
+import { useForm, SubmitHandler } from "react-hook-form"
 
-// A custom validation function. This must return an object
-// which keys are symmetrical to our values/initialValues
-const validate = (values: { firstName: string | any[]; lastName: string | any[]; email: string; }) => {
-    const errors: { firstName?: string; lastName?: string; email?: string; } = {};
+type Inputs = {
+    title: string
+    price: number
+}
 
-    if (!values.firstName) {
-        errors.firstName = 'Required';
-    } else if (values.firstName.length > 15) {
-        errors.firstName = 'Must be 15 characters or less';
+function AddProduct() {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<Inputs>()
+
+    const onSubmit: SubmitHandler<Inputs> = (data) => {
+        console.log('Form data:', data);
+        axios.post("/api/products/add", data)
+            .then(response => {
+                console.log('API response:', response);
+                if (response.status === 200) {
+                    alert('Product added successfully!');
+                }else if(response.status === 500) {
+                    alert('Failed to add product. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
     }
-
-    if (!values.lastName) {
-        errors.lastName = 'Required';
-    } else if (values.lastName.length > 20) {
-        errors.lastName = 'Must be 20 characters or less';
-    }
-
-    if (!values.email) {
-        errors.email = 'Required';
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-        errors.email = 'Invalid email address';
-    }
-
-    return errors;
-};
-
-const AddProduct = () => {
-    // Pass the useFormik() hook initial form values, a validate function that will be called when
-    // form values change or fields are blurred, and a submit function that will
-    // be called when the form is submitted
-    const formik = useFormik({
-        initialValues: {
-            firstName: '',
-            lastName: '',
-            email: '',
-        },
-        validate,
-        onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
-        },
-    });
     return (
-        <form onSubmit={formik.handleSubmit}>
-            <label htmlFor="firstName">First Name</label>
-            <input
-                id="firstName"
-                name="firstName"
-                type="text"
-                onChange={formik.handleChange}
-                value={formik.values.firstName}
-            />
-            {formik.errors.firstName ? <div>{formik.errors.firstName}</div> : null}
+        <>
+            <h1 className='text-xl'>Add New Product</h1>
+            <form onSubmit={handleSubmit(onSubmit)} className='w-[30rem] py-6 px-10'>
+                <div>
+                    <label htmlFor="title" className="block text-sm font-medium leading-6 text-gray-900">
+                        Enter Title/Name
+                    </label>
+                    <div className="mt-2">
+                        <input {...register("title", { required: true })}
+                            id="title"
+                            name="title"
+                            type="text"
+                            required
+                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                    </div>
+                </div>
+                <div>
+                    <label htmlFor="price" className="block text-sm font-medium leading-6 text-gray-900">
+                        Enter Price
+                    </label>
+                    <div className="mt-2">
+                        <input {...register("price", { required: true })}
+                            id="price"
+                            name="price"
+                            type="number"
+                            required
+                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                    </div>
+                </div>
+                <div>
+                    <button
+                        type="submit"
+                        className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    >
+                        Add Now
+                    </button>
+                </div>
+            </form>
+        </>
+    )
+}
 
-            <label htmlFor="lastName">Last Name</label>
-            <input
-                id="lastName"
-                name="lastName"
-                type="text"
-                onChange={formik.handleChange}
-                value={formik.values.lastName}
-            />
-            {formik.errors.lastName ? <div>{formik.errors.lastName}</div> : null}
-
-            <label htmlFor="email">Email Address</label>
-            <input
-                id="email"
-                name="email"
-                type="email"
-                onChange={formik.handleChange}
-                value={formik.values.email}
-            />
-            {formik.errors.email ? <div>{formik.errors.email}</div> : null}
-
-            <button type="submit">Submit</button>
-        </form>
-    );
-};
-
-
-export default AddProduct;
+export default AddProduct

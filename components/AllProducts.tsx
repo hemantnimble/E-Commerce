@@ -17,7 +17,7 @@ function AllProducts() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get<{ products: Product[] }>("/api/products")
+        const response = await axios.get<{ products: Product[] }>("/api/products/getproducts")
         // console.log("Response data:", response.data) 
         setProducts(response.data.products)
       } catch (error) {
