@@ -1,5 +1,6 @@
 'use client'
 import axios from 'axios';
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 
 interface Product {
@@ -26,21 +27,9 @@ function UpdateProduct() {
     }, [])
 
     const handleDelete = async (id: string) => {
-        try {
-            const response = await axios.post(
-                "/api/products/delete",
-                { id },
-                {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            );
-            console.log('Delete response:', response.data);
-        } catch (error) {
-            console.error("Error deleting product:", error);
-        }
+        const deleteProduct = await axios.post("/api/products/delete", { id })
     }
+
     return (
         <>
             <h1>
@@ -50,7 +39,9 @@ function UpdateProduct() {
                         <div key={item.id}>
                             <h2>{item.title}</h2>
                             <p>{item.price}</p>
-                            <button className='mr-6 text-blue-700'>Update</button>
+                            <Link href={`/updateproduct/${item.id}`}>
+                                <button className='mr-6 text-blue-700'>Update</button>
+                            </Link>
                             <button onClick={() => handleDelete(item.id)} className='text-red-600'>Delete</button>
                         </div>
                     ))

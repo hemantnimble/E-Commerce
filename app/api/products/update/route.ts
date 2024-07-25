@@ -1,28 +1,25 @@
 import { PrismaClient } from "@prisma/client";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-    if (req.method === "PUT") {
-        const { id, title, price } = req.body;
+export async function PUT(req: NextRequest, res: NextResponse) {
+    const { id, title, price } = await req.json();
 
-        try {
-            const updatedProduct = await prisma.products.update({
-                where: {
-                    id: id,
-                },
-                data: {
-                    title,
-                    price,
-                },
-            });
-            res.status(200).json(updatedProduct);
-        } catch (error: any) {
-            res.status(500).json({ error: error.message });
-        }
-    } else {
-        res.setHeader('Allow', ['PUT']);
-        res.status(405).end(`Method ${req.method} Not Allowed`);
+    try {
+        const updatedProduct = await prisma.products.update({
+            where: {
+                id: id,
+            },
+            data: {
+                title,
+                price,
+            },
+        });
+        return NextResponse.json(updatedProduct, { status: 200 });
+    } catch (error: any) {
+        return NextResponse.json({ error: error.message }, { status: 500 })
     }
+
 };
