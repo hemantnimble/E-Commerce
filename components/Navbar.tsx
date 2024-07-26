@@ -16,7 +16,10 @@ import {
   TabPanel,
   TabPanels,
 } from '@headlessui/react'
-import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon,UserIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon, UserIcon } from '@heroicons/react/24/outline'
+import Link from 'next/link'
+import { useSession } from 'next-auth/react'
+import Cart from './Cart'
 
 const navigation = {
   categories: [
@@ -143,7 +146,11 @@ const navigation = {
 
 export default function Example() {
   const [open, setOpen] = useState(false)
-
+  const [cartModal, setCartModal] = useState(false)
+  const session = useSession();
+  const handleOpen = () => {
+    setCartModal(prevState => !prevState)
+  }
   return (
     <div className="bg-white">
       {/* Mobile menu */}
@@ -282,14 +289,14 @@ export default function Example() {
 
               {/* Logo */}
               <div className="ml-4 flex lg:ml-0">
-                <a href="#">
+                <Link href="/">
                   <span className="sr-only">Your Company</span>
                   <img
                     alt=""
                     src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
                     className="h-8 w-auto"
                   />
-                </a>
+                </Link>
               </div>
 
               {/* Flyout menus */}
@@ -376,13 +383,22 @@ export default function Example() {
 
               <div className="ml-auto flex items-center">
                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                <UserIcon
-                      aria-hidden="true"
-                      className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                    />
-                  <a href="#" className="text-sm font-medium text-gray-700 hover:text-gray-800">
-                    Sign in
-                  </a>
+                  {session.data ? (
+
+                    <Link className='flex' href='/profile'>
+                      <UserIcon
+                        aria-hidden="true"
+                        className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                      />
+                      {session && (
+                        <p>{session?.data?.user?.name}</p>
+                      )}
+                    </Link>
+                  ) : (
+                    <Link href="/signin" className="text-sm font-medium text-gray-700 hover:text-gray-800">
+                      Sign in
+                    </Link>
+                  )}
                   <span aria-hidden="true" className="h-6 w-px bg-gray-200" />
                 </div>
 
@@ -396,14 +412,22 @@ export default function Example() {
 
                 {/* Cart */}
                 <div className="ml-4 flow-root lg:ml-6">
-                  <a href="#" className="group -m-2 flex items-center p-2">
-                    <ShoppingBagIcon
+                  <Link href="" className="group -m-2 flex items-center p-2">
+                    <ShoppingBagIcon onClick={handleOpen}
                       aria-hidden="true"
-                      className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                      className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500 relative"
                     />
+                    {
+                      cartModal && (
+                        <div className='absolute top-8 right-8 z-10' >
+                          <Cart />
+                        </div>
+                      )
+                    }
+
                     <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
                     <span className="sr-only">items in cart, view bag</span>
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

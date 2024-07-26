@@ -30,8 +30,7 @@ function AllProducts() {
   }, [])
 
   return (
-    <div>
-      <h1>All Products</h1>
+    <div className="flex flex-wrap">
       {products.length > 0 ? (
         products.map(item => (
           <Card key={item.id} item={item}></Card>
