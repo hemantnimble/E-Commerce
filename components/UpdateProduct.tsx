@@ -2,6 +2,7 @@
 import axios from 'axios';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
+import Card from './Card';
 
 interface Product {
     id: string;
@@ -37,8 +38,7 @@ function UpdateProduct() {
                 {products.length > 0 ? (
                     products.map(item => (
                         <div key={item.id}>
-                            <h2>{item.title}</h2>
-                            <p>{item.price}</p>
+                            <Card item={item}></Card>
                             <Link href={`/updateproduct/${item.id}`}>
                                 <button className='mr-6 text-blue-700'>Update</button>
                             </Link>

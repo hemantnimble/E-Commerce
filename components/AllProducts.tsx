@@ -2,6 +2,7 @@
 
 import axios from "axios"
 import { useState, useEffect } from "react"
+import Card from "./Card";
 
 interface Product {
   id: string;
@@ -33,10 +34,7 @@ function AllProducts() {
       <h1>All Products</h1>
       {products.length > 0 ? (
         products.map(item => (
-          <div key={item.id}>
-            <h2>{item.title}</h2>
-            <p>{item.price}</p>
-          </div>
+          <Card key={item.id} item={item}></Card>
         ))
       ) : (
         <p>Loading products...</p>
