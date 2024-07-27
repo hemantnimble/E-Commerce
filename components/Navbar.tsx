@@ -426,7 +426,7 @@ export default function Example() {
                     }
 
                     <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
-                    <span className="sr-only">items in cart, view bag</span>
+                    <span className="sr-only">items in cart, view your bag</span>
                   </Link>
                 </div>
               </div>
