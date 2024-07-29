@@ -146,11 +146,8 @@ const navigation = {
 
 export default function Example() {
   const [open, setOpen] = useState(false)
-  const [cartModal, setCartModal] = useState(false)
   const session = useSession();
-  const handleOpen = () => {
-    setCartModal(prevState => !prevState)
-  }
+
   return (
     <div className="bg-white">
       {/* Mobile menu */}
@@ -412,19 +409,11 @@ export default function Example() {
 
                 {/* Cart */}
                 <div className="ml-4 flow-root lg:ml-6">
-                  <Link href="" className="group -m-2 flex items-center p-2">
-                    <ShoppingBagIcon onClick={handleOpen}
+                  <Link href="/cart" className="group -m-2 flex items-center p-2">
+                    <ShoppingBagIcon
                       aria-hidden="true"
                       className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500 relative"
                     />
-                    {
-                      cartModal && (
-                        <div className='absolute top-8 right-8 z-10' >
-                          <Cart />
-                        </div>
-                      )
-                    }
-
                     <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
                     <span className="sr-only">items in cart, view your bag</span>
                   </Link>
