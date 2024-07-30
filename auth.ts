@@ -12,6 +12,11 @@ export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
     Credentials({
       name: "Credentials",
       credentials: {
+        name: {
+          label: "Name",
+          type: "text",
+          placeholder: "name",
+        },
         email: {
           label: "Email",
           type: "email",
@@ -23,7 +28,7 @@ export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
         if (!credentials || !credentials.email || !credentials.password) {
           return null;
         }
-
+        const name = credentials.name as string;
         const email = credentials.email as string;
         const hash = saltAndHashPassword(credentials.password);
 
@@ -36,6 +41,7 @@ export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
         if (!user) {
           user = await db.user.create({
             data: {
+              name,
               email,
               hashedPassword: hash,
             },

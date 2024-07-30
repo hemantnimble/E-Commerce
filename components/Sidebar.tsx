@@ -1,5 +1,5 @@
 // components/Sidebar.tsx
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import React, { useState } from 'react';
 
 interface SidebarProps {
@@ -12,6 +12,9 @@ const Sidebar: React.FC<SidebarProps> = ({ setActiveTab, activeTab }) => {
     
     const handleTabClick = (tab: string) => {
         setActiveTab(tab);
+    };
+    const handleSignout = () => {
+        signOut();
     };
 
     return (
@@ -59,6 +62,12 @@ const Sidebar: React.FC<SidebarProps> = ({ setActiveTab, activeTab }) => {
                             className={`mt-5 cursor-pointer border-l-2 px-2 py-2 font-semibold transition ${activeTab === 'integrations' ? 'border-l-blue-700 text-blue-700' : 'border-transparent hover:border-l-blue-700 hover:text-blue-700'}`}
                         >
                             Integrations
+                        </li>
+                        <li
+                            onClick={handleSignout}
+                            className={`mt-5 cursor-pointer border-l-2 px-2 py-2 font-semibold transition ${activeTab === 'integrations' ? 'border-l-blue-700 text-blue-700' : 'border-transparent hover:border-l-blue-700 hover:text-blue-700'}`}
+                        >
+                            Sign Out 
                         </li>
                     </ul>
                 </div>
