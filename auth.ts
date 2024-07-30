@@ -1,9 +1,9 @@
-import NextAuth from "next-auth"
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import Credentials from "next-auth/providers/credentials"
-import bcrypt from "bcryptjs"
-import { db } from "./db"
-import { saltAndHashPassword } from "./utils/helper"
+import NextAuth from "next-auth";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import Credentials from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
+import { db } from "./db";
+import { saltAndHashPassword } from "./utils/helper";
 
 export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(db),
@@ -20,9 +20,9 @@ export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
         email: {
           label: "Email",
           type: "email",
-          placeholder: "sdshjdhsj"
+          placeholder: "email"
         },
-        password: { label: "Password", type: "password", }
+        password: { label: "Password", type: "password" }
       },
       authorize: async (credentials) => {
         if (!credentials || !credentials.email || !credentials.password) {
@@ -46,8 +46,7 @@ export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
               hashedPassword: hash,
             },
           });
-        }
-        else {
+        } else {
           const isMatch = bcrypt.compareSync(
             credentials.password as string,
             user.hashedPassword
@@ -64,7 +63,7 @@ export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
   callbacks: {
     session: async ({ session, token }) => {
       if (session?.user) {
-        session.user.id = token.sub;
+        session.user.id = token.sub as string; // Ensure token.sub is a string
       }
       return session;
     },
@@ -75,5 +74,4 @@ export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
       return token;
     },
   },
-
-})
+});
