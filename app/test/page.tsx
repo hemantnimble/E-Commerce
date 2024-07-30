@@ -2,15 +2,13 @@
 import {  useSession } from 'next-auth/react';
 import axios from 'axios';
 
-const fetchUserData = async () => {
-    const session = await useSession();
+const fetchUserData =  () => {
+    const session =  useSession();
     async function handleApi() {
 
         if (session) {
             try {
-                const response = await axios.post('/api/cart/add', {
-                    user: session.data?.user?.id, // Pass the session user data
-                });
+                const response =  axios.get('/api/cart/get');
 
                 console.log('Server response:', response.data);
             } catch (error) {

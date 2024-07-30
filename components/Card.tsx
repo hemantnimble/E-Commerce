@@ -1,7 +1,5 @@
 import axios from 'axios'
-import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
 interface Item {
     id: string
     price: string,
@@ -9,11 +7,10 @@ interface Item {
 }
 
 function Card({ item }: { item: Item }) {
-    const session = useSession()
    
     const handleCart = async (productId: string) => {
         try {
-            const response = await axios.post("/api/cart/add", { productId, quantity: 1 ,userId:session.data?.user?.id})
+            const response = await axios.post("/api/cart/add", { productId, quantity: 1})
             console.log(response.data)
         } catch (error) {
             console.error('Error adding to cart:', error)
