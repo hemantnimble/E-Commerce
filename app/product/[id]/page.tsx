@@ -11,7 +11,7 @@ interface Product {
     updatedAt: string;
 }
 
-function page() {
+function Page() {
     const params = useParams<{ id: string }>()
     const id = params?.id;
     const [product, setProduct] = useState<Product | null>(null);
@@ -173,4 +173,4 @@ function page() {
     )
 }
 
-export default page
+export default Page
