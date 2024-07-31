@@ -16,27 +16,23 @@ export async function POST(req: NextRequest) {
     const { productId, quantity } = await req.json();
 
     try {
-        // const adCart = await prisma.cartItem.upsert({
-        //     where: {
-        //         userId_productId: {
-        //             userId,
-        //             productId,
-        //         },
-        //     },
-        //     update: {
-        //         quantity: {
-        //             increment: quantity,
-        //         },
-        //     },
-        //     create: {
-        //         userId,
-        //         productId,
-        //         quantity,
-        //     },
-        // });
-        const adCart = await prisma.cartItem.findMany({
-          where: { userId }, // Filter cart items by the logged-in user's ID
-          include: { product: true }, // Include product details if needed
+        const adCart = await prisma.cartItem.upsert({
+            where: {
+                userId_productId: {
+                    userId,
+                    productId,
+                },
+            },
+            update: {
+                quantity: {
+                    increment: quantity,
+                },
+            },
+            create: {
+                userId,
+                productId,
+                quantity,
+            },
         });
         return NextResponse.json({ adCart }, { status: 200 });
 
