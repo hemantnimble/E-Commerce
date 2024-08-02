@@ -106,6 +106,7 @@ model Products {
   id        String     @id @default(auto()) @map("_id") @db.ObjectId
   title     String?    @unique
   price     String?
+  category String?
   cartItems CartItem[] @relation("ProductCartItems")
 
   createdAt DateTime @default(now())
