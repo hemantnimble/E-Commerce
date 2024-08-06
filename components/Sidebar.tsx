@@ -18,7 +18,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setActiveTab, activeTab }) => {
     };
 
     return (
-        <div className="mx-4 max-w-screen-xl sm:mx-8 xl:mx-auto">
+        <div className="mx-4 max-w-[180px] overflow-hidden sm:mx-8 xl:mx-auto">
             <h1 className="border-b py-6 text-4xl font-semibold">
                 {session && (
                     <p>{session?.data?.user?.name}</p>

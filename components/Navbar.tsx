@@ -400,7 +400,18 @@ export default function Example() {
                 </div>
 
                 {/* Search */}
+
                 <div className="flex lg:ml-6">
+                  <div className="mr-3">
+                    <input
+                      id="category"
+                      placeholder='search'
+                      name="category"
+                      type="text"
+                      required
+                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    />
+                  </div>
                   <a href="#" className="p-2 text-gray-400 hover:text-gray-500">
                     <span className="sr-only">Search</span>
                     <MagnifyingGlassIcon aria-hidden="true" className="h-6 w-6" />
