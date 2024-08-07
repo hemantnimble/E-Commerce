@@ -409,8 +409,8 @@ export default function Example() {
                     {products &&
                       <div >
                         {products.map((product) => (
-                          <Link href={`/product/${product.id}`}>
-                            <div className='absolute z-10 bg-white w-full border border-gray-300 rounded mt-2 py-3 px-6 shadow-md' key={product.id}>
+                          <Link key={product.id} href={`/product/${product.id}`}>
+                            <div className='absolute z-10 bg-white w-full border border-gray-300 rounded mt-2 py-3 px-6 shadow-md' >
                               <h2>{product.title}</h2>
                               <p>${product.price}</p>
                             </div>
