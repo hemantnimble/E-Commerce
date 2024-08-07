@@ -19,8 +19,7 @@ import {
 import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon, UserIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
-import Cart from './Cart'
-
+import SearchBar from "@/components/Searchbar"
 const navigation = {
   categories: [
     {
@@ -147,6 +146,9 @@ const navigation = {
 export default function Example() {
   const [open, setOpen] = useState(false)
   const session = useSession();
+  const [products, setProducts] = useState<any[]>([]);
+  
+
 
   return (
     <div className="bg-white">
@@ -402,15 +404,20 @@ export default function Example() {
                 {/* Search */}
 
                 <div className="flex lg:ml-6">
-                  <div className="mr-3">
-                    <input
-                      id="category"
-                      placeholder='search'
-                      name="category"
-                      type="text"
-                      required
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    />
+                  <div className='relative' >
+                    <SearchBar onSearch={setProducts} />
+                    {products &&
+                      <div >
+                        {products.map((product) => (
+                          <Link href={`/product/${product.id}`}>
+                            <div className='absolute z-10 bg-white w-full border border-gray-300 rounded mt-2 py-3 px-6 shadow-md' key={product.id}>
+                              <h2>{product.title}</h2>
+                              <p>${product.price}</p>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    }
                   </div>
                   <a href="#" className="p-2 text-gray-400 hover:text-gray-500">
                     <span className="sr-only">Search</span>
