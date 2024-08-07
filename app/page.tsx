@@ -35,14 +35,13 @@ export default function Home() {
           </div>
         </section>
         <section className="py-12 md:py-16 lg:py-20">
-          <div className="container">
+          <div className=" w-full">
             <div className="mb-8 text-center">
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Featured Products</h2>
               <p className="mt-4 text-muted-foreground">Discover our latest fashion collections.</p>
             </div>
             <div className="">
             <AllProducts />
-
             </div>
           </div>
         </section>
