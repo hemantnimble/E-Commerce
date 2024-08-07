@@ -16,7 +16,7 @@ interface Product {
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC ?? '');
 
-function page() {
+function Page() {
     const params = useParams<{ id: string }>()
     const id = params?.id;
     const [product, setProduct] = useState<Product | null>(null);
@@ -46,4 +46,4 @@ function page() {
     )
 }
 
-export default page
+export default Page
