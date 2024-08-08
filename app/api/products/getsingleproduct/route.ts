@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { NextResponse, NextRequest } from "next/server";
 const prisma = new PrismaClient();
-
+export const dynamic = 'force-dynamic';
 export async function POST(req: NextRequest) {
     try {
         const { id } = await req.json(); // Parse the JSON body of the request
