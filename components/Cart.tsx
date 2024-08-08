@@ -29,15 +29,11 @@ export default function CartPage() {
                 const items = response.data;
                 setCartItems(items);
 
-                // Calculate the total price
                 const total = items.reduce((sum: number, item: CartItem) => {
-                    const price = parseFloat(item.product.price); // Convert price to number
-                    return sum + price * item.quantity; // Multiply price by quantity and add to sum
+                    const price = parseFloat(item.product.price); 
+                    return sum + price * item.quantity; 
                 }, 0);
-
                 setTotalPrice(total);
-
-                // Set cart items in local storage
                 localStorage.setItem('cartItems', JSON.stringify(items));
             } catch (error) {
                 console.error('Error fetching cart items:', error);
@@ -45,7 +41,6 @@ export default function CartPage() {
                 setLoading(false);
             }
         };
-
         fetchCartItems();
     }, []);
 

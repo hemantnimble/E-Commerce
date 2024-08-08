@@ -24,7 +24,6 @@ function Page() {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [totalPrice, setTotalPrice] = useState<number>(0);
 
-    // Fetch cart items from localStorage
     useEffect(() => {
         const fetchProducts = async () => {
             try {
@@ -39,20 +38,19 @@ function Page() {
         fetchProducts();
     }, []);
 
-    // Calculate total price whenever cartItems changes
     useEffect(() => {
-        console.log("Cart Items for price calculation:", cartItems);
+        // console.log("Cart Items for price calculation:", cartItems);
         const total = cartItems.reduce((sum: number, item: CartItem) => {
-            const price = parseFloat(item.product.price); // Convert price to number
-            return sum + price * item.quantity; // Multiply price by quantity and add to sum
+            const price = parseFloat(item.product.price); 
+            return sum + price * item.quantity;
         }, 0);
 
         setTotalPrice(total);
     }, [cartItems]);
 
     const amount = totalPrice ?? 1;
-    console.log('totalprice', totalPrice);
-    console.log('cartitems', cartItems);
+    // console.log('totalprice', totalPrice);
+    // console.log('cartitems', cartItems);
     return (
         <Elements stripe={stripePromise}
             options={{
