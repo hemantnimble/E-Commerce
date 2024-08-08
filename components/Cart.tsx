@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
@@ -20,28 +20,30 @@ interface CartItem {
 export default function CartPage() {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [totalPrice, setTotalPrice] = useState<number>(0);
-
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchCartItems = async () => {
             try {
                 const response = await axios.get('/api/cart/get');
-                setCartItems(response.data);
+                const items = response.data;
+                setCartItems(items);
 
                 // Calculate the total price
-                const total = response.data.reduce((sum: number, item: CartItem) => {
+                const total = items.reduce((sum: number, item: CartItem) => {
                     const price = parseFloat(item.product.price); // Convert price to number
                     return sum + price * item.quantity; // Multiply price by quantity and add to sum
                 }, 0);
 
                 setTotalPrice(total);
+
+                // Set cart items in local storage
+                localStorage.setItem('cartItems', JSON.stringify(items));
             } catch (error) {
                 console.error('Error fetching cart items:', error);
             } finally {
                 setLoading(false);
             }
-
         };
 
         fetchCartItems();
@@ -52,7 +54,6 @@ export default function CartPage() {
     }
 
     return (
-
         <div className="mx-auto mt-8 max-w-2xl md:mt-12">
             <div className="bg-slate-100 shadow">
                 <div className="px-4 py-6 sm:px-8 sm:py-10">
@@ -74,7 +75,7 @@ export default function CartPage() {
                                                 <div className="sm:order-1">
                                                     <div className="mx-auto flex h-8 items-stretch text-gray-600">
                                                         <button className="flex items-center justify-center rounded-l-md bg-gray-200 px-4 transition hover:bg-black hover:text-white">-</button>
-                                                        <div className="flex w-full items-center justify-center bg-gray-100 px-4 text-xs uppercase transition">1</div>
+                                                        <div className="flex w-full items-center justify-center bg-gray-100 px-4 text-xs uppercase transition">{item.quantity}</div>
                                                         <button className="flex items-center justify-center rounded-r-md bg-gray-200 px-4 transition hover:bg-black hover:text-white">+</button>
                                                     </div>
                                                 </div>
@@ -104,10 +105,10 @@ export default function CartPage() {
                     </div>
                     <div className="mt-6 flex items-center justify-between">
                         <p className="text-sm font-medium text-gray-900">Total</p>
-                        <p className="text-2xl font-semibold text-gray-900"><span className="text-xs font-normal text-gray-400">USD</span> {totalPrice+8}</p>
+                        <p className="text-2xl font-semibold text-gray-900"><span className="text-xs font-normal text-gray-400">USD</span> {totalPrice}</p>
                     </div>
                     <div className="mt-6 text-center">
-                        <Link href="/checkout">
+                        <Link href={`/checkout`}>
                             <button type="button" className="group inline-flex w-full items-center justify-center rounded-md bg-gray-900 px-6 py-4 text-lg font-semibold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800">
                                 Checkout
                                 <svg xmlns="http://www.w3.org/2000/svg" className="group-hover:ml-8 ml-4 h-6 w-6 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
