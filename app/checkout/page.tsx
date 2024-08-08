@@ -41,6 +41,7 @@ function Page() {
 
     // Calculate total price whenever cartItems changes
     useEffect(() => {
+        console.log("Cart Items for price calculation:", cartItems);
         const total = cartItems.reduce((sum: number, item: CartItem) => {
             const price = parseFloat(item.product.price); // Convert price to number
             return sum + price * item.quantity; // Multiply price by quantity and add to sum
