@@ -27,10 +27,6 @@ function AllProducts() {
     }
 
     fetchProducts();
-    // Optionally, add a polling mechanism to re-fetch periodically
-    const interval = setInterval(fetchProducts, 60000); // Fetch every 60 seconds
-
-    return () => clearInterval(interval); // Cleanup on unmount
   }, [])
 
   return (
