@@ -50,7 +50,7 @@ function Page() {
     }, [cartItems]);
 
     const amount = totalPrice ?? 1;
-    // console.log('totalprice', totalPrice);
+    console.log('totalprice', totalPrice);
     // console.log('cartitems', cartItems);
     return (
         <Elements stripe={stripePromise}
