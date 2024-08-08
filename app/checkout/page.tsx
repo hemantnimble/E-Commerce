@@ -39,7 +39,7 @@ function Page() {
     }, []);
 
     useEffect(() => {
-        // console.log("Cart Items for price calculation:", cartItems);
+        console.log("Cart Items for price calculation:", cartItems);
         const total = cartItems.reduce((sum: number, item: CartItem) => {
             const price = parseFloat(item.product.price); 
             return sum + price * item.quantity;
