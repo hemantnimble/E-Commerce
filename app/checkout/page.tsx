@@ -26,7 +26,7 @@ function Page() {
 
     useEffect(() => {
         const fetchProducts = async () => {
-            const savedCartItems = await localStorage.getItem('cartItems');
+            const savedCartItems = localStorage.getItem('cartItems');
             try {
                 if (savedCartItems) {
                     setCartItems(JSON.parse(savedCartItems));
@@ -59,7 +59,7 @@ function Page() {
                 currency: "usd",
             }}
         >
-            <CheckoutPage amount={amount} />
+            <CheckoutPage />
         </Elements>
     )
 }

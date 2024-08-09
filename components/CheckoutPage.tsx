@@ -2,65 +2,104 @@
 import React, { useEffect, useState } from 'react'
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js'
 import convertToSubcurrency from '@/utils/convertToSubcurrency';
+import axios from 'axios';
 
-function CheckoutPage({ amount }: { amount: number }) {
+interface Product {
+    id: string;
+    title: string;
+    price: string;
+}
+
+interface CartItem {
+    id: string;
+    quantity: number;
+    createdAt: string;
+    updatedAt: string;
+    product: Product;
+}
+
+function CheckoutPage() {
     const stripe = useStripe();
     const elements = useElements();
     const [errorMessage, setErrorMessage] = useState<string>();
-    const [clientSecret, setClientSecret] = useState("");
-    const [loading, setLoading] = useState(false);
+    const [clientSecret, setClientSecret] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
+    const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const [totalPrice, setTotalPrice] = useState<number>(0);
 
+    // Fetch cart items and calculate total price
     useEffect(() => {
-        fetch("/api/paymentIntent", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ amount: convertToSubcurrency(amount) }),
-        })
-            .then((res) => res.json())
-            .then((data) => setClientSecret(data.clientSecret));
-    }, [amount]);
+        const fetchCartItems = async () => {
+            try {
+                const response = await axios.get('/api/cart/get');
+                const items = response.data as CartItem[];
+                setCartItems(items);
+                
+                const total = items.reduce((sum, item) => {
+                    const price = parseFloat(item.product.price);
+                    return sum + price * item.quantity;
+                }, 0);
+                
+                setTotalPrice(total);
+
+                // Create PaymentIntent
+                const paymentIntentResponse = await fetch("/api/paymentIntent", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ amount: convertToSubcurrency(total) }),
+                });
+
+                const paymentIntentData = await paymentIntentResponse.json();
+                setClientSecret(paymentIntentData.clientSecret);
+            } catch (error) {
+                console.error('Error fetching cart items:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchCartItems();
+    }, []);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setLoading(true);
+
         if (!stripe || !elements) {
+            setErrorMessage("Stripe.js has not loaded yet.");
+            setLoading(false);
             return;
         }
-        const { error: submitError } = await elements.submit();
+
+        const { error: submitError } = await stripe.confirmPayment({
+            elements,
+            clientSecret,
+            confirmParams: {
+                return_url: `${process.env.NEXT_PUBLIC_RETURN_URL}/profile`,
+            },
+        });
+
         if (submitError) {
             setErrorMessage(submitError.message);
             setLoading(false);
             return;
         }
-        const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+
+        // Create the order
         const response = await fetch('/api/orders/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({  paymentIntentId: clientSecret, cartItems }),
+            body: JSON.stringify({ paymentIntentId: clientSecret, cartItems }),
         });
 
-        const returnUrl = process.env.NEXT_PUBLIC_RETURN_URL;
-        const { error } = await stripe.confirmPayment({
-            elements,
-            clientSecret,
-            confirmParams: {
-                return_url: `${returnUrl}/profile`,
-            },
-        });
-
-        if (error) {
-            setErrorMessage(error.message);
-        } else {}
         const data = await response.json();
-        if (data.success) {
-            console.log('data',data)
-        } else {
+        if (!data.success) {
             setErrorMessage('Failed to create order');
         }
+
         setLoading(false);
     };
 
@@ -89,7 +128,7 @@ function CheckoutPage({ amount }: { amount: number }) {
                 disabled={!stripe || loading}
                 className="text-white w-full p-5 bg-black mt-2 rounded-md font-bold disabled:opacity-50 disabled:animate-pulse"
             >
-                {!loading ? `Pay $${amount}` : "Processing..."}
+                {!loading ? `Pay $${totalPrice.toFixed(2)}` : "Processing..."}
             </button>
         </form>
     )
