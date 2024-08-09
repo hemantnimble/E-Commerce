@@ -38,14 +38,24 @@ function CheckoutPage({ amount }: { amount: number }) {
             setLoading(false);
             return;
         }
-        
+        const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+
+        // Send order creation request to the server
+        const response = await fetch('/api/orders/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({  paymentIntentId: clientSecret, cartItems }),
+        });
+
         const returnUrl = process.env.NEXT_PUBLIC_RETURN_URL;
 
         const { error } = await stripe.confirmPayment({
             elements,
             clientSecret,
             confirmParams: {
-                return_url: `${returnUrl}/payment-success?amount=${amount}`,
+                return_url: `${returnUrl}/profile`,
             },
         });
         if (error) {
@@ -56,6 +66,16 @@ function CheckoutPage({ amount }: { amount: number }) {
             //  The payment UI automatically closes with a success animation.
             //  Your customer is redirected to your`return_url`.
         }
+
+       
+        const data = await response.json();
+        if (data.success) {
+            console.log('data',data)
+            // Handle successful order creation (e.g., redirect or show a success message)
+        } else {
+            setErrorMessage('Failed to create order');
+        }
+
         setLoading(false);
     };
 

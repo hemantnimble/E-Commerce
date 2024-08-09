@@ -36,6 +36,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ adCart }, { status: 200 });
 
     } catch (err:any) {
+        console.log(err)
         return NextResponse.json({ message: err.message }, { status: 500 });
     }
 }

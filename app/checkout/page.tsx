@@ -18,13 +18,11 @@ interface CartItem {
     updatedAt: string;
     product: Product;
 }
-
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC ?? '');
 
 function Page() {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [totalPrice, setTotalPrice] = useState<number>(0);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -35,23 +33,20 @@ function Page() {
                 }
             } catch (error) {
                 console.error("Error fetching products:", error);
-            } finally {
-                setIsLoading(false);
             }
         }
         fetchProducts();
     }, []);
 
     useEffect(() => {
-        if (!isLoading) {
-            const total = cartItems.reduce((sum: number, item: CartItem) => {
-                const price = parseFloat(item.product.price); // Convert price to number
-                return sum + price * item.quantity; // Multiply price by quantity and add to sum
-            }, 0);
+        console.log("Cart Items for price calculation:", cartItems);
+        const total = cartItems.reduce((sum: number, item: CartItem) => {
+            const price = parseFloat(item.product.price); 
+            return sum + price * item.quantity;
+        }, 0);
 
-            setTotalPrice(total);
-        }
-    }, [cartItems, isLoading]);
+        setTotalPrice(total);
+    }, [cartItems]);
 
     const amount = totalPrice ?? 1;
     console.log('totalprice', totalPrice);

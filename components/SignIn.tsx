@@ -7,11 +7,6 @@ import { useRouter } from 'next/navigation';
 
 export default function LoginForm() {
 
-    // useEffect(() => {
-    //     signOut({
-    //         redirect: false,
-    //     });
-    // }, [])
     const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
