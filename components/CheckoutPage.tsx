@@ -73,8 +73,8 @@ function CheckoutPage({ amount, cartItems }: { amount: number, cartItems: CartIt
             });
 
             const data = await response.json();
-
-            if (data.success) {
+          console.log(data)
+            if (data) {
                 console.log('Order created successfully:', data);
                 const returnUrl = process.env.NEXT_PUBLIC_RETURN_URL;
                 const { error } = await stripe.confirmPayment({
