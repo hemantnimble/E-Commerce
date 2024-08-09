@@ -24,9 +24,9 @@ function Page() {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [totalPrice, setTotalPrice] = useState<number>(0);
 
-    const savedCartItems =  localStorage.getItem('cartItems');
     useEffect(() => {
         const fetchProducts = async () => {
+            const savedCartItems = await localStorage.getItem('cartItems');
             try {
                 if (savedCartItems) {
                     setCartItems(JSON.parse(savedCartItems));
