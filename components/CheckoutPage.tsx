@@ -22,25 +22,19 @@ function CheckoutPage({ amount }: { amount: number }) {
             .then((data) => setClientSecret(data.clientSecret));
     }, [amount]);
 
-
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setLoading(true);
-
         if (!stripe || !elements) {
             return;
         }
-
         const { error: submitError } = await elements.submit();
-
         if (submitError) {
             setErrorMessage(submitError.message);
             setLoading(false);
             return;
         }
         const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
-
-        // Send order creation request to the server
         const response = await fetch('/api/orders/create', {
             method: 'POST',
             headers: {
@@ -50,7 +44,6 @@ function CheckoutPage({ amount }: { amount: number }) {
         });
 
         const returnUrl = process.env.NEXT_PUBLIC_RETURN_URL;
-
         const { error } = await stripe.confirmPayment({
             elements,
             clientSecret,
@@ -58,24 +51,16 @@ function CheckoutPage({ amount }: { amount: number }) {
                 return_url: `${returnUrl}/profile`,
             },
         });
-        if (error) {
-            //  This point is only reached if there's an immediate error when
-            //  confirming the payment.Show the error to your customer(for example, payment details incomplete)
-            setErrorMessage(error.message);
-        } else {
-            //  The payment UI automatically closes with a success animation.
-            //  Your customer is redirected to your`return_url`.
-        }
 
-       
+        if (error) {
+            setErrorMessage(error.message);
+        } else {}
         const data = await response.json();
         if (data.success) {
             console.log('data',data)
-            // Handle successful order creation (e.g., redirect or show a success message)
         } else {
             setErrorMessage('Failed to create order');
         }
-
         setLoading(false);
     };
 
