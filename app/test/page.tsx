@@ -1,49 +1,79 @@
 'use client'
-import React from 'react'
-import { Alert } from "flowbite-react";
-import { Navbar } from "flowbite-react";
 
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+
+interface Product {
+  id: string;
+  title: string;
+  price: string;
+}
+
+interface OrderItem {
+  id: string;
+  productId: string;
+  quantity: number;
+  product: Product;
+}
+
+interface Order {
+  id: string;
+  createdAt: string;
+  items: OrderItem[];
+}
+
+interface OrdersProps {
+  userId: string;
+}
 
 function page() {
-    return (
-        <Navbar
-        fluid={true}
-        rounded={true}
-      >
-        <Navbar.Brand href="https://flowbite.com/">
-          <img
-            src="https://flowbite.com/docs/images/logo.svg"
-            className="mr-3 h-6 sm:h-9"
-            alt="Flowbite Logo"
-          />
-          <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-            Flowbite
-          </span>
-        </Navbar.Brand>
-        <Navbar.Toggle />
-        <Navbar.Collapse>
-          <Navbar.Link
-            href="/navbars"
-            active={true}
-          >
-            Home
-          </Navbar.Link>
-          <Navbar.Link href="/navbars">
-            About
-          </Navbar.Link>
-          <Navbar.Link href="/navbars">
-            Services
-          </Navbar.Link>
-          <Navbar.Link href="/navbars">
-            Pricing
-          </Navbar.Link>
-          <Navbar.Link href="/navbars">
-            Contact
-          </Navbar.Link>
-        </Navbar.Collapse>
-      </Navbar>
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const fetchOrders = async () => {
+        try {
+          const response = await axios.get(`/api/orders/get`);
+          setOrders(response.data.orders);
+        } catch (error) {
+          setError('Failed to load orders');
+        } finally {
+          setLoading(false);
+        }
+      };
 
-    )
+      fetchOrders();
+    }
+    fetchProducts()
+  }, [])
+  return (
+    <div>
+      <h2>Your Orders</h2>
+      {orders.length === 0 ? (
+        <p>No orders found.</p>
+      ) : (
+        <ul>
+          {orders.map((order) => (
+            <li key={order.id}>
+              <h3>Order ID: {order.id}</h3>
+              <p>Created At: {new Date(order.createdAt).toLocaleDateString()}</p>
+              <ul>
+                {order.items.map((item) => (
+                  <li key={item.id}>
+                    <p>Product: {item.product.title}</p>
+                    <p>Quantity: {item.quantity}</p>
+                    <p>Price: ${item.product.price}</p>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+
+  )
 }
 
 export default page

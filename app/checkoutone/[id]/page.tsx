@@ -2,10 +2,10 @@
 import React, { useEffect, useState } from 'react'
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
-import CheckoutPage from '@/components/CheckoutPage';
 import convertToSubcurrency from '@/utils/convertToSubcurrency';
 import { useParams } from 'next/navigation';
 import axios from 'axios';
+import CheckoutPageSingle from '@/components/CheckoutSingle';
 interface Product {
     id: string;
     title: string;
@@ -33,6 +33,7 @@ function Page() {
         fetchProducts(id)
     }, [id])
     const amount = product?.price ?? 1;
+    const item = product 
     return (
         <Elements stripe={stripePromise}
             options={{
@@ -41,7 +42,7 @@ function Page() {
                 currency: "usd",
             }}
         >
-            <CheckoutPage amount={amount} />
+            <CheckoutPageSingle amount={amount} item ={product} />
         </Elements>
     )
 }
