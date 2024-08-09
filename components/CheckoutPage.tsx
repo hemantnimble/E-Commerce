@@ -4,12 +4,6 @@ import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js'
 import convertToSubcurrency from '@/utils/convertToSubcurrency';
 import axios from 'axios';
 
-interface Product {
-    id: string;
-    title: string;
-    price: string;
-}
-
 interface CartItem {
     id: string;
     quantity: number;
@@ -18,47 +12,38 @@ interface CartItem {
     product: Product;
 }
 
-function CheckoutPage() {
+interface Product {
+    id: string;
+    title: string;
+    price: string;
+}
+
+function CheckoutPage({ amount, cartItems }: { amount: number, cartItems: CartItem[] }) {
     const stripe = useStripe();
     const elements = useElements();
     const [errorMessage, setErrorMessage] = useState<string>();
     const [clientSecret, setClientSecret] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
-    const [cartItems, setCartItems] = useState<CartItem[]>([]);
-    const [totalPrice, setTotalPrice] = useState<number>(0);
 
     useEffect(() => {
-        const fetchCartItems = async () => {
+        const fetchPaymentIntent = async () => {
             try {
-                const response = await axios.get('/api/cart/get');
-                const items = response.data as CartItem[];
-                setCartItems(items);
-                
-                const total = items.reduce((sum, item) => {
-                    const price = parseFloat(item.product.price);
-                    return sum + price * item.quantity;
-                }, 0);
-                
-                setTotalPrice(total);
-
-                const paymentIntentResponse = await fetch("/api/paymentIntent", {
+                const response = await fetch("/api/paymentIntent", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ amount: convertToSubcurrency(total) }),
+                    body: JSON.stringify({ amount: convertToSubcurrency(amount) }),
                 });
-
-                const paymentIntentData = await paymentIntentResponse.json();
-                setClientSecret(paymentIntentData.clientSecret);
+                const data = await response.json();
+                setClientSecret(data.clientSecret);
             } catch (error) {
-                console.error('Error fetching cart items:', error);
-            } finally {
-                setLoading(false);
+                console.error("Error fetching payment intent:", error);
             }
         };
-        fetchCartItems();
-    }, []);
+
+        fetchPaymentIntent();
+    }, [amount]);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -70,7 +55,6 @@ function CheckoutPage() {
             return;
         }
 
-        // Handle form submission
         const { error: submitError } = await elements.submit();
 
         if (submitError) {
@@ -79,33 +63,36 @@ function CheckoutPage() {
             return;
         }
 
-        // Confirm the payment
-        const { error: paymentError } = await stripe.confirmPayment({
-            elements,
-            clientSecret,
-            confirmParams: {
-                return_url: `${process.env.NEXT_PUBLIC_RETURN_URL}/profile`,
-            },
-        });
+        try {
+            const response = await fetch('/api/orders/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ paymentIntentId: clientSecret, cartItems }),
+            });
 
-        if (paymentError) {
-            setErrorMessage(paymentError.message);
-            setLoading(false);
-            return;
-        }
+            const data = await response.json();
 
-        // Create the order after payment confirmation
-        const response = await fetch('/api/orders/create', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ paymentIntentId: clientSecret, cartItems }),
-        });
+            if (data.success) {
+                console.log('Order created successfully:', data);
+                const returnUrl = process.env.NEXT_PUBLIC_RETURN_URL;
+                const { error } = await stripe.confirmPayment({
+                    elements,
+                    clientSecret,
+                    confirmParams: {
+                        return_url: `${returnUrl}/profile`,
+                    },
+                });
 
-        const data = await response.json();
-        if (!data.success) {
-            setErrorMessage('Failed to create order');
+                if (error) {
+                    setErrorMessage(error.message);
+                }
+            } else {
+                setErrorMessage('Failed to create order');
+            }
+        } catch (error) {
+            setErrorMessage('An error occurred while creating the order.');
         }
 
         setLoading(false);
@@ -136,10 +123,10 @@ function CheckoutPage() {
                 disabled={!stripe || loading}
                 className="text-white w-full p-5 bg-black mt-2 rounded-md font-bold disabled:opacity-50 disabled:animate-pulse"
             >
-                {!loading ? `Pay $${totalPrice.toFixed(2)}` : "Processing..."}
+                {!loading ? `Pay $${amount}` : "Processing..."}
             </button>
         </form>
-    )
+    );
 }
 
-export default CheckoutPage
+export default CheckoutPage;

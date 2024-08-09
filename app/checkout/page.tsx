@@ -4,6 +4,9 @@ import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
 import CheckoutPage from '@/components/CheckoutPage';
 import convertToSubcurrency from '@/utils/convertToSubcurrency';
+import axios from 'axios';
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC ?? '');
 
 interface Product {
     id: string;
@@ -18,39 +21,57 @@ interface CartItem {
     updatedAt: string;
     product: Product;
 }
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC ?? '');
 
 function Page() {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [totalPrice, setTotalPrice] = useState<number>(0);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        const fetchProducts = async () => {
-            const savedCartItems = localStorage.getItem('cartItems');
+        const fetchCartItems = async () => {
             try {
-                if (savedCartItems) {
-                    setCartItems(JSON.parse(savedCartItems));
-                }
+                const response = await axios.get('/api/cart/get'); // Your API endpoint to fetch cart items
+                const items: CartItem[] = response.data;
+                setCartItems(items);
+
+                const total = items.reduce((sum: number, item: CartItem) => {
+                    const price = parseFloat(item.product.price);
+                    return sum + price * item.quantity;
+                }, 0);
+
+                setTotalPrice(total);
             } catch (error) {
-                console.error("Error fetching products:", error);
+                console.error("Error fetching cart items:", error);
+            } finally {
+                setLoading(false);
             }
         }
-        fetchProducts();
+        fetchCartItems();
     }, []);
 
-    useEffect(() => {
-        console.log("Cart Items for price calculation:", cartItems);
-        const total = cartItems.reduce((sum: number, item: CartItem) => {
-            const price = parseFloat(item.product.price); 
-            return sum + price * item.quantity;
-        }, 0);
-
-        setTotalPrice(total);
-    }, [cartItems]);
-
+    // const amount = totalPrice ?? 1; // Default to 1 if totalPrice is not available
+    // console.log(amount)
     const amount = totalPrice ?? 1;
-    console.log('totalprice', totalPrice);
-    // console.log('cartitems', cartItems);
+console.log(amount)
+console.log(cartItems)
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center">
+                <div
+                    className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
+                    role="status"
+                >
+                    <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                        Loading...
+                    </span>
+                </div>
+            </div>
+        );
+    }
+
+    if (amount === undefined) {
+        return <div>Error: Total price not available.</div>;
+    }
     return (
         <Elements stripe={stripePromise}
             options={{
@@ -59,7 +80,7 @@ function Page() {
                 currency: "usd",
             }}
         >
-            <CheckoutPage />
+            <CheckoutPage amount={amount} cartItems={cartItems} />
         </Elements>
     )
 }
