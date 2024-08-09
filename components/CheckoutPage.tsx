@@ -27,7 +27,6 @@ function CheckoutPage() {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [totalPrice, setTotalPrice] = useState<number>(0);
 
-    // Fetch cart items and calculate total price
     useEffect(() => {
         const fetchCartItems = async () => {
             try {
@@ -42,7 +41,6 @@ function CheckoutPage() {
                 
                 setTotalPrice(total);
 
-                // Create PaymentIntent
                 const paymentIntentResponse = await fetch("/api/paymentIntent", {
                     method: "POST",
                     headers: {
@@ -72,13 +70,8 @@ function CheckoutPage() {
             return;
         }
 
-        const { error: submitError } = await stripe.confirmPayment({
-            elements,
-            clientSecret,
-            confirmParams: {
-                return_url: `${process.env.NEXT_PUBLIC_RETURN_URL}/profile`,
-            },
-        });
+        // Handle form submission
+        const { error: submitError } = await elements.submit();
 
         if (submitError) {
             setErrorMessage(submitError.message);
@@ -86,7 +79,22 @@ function CheckoutPage() {
             return;
         }
 
-        // Create the order
+        // Confirm the payment
+        const { error: paymentError } = await stripe.confirmPayment({
+            elements,
+            clientSecret,
+            confirmParams: {
+                return_url: `${process.env.NEXT_PUBLIC_RETURN_URL}/profile`,
+            },
+        });
+
+        if (paymentError) {
+            setErrorMessage(paymentError.message);
+            setLoading(false);
+            return;
+        }
+
+        // Create the order after payment confirmation
         const response = await fetch('/api/orders/create', {
             method: 'POST',
             headers: {
