@@ -26,7 +26,7 @@ interface OrdersProps {
   userId: string;
 }
 
-function page() {
+function Page() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -56,7 +56,7 @@ function page() {
         <ul>
           {orders.map((order) => (
             <li key={order.id}>
-              <h3>Order ID: {order.id}</h3>
+              <h3 className='text-red-500'>Order ID: {order.id}</h3>
               <p>Created At: {new Date(order.createdAt).toLocaleDateString()}</p>
               <ul>
                 {order.items.map((item) => (
@@ -76,4 +76,4 @@ function page() {
   )
 }
 
-export default page
+export default Page

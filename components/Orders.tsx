@@ -123,12 +123,12 @@ const Orders: React.FC = () => {
         <ul>
           {orders.map((order) => (
             <li key={order.id}>
-              <h3>Order ID: {order.id}</h3>
+              <h3 className='text-red-600'>Order ID: {order.id}</h3>
               <p>Created At: {new Date(order.createdAt).toLocaleDateString()}</p>
               <ul>
                 {order.items.map((item) => (
                   <li key={item.id}>
-                    <p>Product: {item.product.title}</p>
+                    <p className='text-green-600'>Name: {item.product.title}</p>
                     <p>Quantity: {item.quantity}</p>
                     <p>Price: ${item.product.price}</p>
                   </li>
