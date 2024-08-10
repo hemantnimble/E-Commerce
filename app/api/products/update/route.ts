@@ -1,11 +1,10 @@
 import { PrismaClient } from "@prisma/client";
-import { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export async function PUT(req: NextRequest, res: NextResponse) {
-    const { id, title, price } = await req.json();
+export async function PUT(req: NextRequest) {
+    const { id, title, price, images }: { id: string, title: string, price: string, images: string[] } = await req.json();
 
     try {
         const updatedProduct = await prisma.products.update({
@@ -15,11 +14,11 @@ export async function PUT(req: NextRequest, res: NextResponse) {
             data: {
                 title,
                 price,
+                images,  
             },
         });
         return NextResponse.json(updatedProduct, { status: 200 });
     } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
-
 };

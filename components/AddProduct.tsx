@@ -3,7 +3,6 @@ import axios from 'axios'
 import React, { useState } from 'react'
 import { useForm, SubmitHandler } from "react-hook-form"
 import "@uploadthing/react/styles.css";
-
 import { UploadButton } from "@uploadthing/react";
 import { OurFileRouter } from "../app/api/uploadthing/core";
 import Link from "next/link";
@@ -60,9 +59,6 @@ function AddProduct() {
             console.error('There was an error!', error);
         }
     }
-
-
-
 
     const imgList = (
         <>
