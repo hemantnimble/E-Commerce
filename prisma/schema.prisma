@@ -86,50 +86,58 @@ model CartItem {
 }
 
 model Order {
-    id               String       @id @default(auto()) @map("_id") @db.ObjectId
-    userId           String       @db.ObjectId
-    paymentIntentId  String
-    createdAt        DateTime     @default(now())
-    updatedAt        DateTime     @updatedAt
-    items            OrderItem[]  @relation("OrderItems")
-    
-    user             User         @relation("UserOrders", fields: [userId], references: [id])
+  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String      @db.ObjectId
+  paymentIntentId String
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  items           OrderItem[] @relation("OrderItems")
+
+  user User @relation("UserOrders", fields: [userId], references: [id])
 }
 
 model OrderItem {
-    id         String   @id @default(auto()) @map("_id") @db.ObjectId
-    orderId    String   @db.ObjectId
-    productId  String   @db.ObjectId
-    quantity   Int
-    order      Order    @relation("OrderItems", fields: [orderId], references: [id])
-    product    Products @relation("ProductOrderItems", fields: [productId], references: [id])
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  orderId   String   @db.ObjectId
+  productId String   @db.ObjectId
+  quantity  Int
+  order     Order    @relation("OrderItems", fields: [orderId], references: [id])
+  product   Products @relation("ProductOrderItems", fields: [productId], references: [id])
 }
 
 model User {
-    id             String          @id @default(auto()) @map("_id") @db.ObjectId
-    name           String?
-    email          String?         @unique
-    hashedPassword String?
-    emailVerified  DateTime?
-    image          String?
-    accounts       Account[]
-    sessions       Session[]
-    roles          UserRole?       @default(ADMIN)
-    Authenticator  Authenticator[]
-    cartItems      CartItem[]      @relation("UserCartItems")
-    orders         Order[]         @relation("UserOrders")
-    createdAt      DateTime        @default(now())
-    updatedAt      DateTime        @updatedAt
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
+  name           String?
+  email          String?         @unique
+  hashedPassword String?
+  emailVerified  DateTime?
+  image          String?
+  accounts       Account[]
+  sessions       Session[]
+  roles          UserRole?       @default(ADMIN)
+  Authenticator  Authenticator[]
+  cartItems      CartItem[]      @relation("UserCartItems")
+  orders         Order[]         @relation("UserOrders")
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
 }
 
 model Products {
-    id        String     @id @default(auto()) @map("_id") @db.ObjectId
-    title     String?    @unique
-    price     String?
-    category  String?
-    cartItems CartItem[] @relation("ProductCartItems")
-    orderItems OrderItem[] @relation("ProductOrderItems")
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  id         String      @id @default(auto()) @map("_id") @db.ObjectId
+  title      String?     @unique
+  price      String?
+  category   String?
+  images     String[]
+  // images    Image[]    @relation("ProductImages")
+  cartItems  CartItem[]  @relation("ProductCartItems")
+  orderItems OrderItem[] @relation("ProductOrderItems")
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
 }
 
+// model Image {
+//     id         String    @id @default(auto()) @map("_id") @db.ObjectId
+//     url        String
+//     product    Products @relation("ProductImages", fields: [productId], references: [id])
+//     productId  String   @db.ObjectId
+// }

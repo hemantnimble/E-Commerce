@@ -1,7 +1,12 @@
 'use client'
 import axios from 'axios'
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm, SubmitHandler } from "react-hook-form"
+import "@uploadthing/react/styles.css";
+
+import { UploadButton } from "@uploadthing/react";
+import { OurFileRouter } from "../app/api/uploadthing/core";
+import Link from "next/link";
 
 type Inputs = {
     title: string
@@ -16,21 +21,67 @@ function AddProduct() {
         formState: { errors },
     } = useForm<Inputs>()
 
-    const onSubmit: SubmitHandler<Inputs> = (data) => {
-        console.log('Form data:', data);
-        axios.post("/api/products/add", data)
-            .then(response => {
-                console.log('API response:', response);
-                if (response.status === 200) {
-                    alert('Product added successfully!');
-                }else if(response.status === 500) {
-                    alert('Failed to add product. Please try again.');
-                }
-            })
-            .catch(error => {
-                console.error('There was an error!', error);
-            });
+    const [images, setImages] = useState<{
+        name: string;
+        size: number;
+        key: string;
+        serverData: {
+            uploadedBy: string;
+        };
+        url: string;
+        customId: string | null;
+        type: string;
+    }[]>([]);
+
+    const title = images.length ? (
+        <>
+            <p>Upload Complete!</p>
+            <p className="mt-2">{images.length} files</p>
+        </>
+    ) : null;
+
+    const onSubmit: SubmitHandler<Inputs> = async (data) => {
+        try {
+            // Include image URLs in the product data
+            const productData = {
+                ...data,
+                images: images.map(image => image.url), // Extract image URLs
+            };
+
+            const response = await axios.post("/api/products/add", productData);
+
+            console.log('API response:', response);
+            if (response.status === 200) {
+                alert('Product added successfully!');
+            } else if (response.status === 500) {
+                alert('Failed to add product. Please try again.');
+            }
+        } catch (error) {
+            console.error('There was an error!', error);
+        }
     }
+
+
+
+
+    const imgList = (
+        <>
+            {title}
+            <ul>
+                {images.map(image => (
+                    <li key={image.key} className="mt-2">
+                        {image.url ? (
+                            <Link href={image.url} target="_blank">
+                                {image.url}
+                            </Link>
+                        ) : (
+                            <p>URL not available</p>
+                        )}
+                    </li>
+                ))}
+            </ul>
+        </>
+    );
     return (
         <>
             <h1 className='text-xl'>Add New Product</h1>
@@ -85,6 +136,24 @@ function AddProduct() {
                         Add Now
                     </button>
                 </div>
+                <section className="flex min-h-screen flex-col items-center justify-start p-24">
+                    <UploadButton<OurFileRouter, "imageUploader">
+                        endpoint="imageUploader"
+                        onClientUploadComplete={(res: any) => {
+                            if (res) {
+                                setImages(res);
+                                const json = JSON.stringify(res);
+
+                            }
+                            alert("Upload Completed");
+                        }}
+                        onUploadError={(error: Error) => {
+                            // Do something with the error
+                            alert(`ERROR! ${error.message}`);
+                        }}
+                    />
+                    {imgList}
+                </section>
             </form>
         </>
     )
