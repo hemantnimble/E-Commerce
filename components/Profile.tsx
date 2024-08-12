@@ -10,6 +10,7 @@ const Profile: React.FC = () => {
 
           <p>{session.data?.user?.name}</p>
           <p>{session.data?.user?.email}</p>
+          <img src={`${session.data?.user?.image}`} alt="" />
         </div>
       )}
     </div>
