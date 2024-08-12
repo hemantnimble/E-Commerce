@@ -128,16 +128,8 @@ model Products {
   price      String?
   category   String?
   images     String[]
-  // images    Image[]    @relation("ProductImages")
   cartItems  CartItem[]  @relation("ProductCartItems")
   orderItems OrderItem[] @relation("ProductOrderItems")
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
 }
-
-// model Image {
-//     id         String    @id @default(auto()) @map("_id") @db.ObjectId
-//     url        String
-//     product    Products @relation("ProductImages", fields: [productId], references: [id])
-//     productId  String   @db.ObjectId
-// }
