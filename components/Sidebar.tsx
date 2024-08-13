@@ -9,12 +9,18 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ setActiveTab, activeTab }) => {
     const session = useSession();
-    
+
     const handleTabClick = (tab: string) => {
         setActiveTab(tab);
     };
     const handleSignout = () => {
-        signOut();
+        try {
+            signOut();
+            alert('Signed out successfully');
+        } catch (err) {
+            console.error('Error signing out: ', err);
+            alert('Error signing out');
+        }
     };
 
     return (
@@ -67,7 +73,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setActiveTab, activeTab }) => {
                             onClick={handleSignout}
                             className={`mt-5 cursor-pointer border-l-2 px-2 py-2 font-semibold transition ${activeTab === 'integrations' ? 'border-l-blue-700 text-blue-700' : 'border-transparent hover:border-l-blue-700 hover:text-blue-700'}`}
                         >
-                            Sign Out 
+                            Sign Out
                         </li>
                     </ul>
                 </div>
