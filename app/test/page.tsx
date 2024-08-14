@@ -34,7 +34,7 @@ function Page() {
     const fetchProducts = async () => {
       const fetchOrders = async () => {
         try {
-          const response = await axios.get(`/api/orders/get`);
+          const response = await axios.get(`/api/admin/orders/get`);
           setOrders(response.data.orders);
         } catch (error) {
           setError('Failed to load orders');
@@ -50,7 +50,7 @@ function Page() {
   return (
     <div>
       <h2>Your Orders</h2>
-      {orders.length === 0 ? (
+      {/* {orders.length === 0 ? (
         <p>No orders found.</p>
       ) : (
         <ul>
@@ -70,7 +70,7 @@ function Page() {
             </li>
           ))}
         </ul>
-      )}
+      )} */}
     </div>
 
   )

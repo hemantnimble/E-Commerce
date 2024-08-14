@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 import { db } from "./db";
 import { saltAndHashPassword } from "./utils/helper";
 import Google from "next-auth/providers/google"
+import { UserRole } from "@prisma/client";
 
 export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(db),
@@ -67,16 +68,25 @@ export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     session: async ({ session, token }) => {
-      if (session?.user) {
-        session.user.id = token.sub as string; // Ensure token.sub is a string
+      if (token) {
+        session.user.name = token.name
+        session.user.id = token.id as string
+        session.user.email = token.email as string
+        session.user.image = token.image as string
+        session.user.roles = token.roles || [UserRole.USER]
       }
       return session;
     },
     jwt: async ({ user, token }) => {
       if (user) {
-        token.uid = user.id;
+        token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+        token.image = user.image;
+        token.roles = user.roles as UserRole;
       }
       return token;
     },
+
   },
 });

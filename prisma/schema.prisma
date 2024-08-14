@@ -114,7 +114,7 @@ model User {
   image          String?
   accounts       Account[]
   sessions       Session[]
-  roles          UserRole?       @default(ADMIN)
+  roles          UserRole?       @default(USER)
   Authenticator  Authenticator[]
   cartItems      CartItem[]      @relation("UserCartItems")
   orders         Order[]         @relation("UserOrders")
