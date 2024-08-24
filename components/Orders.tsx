@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -8,135 +8,110 @@ interface Product {
   title: string;
   price: string;
 }
+
 interface OrderItem {
   id: string;
   productId: string;
   quantity: number;
   product: Product;
 }
+
 interface Order {
   id: string;
   createdAt: string;
   items: OrderItem[];
 }
-interface OrdersProps {
-  userId: string;
-}
 
 const Orders: React.FC = () => {
-
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const fetchOrders = async () => {
-        try {
-          const response = await axios.get(`/api/orders/get`);
-          setOrders(response.data.orders);
-        } catch (error) {
-          setError('Failed to load orders');
-        } finally {
-          setLoading(false);
-        }
-      };
 
-      fetchOrders();
-    }
-    fetchProducts()
-  }, [])
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get(`/api/orders/get`);
+        setOrders(response.data.orders);
+      } catch (error) {
+        setError('Failed to load orders');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
+  console.log(orders);
 
   return (
-    // <div>
-    //   <h1>Orders</h1>
-    //   <div className="relative overflow-x-auto">
-    //     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-    //       <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-    //         <tr>
-    //           <th scope="col" className="px-6 py-3">
-    //             Product name
-    //           </th>
-    //           <th scope="col" className="px-6 py-3">
-    //             Color
-    //           </th>
-    //           <th scope="col" className="px-6 py-3">
-    //             Category
-    //           </th>
-    //           <th scope="col" className="px-6 py-3">
-    //             Price
-    //           </th>
-    //         </tr>
-    //       </thead>
-    //       <tbody>
-    //         <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-    //           <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-    //             Apple MacBook Pro 17
-    //           </th>
-    //           <td className="px-6 py-4">
-    //             Silver
-    //           </td>
-    //           <td className="px-6 py-4">
-    //             Laptop
-    //           </td>
-    //           <td className="px-6 py-4">
-    //             $2999
-    //           </td>
-    //         </tr>
-    //         <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-    //           <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-    //             Microsoft Surface Pro
-    //           </th>
-    //           <td className="px-6 py-4">
-    //             White
-    //           </td>
-    //           <td className="px-6 py-4">
-    //             Laptop PC
-    //           </td>
-    //           <td className="px-6 py-4">
-    //             $1999
-    //           </td>
-    //         </tr>
-    //         <tr className="bg-white dark:bg-gray-800">
-    //           <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-    //             Magic Mouse 2
-    //           </th>
-    //           <td className="px-6 py-4">
-    //             Black
-    //           </td>
-    //           <td className="px-6 py-4">
-    //             Accessories
-    //           </td>
-    //           <td className="px-6 py-4">
-    //             $99
-    //           </td>
-    //         </tr>
-    //       </tbody>
-    //     </table>
-    //   </div>
+    <div className="container mx-auto px-4 md:px-6 py-8">
+      <h1 className="text-2xl font-bold mb-6">Orders</h1>
 
-    // </div>
-    <div>
-      <h2>Your Orders</h2>
-      {orders.length === 0 ? (
-        <p>No orders found.</p>
-      ) : (
-        <ul>
-          {orders.map((order) => (
-            <li key={order.id}>
-              <h3 className='text-red-600'>Order ID: {order.id}</h3>
-              <p>Created At: {new Date(order.createdAt).toLocaleDateString()}</p>
-              <ul>
-                {order.items.map((item) => (
-                  <li key={item.id}>
-                    <p className='text-green-600'>Name: {item.product.title}</p>
-                    <p>Quantity: {item.quantity}</p>
-                    <p>Price: ${item.product.price}</p>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ul>
+      {/* Loading Indicator */}
+      {loading && (
+        <div className="flex justify-center items-center">
+          <div className="text-center">
+            <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full" role="status">
+              <span className="visually-hidden">.</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Error Message */}
+      {error && (
+        <div className="text-red-500 text-center mb-4">
+          {error}
+        </div>
+      )}
+
+      {/* No Orders Message */}
+      {!loading && !error && orders.length === 0 && (
+        <div className="text-center text-gray-500">
+          No orders found.
+        </div>
+      )}
+
+      {/* Orders Table */}
+      {!loading && !error && orders.length > 0 && (
+        <div className="">
+          <div>
+            <div className="overflow-x-auto">
+              <table className="w-full table-auto">
+                <thead>
+                  <tr className="bg-muted text-muted-foreground">
+                    <th className="px-4 py-3 text-left">Order #</th>
+                    <th className="px-4 py-3 text-left">Date</th>
+                    <th className="px-4 py-3 text-left">Items</th>
+                    <th className="px-4 py-3 text-right">Total</th>
+                    <th className="px-4 py-3 text-left">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {orders.map((order) => (
+                    <React.Fragment key={order.id}>
+                      {/* Order Row */}
+                      <tr className="border-b hover:bg-muted/50 cursor-pointer">
+                        <td className="px-4 py-3">{order.id}</td>
+                        <td className="px-4 py-3">{new Date(order.createdAt).toLocaleDateString()}</td>
+                        <td className="px-4 py-3">
+                          {order.items.map((item) => (
+                            <div key={item.id}>{item.product.title}</div>
+                          ))}
+                        </td>
+                        <td className="px-4 py-3 text-right">
+                          {order.items.reduce((total, item) => total + parseFloat(item.product.price), 0).toFixed(2)}
+                        </td>
+                        <td className="px-4 py-3">status</td>
+                      </tr>
+                    </React.Fragment>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
