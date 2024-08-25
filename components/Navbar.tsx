@@ -1,7 +1,7 @@
 
 'use client'
 
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import {
   Dialog,
   DialogBackdrop,
@@ -20,6 +20,7 @@ import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon, UserIcon } 
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import SearchBar from "@/components/Searchbar"
+import axios from 'axios'
 const navigation = {
   categories: [
     {
@@ -147,9 +148,24 @@ export default function Example() {
   const [open, setOpen] = useState(false)
   const session = useSession();
   const [products, setProducts] = useState<any[]>([]);
-  
+  const [cartItems, setCartItems] = useState<any[]>([]);
 
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      try {
+        const response = await axios.get('/api/cart/get');
+        // console.log(response.data.length)
+        const items = response.data.length;
+        setCartItems(items);
 
+      } catch (error) {
+        console.error('Error fetching cart items:', error);
+      } finally {
+        // setLoading(false);
+      }
+    };
+    fetchCartItems();
+  }, []);
   return (
     <div className="bg-white">
       {/* Mobile menu */}
@@ -432,7 +448,7 @@ export default function Example() {
                       aria-hidden="true"
                       className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500 relative"
                     />
-                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
+                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">{cartItems}</span>
                     <span className="sr-only">items in cart, view your bag</span>
                   </Link>
                 </div>

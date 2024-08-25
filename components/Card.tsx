@@ -1,5 +1,6 @@
 import axios from 'axios'
 import Link from 'next/link'
+import toast from 'react-hot-toast'
 interface Item {
     id: string
     price: string,
@@ -12,7 +13,8 @@ function Card({ item }: { item: Item }) {
     const handleCart = async (productId: string) => {
         try {
             const response = await axios.post("/api/cart/add", { productId, quantity: 1 })
-            console.log(response.data)
+            // console.log(response.data)
+            toast.success('Product added to cart')
         } catch (error) {
             console.error('Error adding to cart:', error)
         }
@@ -24,9 +26,6 @@ function Card({ item }: { item: Item }) {
                 <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-center text-sm font-medium text-white">39% OFF</span>
             </a>
             <div className="mt-4 px-5 pb-5">
-                {/* {session && (
-                    <p>{session?.data?.user?.name}</p>
-                )} */}
                 <Link href={`/product/${item.id}`}>
                     <h5 className="text-xl tracking-tight text-slate-900">{item.title}</h5>
                 </Link>

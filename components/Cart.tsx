@@ -34,7 +34,7 @@ export default function CartPage() {
                     return sum + price * item.quantity; 
                 }, 0);
                 setTotalPrice(total);
-                localStorage.setItem('cartItems', JSON.stringify(items));
+                // localStorage.setItem('cartItems', JSON.stringify(items));
             } catch (error) {
                 console.error('Error fetching cart items:', error);
             } finally {
