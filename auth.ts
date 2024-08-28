@@ -79,11 +79,12 @@ export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
     },
     jwt: async ({ user, token }) => {
       if (user) {
-        token.id = user.id;
-        token.name = user.name;
-        token.email = user.email;
-        token.image = user.image;
-        token.roles = user.roles as UserRole;
+        token.id = user.id || '';
+        token.name = user.name || ''; 
+        token.email = user.email || '';
+        token.image = user.image || ''; 
+        // token.roles = user.roles as UserRole;
+        token.roles = user.roles || [UserRole.USER];
       }
       return token;
     },

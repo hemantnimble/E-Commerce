@@ -1,15 +1,29 @@
+'use client'
+import { useEffect } from 'react';
+import axios from 'axios';
+import { useCart } from '@/components/CartContext';
 
-"use client"
+const Navbar = () => {
+  const { cartItems, setCartItems } = useCart();
 
-import { useState } from "react"
-
-
-export default function Component() {
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      try {
+        const response = await axios.get('/api/cart/get');
+        const items = response.data.length;
+        setCartItems(items);
+      } catch (error) {
+        console.error('Error fetching cart items:', error);
+      }
+    };
+    fetchCartItems();
+  }, []);
 
   return (
     <div>
-      <h2>Your Orders</h2>
-      
+      Cart Items: {cartItems}
     </div>
-  )
-}
+  );
+};
+
+export default Navbar;

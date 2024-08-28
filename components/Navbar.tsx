@@ -21,6 +21,7 @@ import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import SearchBar from "@/components/Searchbar"
 import axios from 'axios'
+import { useCart } from './CartContext'
 const navigation = {
   categories: [
     {
@@ -148,24 +149,22 @@ export default function Example() {
   const [open, setOpen] = useState(false)
   const session = useSession();
   const [products, setProducts] = useState<any[]>([]);
-  const [cartItems, setCartItems] = useState<any[]>([]);
+
+  const { cartItems, setCartItems } = useCart();
 
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
         const response = await axios.get('/api/cart/get');
-        // console.log(response.data.length)
         const items = response.data.length;
         setCartItems(items);
-
       } catch (error) {
         console.error('Error fetching cart items:', error);
-      } finally {
-        // setLoading(false);
       }
     };
     fetchCartItems();
   }, []);
+  
   return (
     <div className="bg-white">
       {/* Mobile menu */}

@@ -9,10 +9,9 @@ export async function GET(req: NextRequest, res: NextResponse) {
     if (!session) {
         return NextResponse.json({ message: "User not authenticated" }, { status: 401 });
     }
-    if (session.user.roles!=='ADMIN') {
-        return NextResponse.json({ message: "User not autorized" }, { status: 401 });
+    if (!session.user.roles.includes('ADMIN')) {
+        return NextResponse.json({ message: "User not authorized" }, { status: 403 });
     }
-  
 
     try {
         const orders = await prisma.orderItem.findMany({
