@@ -1,19 +1,28 @@
-// export { auth as middleware } from "@/auth";
-
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { auth } from "@/auth";
 
 const protectedRoutes = ["/profile"];
+const adminRoutes = ["/add"];
 
 export default async function middleware(request: NextRequest) {
   const session = await auth();
+  const userRole = session?.user?.roles || [];
 
   const isProtected = protectedRoutes.some((route) =>
     request.nextUrl.pathname.startsWith(route)
   );
 
-  if (!session && isProtected) {
+  const isAdminRoute = adminRoutes.some((route) =>
+    request.nextUrl.pathname.startsWith(route)
+  );
+
+  if (!session) {
+    if (isProtected || isAdminRoute) {
+      const absoluteURL = new URL("/", request.nextUrl.origin);
+      return NextResponse.redirect(absoluteURL.toString());
+    }
+  } else if (isAdminRoute && !userRole.includes("ADMIN")) {
     const absoluteURL = new URL("/", request.nextUrl.origin);
     return NextResponse.redirect(absoluteURL.toString());
   }

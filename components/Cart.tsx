@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
+import toast from 'react-hot-toast';
 
 interface Product {
     id: string;
@@ -21,28 +22,53 @@ export default function CartPage() {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [totalPrice, setTotalPrice] = useState<number>(0);
     const [loading, setLoading] = useState(true);
-
+    const fetchCartItems = async () => {
+        try {
+            const response = await axios.get('/api/cart/get');
+            const items = response.data;
+            setCartItems(items);
+            const total = items.reduce((sum: number, item: CartItem) => {
+                const price = parseFloat(item.product.price);
+                return sum + price * item.quantity;
+            }, 0);
+            setTotalPrice(total);
+        } catch (error) {
+            console.error('Error fetching cart items:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
     useEffect(() => {
-        const fetchCartItems = async () => {
-            try {
-                const response = await axios.get('/api/cart/get');
-                const items = response.data;
-                setCartItems(items);
-
-                const total = items.reduce((sum: number, item: CartItem) => {
-                    const price = parseFloat(item.product.price); 
-                    return sum + price * item.quantity; 
-                }, 0);
-                setTotalPrice(total);
-                // localStorage.setItem('cartItems', JSON.stringify(items));
-            } catch (error) {
-                console.error('Error fetching cart items:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
+        
         fetchCartItems();
     }, []);
+
+    async function handleDelete(productId: string) {
+        try {
+            const response = await axios.post('/api/cart/remove', { productId });
+            fetchCartItems();
+        } catch {
+            toast.error("Error deleting...!")
+        }
+    }
+
+    const handleQuantityChange = async (productId: string, increment: boolean) => {
+        // Implementation for quantity adjustment
+        const newQuantity = cartItems.find(item => item.product.id === productId)?.quantity ?? 0;
+        const updatedQuantity = increment ? newQuantity + 1 : Math.max(newQuantity - 1, 1);
+
+        try {
+            await axios.post('/api/cart/update', { productId, quantity: updatedQuantity });
+            // Update cartItems state to reflect the change
+            setCartItems(cartItems.map(item =>
+                item.product.id === productId
+                    ? { ...item, quantity: updatedQuantity }
+                    : item
+            ));
+        } catch (error) {
+            toast.error("Error updating quantity.");
+        }
+    };
 
     if (loading) {
         return <p>Loading...</p>;
@@ -69,15 +95,15 @@ export default function CartPage() {
                                                 <p className="shrink-0 w-20 text-base font-semibold text-gray-900 sm:order-2 sm:ml-8 sm:text-right">${item.product.price}</p>
                                                 <div className="sm:order-1">
                                                     <div className="mx-auto flex h-8 items-stretch text-gray-600">
-                                                        <button className="flex items-center justify-center rounded-l-md bg-gray-200 px-4 transition hover:bg-black hover:text-white">-</button>
+                                                        <button onClick={() => handleQuantityChange(item.product.id, false)} className="flex items-center justify-center rounded-l-md bg-gray-200 px-4 transition hover:bg-black hover:text-white">-</button>
                                                         <div className="flex w-full items-center justify-center bg-gray-100 px-4 text-xs uppercase transition">{item.quantity}</div>
-                                                        <button className="flex items-center justify-center rounded-r-md bg-gray-200 px-4 transition hover:bg-black hover:text-white">+</button>
+                                                        <button onClick={() => handleQuantityChange(item.product.id, true)} className="flex items-center justify-center rounded-r-md bg-gray-200 px-4 transition hover:bg-black hover:text-white">+</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="absolute top-0 right-0 flex sm:bottom-0 sm:top-auto">
-                                            <button type="button" className="flex rounded p-2 text-center text-gray-500 transition-all duration-200 ease-in-out focus:shadow hover:text-gray-900">
+                                            <button onClick={() => handleDelete(item.product.id)} type="button" className="flex rounded p-2 text-center text-gray-500 transition-all duration-200 ease-in-out focus:shadow hover:text-gray-900">
                                                 <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                                 </svg>
