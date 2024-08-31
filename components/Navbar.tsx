@@ -22,6 +22,7 @@ import { useSession } from 'next-auth/react'
 import SearchBar from "@/components/Searchbar"
 import axios from 'axios'
 import { useCart } from './CartContext'
+import { ShoppingCart } from "lucide-react"
 
 
 export default function Example() {
@@ -86,10 +87,10 @@ export default function Example() {
               <p className='text-lg'>Login</p>
             </Link>
           )}
-          <span className='flex gap-1 items-center'>
-            <ShoppingBagIcon className='w-6' />
-            <p className='text-lg'>Cart</p>
-          </span>
+          <Link className='flex gap-1 items-center' href='/cart'>
+            <ShoppingCart className='w-6' />
+            <p className='text-lg relative'>Cart<span className='absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center'>{cartItems}</span></p>
+          </Link>
         </div>
       </nav>
       {/* mobile searchbar  */}
