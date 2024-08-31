@@ -47,7 +47,7 @@ export default function Example() {
 
   return (
     <header className='fixed z-10 w-full'>
-      <nav className='navbar-top flex h-12 mt-3 mx-3 shadow-lg items-center justify-between bg-white rounded-full px-6 relative'>
+      <nav className='navbar-top flex h-12 mt-3 mx-3 shadow-lg items-center flex-row-reverse lg:flex-row justify-between lg:justify-between bg-white rounded-full px-6 relative'>
         <MagnifyingGlassIcon onClick={() => setOpen(true)} className='w-6 lg:hidden' />
         <div>
           <Link href='/'>LOGO HERE</Link>
@@ -73,7 +73,7 @@ export default function Example() {
           </div>
         </div>
         {/* login cart  */}
-        <div className='flex gap-5'>
+        <div className='flex gap-5 lg:flex hidden'>
           {session.data ? (
             <Link className='flex gap-1 items-center' href='/profile'>
               <UserIcon className='w-6' />
