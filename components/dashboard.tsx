@@ -1,8 +1,10 @@
 "use client"
+
 import { useState } from "react"
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
 import { MoreHorizontal, Search, ShoppingBag, ShoppingCart, Users, Package, DollarSign, Menu, Plus, Edit, Trash2 } from "lucide-react"
 import Link from "next/link"
+
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -68,7 +70,7 @@ const data = [
   },
 ]
 
-export default function Component() {
+export function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [activeTab, setActiveTab] = useState("dashboard")
   const [products, setProducts] = useState([
@@ -78,22 +80,82 @@ export default function Component() {
   ])
   const [editingProduct, setEditingProduct] = useState(null)
 
-  const addProduct = (product: any) => {
+  const addProduct = (product) => {
     setProducts([...products, { ...product, id: products.length + 1 }])
   }
 
-  const updateProduct = (updatedProduct: any) => {
+  const updateProduct = (updatedProduct) => {
     setProducts(products.map(p => p.id === updatedProduct.id ? updatedProduct : p))
   }
 
-  const deleteProduct = (id: any) => {
+  const deleteProduct = (id) => {
     setProducts(products.filter(p => p.id !== id))
   }
 
   return (
     <div className="flex h-screen overflow-hidden">
+      {/* Sidebar */}
+      <aside className={`bg-gray-800 text-white w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 transition duration-200 ease-in-out`}>
+        <nav>
+          <Link href="#" className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-700 rounded">
+            <ShoppingBag className="h-6 w-6" />
+            <span className="text-xl font-bold">E-Shop Admin</span>
+          </Link>
+          <Link href="#" className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-700 rounded" onClick={() => setActiveTab("dashboard")}>
+            <ShoppingCart className="h-5 w-5" />
+            <span>Dashboard</span>
+          </Link>
+          <Link href="#" className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-700 rounded" onClick={() => setActiveTab("products")}>
+            <Package className="h-5 w-5" />
+            <span>Products</span>
+          </Link>
+          <Link href="#" className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-700 rounded">
+            <Users className="h-5 w-5" />
+            <span>Customers</span>
+          </Link>
+        </nav>
+      </aside>
+
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Header */}
+        <header className="flex justify-between items-center py-4 px-6 bg-white border-b-1 border-gray-200">
+          <div className="flex items-center">
+            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-gray-500 focus:outline-none md:hidden">
+              <Menu className="h-6 w-6" />
+            </button>
+            <div className="relative mx-4 lg:mx-0">
+              <span className="absolute inset-y-0 left-0 pl-3 flex items-center">
+                <Search className="h-5 w-5 text-gray-500" />
+              </span>
+              <Input
+                className="pl-10 pr-4"
+                placeholder="Search..."
+                type="text"
+              />
+            </div>
+          </div>
+          <div className="flex items-center">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                  <img
+                    className="rounded-full"
+                    src="/placeholder.svg?height=32&width=32"
+                    alt="Avatar"
+                  />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Settings</DropdownMenuItem>
+                <DropdownMenuItem>Log out</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </header>
+
         {/* Main Content */}
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
           <div className="container mx-auto px-6 py-8">
@@ -104,7 +166,7 @@ export default function Component() {
               </TabsList>
               <TabsContent value="dashboard">
                 <h3 className="text-gray-700 text-3xl font-medium">Dashboard</h3>
-
+                
                 {/* Metrics */}
                 <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                   <Card>
@@ -288,7 +350,8 @@ export default function Component() {
                             <TableCell>{product.name}</TableCell>
                             <TableCell>${product.price.toFixed(2)}</TableCell>
                             <TableCell>{product.stock}</TableCell>
-                            {/* <TableCell>
+                            <Table
+                            Cell>
                               <div className="flex space-x-2">
                                 <Dialog>
                                   <DialogTrigger asChild>
@@ -358,7 +421,7 @@ export default function Component() {
                                   </DialogContent>
                                 </Dialog>
                               </div>
-                            </TableCell> */}
+                            </TableCell>
                           </TableRow>
                         ))}
                       </TableBody>

@@ -4,10 +4,11 @@ import { Home, Search, User, ShoppingCart } from "lucide-react"
 import { useCart } from "./CartContext";
 import { useEffect } from "react";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 
 export default function Component() {
   const { cartItems, setCartItems } = useCart();
-
+  const session = useSession()
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
@@ -36,10 +37,19 @@ export default function Component() {
           </Link>
         </li>
         <li>
-          <Link href="/user/account" className="flex flex-col items-center">
-            <User className="h-6 w-6" />
-            <span className="text-xs mt-1">Account</span>
-          </Link>
+          {
+            session?.data?.user?.roles?.includes("ADMIN") ? (
+              <Link href="/admin/dashboard" className="flex flex-col items-center">
+                <User className="h-6 w-6" />
+                <span className="text-xs mt-1">Account</span>
+              </Link>
+            ) : (
+              <Link href="/user/account" className="flex flex-col items-center">
+                <User className="h-6 w-6" />
+                <span className="text-xs mt-1">Account</span>
+              </Link>
+            )
+          }
         </li>
         <li>
           <Link href="/cart" className="flex flex-col items-center relative">

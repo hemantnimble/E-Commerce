@@ -75,7 +75,7 @@ export default function Example() {
         {/* login cart  */}
         {
           session.data?.user.roles.includes("ADMIN") ? (
-            <Link className='flex gap-1 items-center' href='/admin/dashboard'>
+            <Link className='flex gap-1 items-center lg:flex hidden' href='/admin/dashboard'>
               <UserIcon className='w-6' />
               <p className='text-lg '>{session && (
                 <p className='max-w-16 text-nowrap overflow-hidden text-ellipsis'>{session?.data?.user?.name}</p>
