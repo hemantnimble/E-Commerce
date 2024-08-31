@@ -32,14 +32,32 @@ const SearchBar = ({ onSearch }: { onSearch: (products: any[]) => void }) => {
 
   return (
     <>
-      <input className='border-1 peer block w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-2.5  text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0'
-        id='search'
-        type="text"
-        value={query}
-        onChange={handleChange}
-        placeholder=""
-      />
-      <label htmlFor="search" className="absolute top-2 left-1 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-text select-none bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600"> Search products</label>
+      
+        <div className="searchbar">
+          <div className="searchbar-wrapper">
+            <div className="searchbar-left">
+              <div className="search-icon-wrapper">
+                <span className="search-icon searchbar-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z">
+                    </path>
+                  </svg>
+                </span>
+              </div>
+            </div>
+            <div className="searchbar-center">
+              <div className="searchbar-input-spacer" />
+              <input
+                id='search'
+                type="text"
+                value={query}
+                onChange={handleChange}
+                className="searchbar-input" maxLength={2048} name="q" autoCapitalize="off" autoComplete="off" title="Search" role="combobox" placeholder="Search products" />
+            </div>
+          </div>
+        </div>
+      
+
     </>
   );
 };
