@@ -21,8 +21,8 @@ export default function Component() {
     fetchCartItems();
   }, []);
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border h-16 px-4 md:hidden">
-      <ul className="h-full flex items-center justify-around">
+    <section className="r1 fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border h-16 px-4 md:hidden">
+      <ul className="r2 h-full flex items-center justify-around">
         <li>
           <Link href="/" className="flex flex-col items-center">
             <Home className="h-6 w-6" />
@@ -53,6 +53,6 @@ export default function Component() {
           </Link>
         </li>
       </ul>
-    </nav>
+    </section>
   )
 }

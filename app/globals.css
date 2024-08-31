@@ -377,3 +377,10 @@
   background: rgb(154, 154, 154);
   backdrop-filter: blur(2px);
 } */
+
+.r1{
+  bottom: 0px;
+}
+.r2{
+  justify-content: space-around;
+}
