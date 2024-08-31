@@ -76,8 +76,8 @@ export default function Example() {
           {session.data ? (
             <Link className='flex gap-1 items-center' href='/profile'>
               <UserIcon className='w-6' />
-              <p className='text-lg'>{session && (
-                <p>{session?.data?.user?.name}</p>
+              <p className='text-lg '>{session && (
+                <p className='max-w-16 text-nowrap overflow-hidden text-ellipsis'>{session?.data?.user?.name}</p>
               )}</p>
             </Link>
           ) : (
@@ -119,7 +119,6 @@ export default function Example() {
           </div>
         )
       }
-
     </header>
     //  <div className="bg-white">
     //    {/* Mobile menu */}
