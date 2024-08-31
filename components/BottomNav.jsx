@@ -36,7 +36,7 @@ export default function Component() {
           </Link>
         </li>
         <li>
-          <Link href="/profile" className="flex flex-col items-center">
+          <Link href="/user/account" className="flex flex-col items-center">
             <User className="h-6 w-6" />
             <span className="text-xs mt-1">Account</span>
           </Link>

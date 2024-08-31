@@ -73,25 +73,37 @@ export default function Example() {
           </div>
         </div>
         {/* login cart  */}
-        <div className='flex gap-5 lg:flex hidden'>
-          {session.data ? (
-            <Link className='flex gap-1 items-center' href='/profile'>
+        {
+          session.data?.user.roles.includes("ADMIN") ? (
+            <Link className='flex gap-1 items-center' href='/admin/dashboard'>
               <UserIcon className='w-6' />
               <p className='text-lg '>{session && (
                 <p className='max-w-16 text-nowrap overflow-hidden text-ellipsis'>{session?.data?.user?.name}</p>
               )}</p>
             </Link>
           ) : (
-            <Link className='flex gap-1 items-center' href='/signin'>
-              <UserIcon className='w-6' />
-              <p className='text-lg'>Login</p>
-            </Link>
-          )}
-          <Link className='flex gap-1 items-center' href='/cart'>
-            <ShoppingCart className='w-6' />
-            <p className='text-lg relative'>Cart<span className='absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center'>{cartItems}</span></p>
-          </Link>
-        </div>
+            <div className='flex gap-5 lg:flex hidden'>
+              {session.data ? (
+                <Link className='flex gap-1 items-center' href='/user/account'>
+                  <UserIcon className='w-6' />
+                  <p className='text-lg '>{session && (
+                    <p className='max-w-16 text-nowrap overflow-hidden text-ellipsis'>{session?.data?.user?.name}</p>
+                  )}</p>
+                </Link>
+              ) : (
+                <Link className='flex gap-1 items-center' href='/signin'>
+                  <UserIcon className='w-6' />
+                  <p className='text-lg'>Login</p>
+                </Link>
+              )}
+              <Link className='flex gap-1 items-center' href='/cart'>
+                <ShoppingCart className='w-6' />
+                <p className='text-lg relative'>Cart<span className='absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center'>{cartItems}</span></p>
+              </Link>
+            </div>
+          )
+        }
+
       </nav>
       {/* mobile searchbar  */}
       {
