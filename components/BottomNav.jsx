@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Home, Search, User, ShoppingCart } from "lucide-react"
 import { useCart } from "./CartContext";
 import { useEffect } from "react";
+import axios from "axios";
 
 export default function Component() {
   const { cartItems, setCartItems } = useCart();
