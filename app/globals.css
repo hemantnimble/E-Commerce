@@ -920,3 +920,12 @@
   font-size:70px;
   line-height: 55px;
 }
+
+.carousel > button:first-of-type {
+  /* right: 1rem; */
+  left: 1rem;
+}
+.carousel > button:last-of-type{
+  right: 1rem;
+  /* left: 1rem; */
+}

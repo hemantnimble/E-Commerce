@@ -4,6 +4,7 @@ import AllProducts from "@/components/AllProducts";
 import Link from "next/link";
 import { VelocityScroll } from "@/components/magicui/scroll-based-velocity";
 import TextReveal from "@/components/magicui/text-reveal";
+import Footer from "@/components/Footer";
 
 export default function Home() {
 
@@ -15,28 +16,28 @@ export default function Home() {
           <section className="relative h-[60vh] lg:h-[85vh] w-full overflow-hidden">
             <div className="grid grid-cols-4 grid-rows-5 gap-2 lg:gap-4 w-full h-full py-3 px-6">
               <div className="row-span-3">
-                <img src="https://img.freepik.com/free-photo/shirt-mockup-concept-with-plain-clothing_23-2149448750.jpg?ga=GA1.1.696854174.1725166886&semt=ais_hybrid" alt="Image 1" className="rounded-lg w-full h-full object-cover" />
+                <img src="https://img.freepik.com/free-psd/gadget-concept-poster-template_23-2148626930.jpg?semt=ais_hybrid" alt="Image 1" className="rounded-lg w-full h-full object-cover" />
               </div>
               <div className="col-span-2 row-span-2">
-                <img src="https://img.freepik.com/free-photo/shirt-mockup-concept-with-plain-clothing_23-2149448751.jpg?ga=GA1.1.696854174.1725166886&semt=ais_hybrid" alt="Image 2" className="w-full h-full object-cover rounded-lg" />
+                <img src="https://img.freepik.com/premium-psd/airpods-cover-case-mockup_23-2150263561.jpg?semt=ais_hybrid" alt="Image 2" className="w-full h-full object-cover rounded-lg" />
               </div>
               <div className="row-span-3 col-start-4">
-                <img src="https://img.freepik.com/free-photo/clothing-rack-with-floral-hawaiian-shirts-hangers-hat_23-2149366018.jpg?ga=GA1.1.696854174.1725166886&semt=ais_hybrid" alt="Image 3" className="w-full h-full object-cover rounded-lg" />
+                <img src="https://img.freepik.com/premium-psd/airpods-cover-case-mockup_23-2150263512.jpg?semt=ais_hybrid" alt="Image 3" className="w-full h-full object-cover rounded-lg" />
               </div>
               <div className="row-span-2 col-start-1 row-start-4">
-                <img src="https://img.freepik.com/free-photo/shirt-mockup-concept-with-plain-clothing_23-2149448748.jpg?ga=GA1.1.696854174.1725166886&semt=ais_hybrid" alt="Image 4" className="w-full h-full object-cover rounded-lg" />
+                <img src="https://img.freepik.com/premium-psd/wireless-earphones-case-mockup-psd-template_77323-1942.jpg?semt=ais_hybrid" alt="Image 4" className="w-full h-full object-cover rounded-lg" />
               </div>
               <div className="row-span-3 col-start-2 row-start-3">
-                <img src="https://img.freepik.com/premium-photo/3d-rendered-photo-mens-clothes-ad-backgorund_1198274-27546.jpg?ga=GA1.1.696854174.1725166886&semt=ais_hybrid" alt="Image 5" className="w-full h-full object-cover rounded-lg" />
+                <img src="https://img.freepik.com/premium-psd/airpods-cover-case-mockup_23-2150263528.jpg?semt=ais_hybrid" alt="Image 5" className="w-full h-full object-cover rounded-lg" />
               </div>
               <div className="col-span-2 col-start-3 row-start-5">
-                <img src="https://img.freepik.com/free-photo/clothing-rack-with-hawaiian-shirts-with-floral-print-hat_23-2149366013.jpg?ga=GA1.1.696854174.1725166886&semt=ais_hybrid" alt="Image 8" className="w-full h-full object-cover rounded-lg" />
+                <img src="https://img.freepik.com/premium-psd/airpods-cover-case-mockup_23-2150263504.jpg?semt=ais_hybrid" alt="Image 8" className="w-full h-full object-cover rounded-lg" />
               </div>
               <div className="row-span-2 col-start-3 row-start-3">
-                <img src="https://img.freepik.com/free-photo/assortment-father-son-clothing_23-2148868939.jpg?ga=GA1.1.696854174.1725166886&semt=ais_hybrid" alt="Image 10" className="w-full h-full object-cover rounded-lg" />
+                <img src="https://img.freepik.com/premium-psd/airpods-cover-case-mockup_23-2150263590.jpg?semt=ais_hybrid" alt="Image 10" className="w-full h-full object-cover rounded-lg" />
               </div>
               <div className="col-start-4 row-start-4">
-                <img src="https://img.freepik.com/free-photo/view-hawaiian-shirt-with-pants-sneakers_23-2149366039.jpg?ga=GA1.1.696854174.1725166886&semt=ais_hybrid" alt="Image 11" className="w-full h-full object-cover rounded-lg" />
+                <img src="https://img.freepik.com/premium-psd/airpods-cover-case-mockup_23-2150263488.jpg?semt=ais_hybrid" alt="Image 11" className="w-full h-full object-cover rounded-lg" />
               </div>
             </div>
           </section>
@@ -89,6 +90,7 @@ export default function Home() {
           </section>
         </main>
       </div>
+      <Footer/>
     </main>
   );
 }
