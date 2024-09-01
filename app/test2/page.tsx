@@ -1,36 +1,16 @@
 import React from 'react'
+import WordPullUp from "@/components/magicui/word-pull-up";
 
 function page() {
     return (
 
-
-        <div className="grid grid-cols-4 grid-rows-5 gap-4 w-full h-[85vh] py-3 px-6">
-            <div className="row-span-3">
-                <img  src="https://img.freepik.com/free-photo/shirt-mockup-concept-with-plain-clothing_23-2149448750.jpg?ga=GA1.1.696854174.1725166886&semt=ais_hybrid" alt="Image 1" className="rounded-lg w-full h-full object-cover" />
-            </div>
-            <div className="col-span-2 row-span-2">
-                <img src="https://img.freepik.com/free-photo/shirt-mockup-concept-with-plain-clothing_23-2149448751.jpg?ga=GA1.1.696854174.1725166886&semt=ais_hybrid" alt="Image 2" className="w-full h-full object-cover rounded-lg" />
-            </div>
-            <div className="row-span-3 col-start-4">
-                <img src="https://img.freepik.com/free-photo/clothing-rack-with-floral-hawaiian-shirts-hangers-hat_23-2149366018.jpg?ga=GA1.1.696854174.1725166886&semt=ais_hybrid" alt="Image 3" className="w-full h-full object-cover rounded-lg" />
-            </div>
-            <div className="row-span-2 col-start-1 row-start-4">
-                <img src="https://img.freepik.com/free-photo/shirt-mockup-concept-with-plain-clothing_23-2149448748.jpg?ga=GA1.1.696854174.1725166886&semt=ais_hybrid" alt="Image 4" className="w-full h-full object-cover rounded-lg" />
-            </div>
-            <div className="row-span-3 col-start-2 row-start-3">
-                <img src="https://img.freepik.com/premium-photo/3d-rendered-photo-mens-clothes-ad-backgorund_1198274-27546.jpg?ga=GA1.1.696854174.1725166886&semt=ais_hybrid" alt="Image 5" className="w-full h-full object-cover rounded-lg" />
-            </div>
-            <div className="col-span-2 col-start-3 row-start-5">
-                <img src="https://img.freepik.com/free-photo/clothing-rack-with-hawaiian-shirts-with-floral-print-hat_23-2149366013.jpg?ga=GA1.1.696854174.1725166886&semt=ais_hybrid" alt="Image 8" className="w-full h-full object-cover rounded-lg" />
-            </div>
-            <div className="row-span-2 col-start-3 row-start-3">
-                <img src="https://img.freepik.com/free-photo/assortment-father-son-clothing_23-2148868939.jpg?ga=GA1.1.696854174.1725166886&semt=ais_hybrid" alt="Image 10" className="w-full h-full object-cover rounded-lg" />
-            </div>
-            <div className="col-start-4 row-start-4">
-                <img src="https://img.freepik.com/free-photo/view-hawaiian-shirt-with-pants-sneakers_23-2149366039.jpg?ga=GA1.1.696854174.1725166886&semt=ais_hybrid" alt="Image 11" className="w-full h-full object-cover rounded-lg" />
-            </div>
+        <div className='flex items-center justify-center w-full h-[100vh] flex-col'>
+            <img className='w-[30%]' src="./assets/cart.gif" alt="cart gif" />
+            <WordPullUp
+                className="text-lg font-bold tracking-[-0.02em] text-black dark:text-white md:text-7xl md:leading-[5rem]"
+                words="Loading your cart..."
+            />
         </div>
-
 
         // <div>
         //     <meta charSet="UTF-8" />

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { auth } from "@/auth";
 
-const protectedRoutes = ["/profile"];
+const protectedRoutes = ["/user/account"];
 const adminRoutes = ["/add"];
 
 export default async function middleware(request: NextRequest) {
@@ -19,7 +19,7 @@ export default async function middleware(request: NextRequest) {
 
   if (!session) {
     if (isProtected || isAdminRoute) {
-      const absoluteURL = new URL("/", request.nextUrl.origin);
+      const absoluteURL = new URL("/signin", request.nextUrl.origin);
       return NextResponse.redirect(absoluteURL.toString());
     }
   } else if (isAdminRoute && !userRole.includes("ADMIN")) {

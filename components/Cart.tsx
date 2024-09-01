@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
+import CartLoading from './CartLoading';
+import WordPullUp from "@/components/magicui/word-pull-up";
 
 interface Product {
     id: string;
@@ -39,7 +41,7 @@ export default function CartPage() {
         }
     };
     useEffect(() => {
-        
+
         fetchCartItems();
     }, []);
 
@@ -71,12 +73,20 @@ export default function CartPage() {
     };
 
     if (loading) {
-        return <p>Loading...</p>;
+        return (
+            <div className='flex items-center justify-center w-full h-[100vh] flex-col'>
+                <img className='w-[30%]' src='/assets/cart.gif' alt="cart gif" />
+                <WordPullUp
+                    className="text-lg font-bold tracking-[-0.02em] text-black dark:text-white md:text-7xl md:leading-[5rem]"
+                    words="Loading your cart..."
+                />
+            </div>
+        );
     }
 
     return (
         <div className="mx-auto mt-8 max-w-2xl md:mt-12">
-            <div className="bg-slate-100 shadow">
+            <div className=" shadow px-4">
                 <div className="px-4 py-6 sm:px-8 sm:py-10">
                     <div className="flow-root">
                         <ul className="-my-8">
