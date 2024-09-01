@@ -916,3 +916,7 @@
   color: #000;
   /*Set to match the Tailwind colour you want the active one to be */
 }
+.textRevel p{
+  font-size:70px;
+  line-height: 55px;
+}

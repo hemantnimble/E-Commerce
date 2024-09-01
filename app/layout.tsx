@@ -25,7 +25,7 @@ export default function RootLayout({
         <SessionProvider>
           <CartProvider>
             <Navbar></Navbar>
-            <div className="pt-16">
+            <div className="pt-16 pb-[64px] lg:pb-0">
               {children}
             </div>
             <BottomNav></BottomNav>

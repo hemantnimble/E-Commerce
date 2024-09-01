@@ -81,7 +81,7 @@ function CheckoutPage({ amount, cartItems }: { amount: number, cartItems: CartIt
                     elements,
                     clientSecret,
                     confirmParams: {
-                        return_url: `${returnUrl}/profile`,
+                        return_url: `${returnUrl}/payment-success`,
                     },
                 });
 

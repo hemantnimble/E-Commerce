@@ -3,6 +3,7 @@ import { Toaster } from "react-hot-toast";
 import AllProducts from "@/components/AllProducts";
 import Link from "next/link";
 import { VelocityScroll } from "@/components/magicui/scroll-based-velocity";
+import TextReveal from "@/components/magicui/text-reveal";
 
 export default function Home() {
 
@@ -11,29 +12,42 @@ export default function Home() {
       <Toaster />
       <div className="flex flex-col min-h-dvh">
         <main className="flex-1">
-          <section className="relative h-[80vh] w-full overflow-hidden">
-            <img
-              src="https://img.freepik.com/premium-photo/product-photography-simple-background-sports-shoes-with-chinese-landscape-carving-style_919910-666.jpg"
-              alt="Hero Image"
-              className="h-full w-full object-cover object-center"
-              width={1920}
-              height={1080}
-              style={{ aspectRatio: "1920/1080", objectFit: "cover" }}
-            />
-            <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-              <div className="text-center text-white">
-                <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">Elevate Your Style</h1>
-                <p className="mt-4 text-lg md:text-xl">Discover the latest fashion trends and must-have pieces.</p>
-                <Link
-                  href="#"
-                  className="mt-8 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                  prefetch={false}
-                >
-                  Shop Now
-                </Link>
+          <section className="relative h-[60vh] lg:h-[85vh] w-full overflow-hidden">
+            <div className="grid grid-cols-4 grid-rows-5 gap-2 lg:gap-4 w-full h-full py-3 px-6">
+              <div className="row-span-3">
+                <img src="https://img.freepik.com/free-photo/shirt-mockup-concept-with-plain-clothing_23-2149448750.jpg?ga=GA1.1.696854174.1725166886&semt=ais_hybrid" alt="Image 1" className="rounded-lg w-full h-full object-cover" />
+              </div>
+              <div className="col-span-2 row-span-2">
+                <img src="https://img.freepik.com/free-photo/shirt-mockup-concept-with-plain-clothing_23-2149448751.jpg?ga=GA1.1.696854174.1725166886&semt=ais_hybrid" alt="Image 2" className="w-full h-full object-cover rounded-lg" />
+              </div>
+              <div className="row-span-3 col-start-4">
+                <img src="https://img.freepik.com/free-photo/clothing-rack-with-floral-hawaiian-shirts-hangers-hat_23-2149366018.jpg?ga=GA1.1.696854174.1725166886&semt=ais_hybrid" alt="Image 3" className="w-full h-full object-cover rounded-lg" />
+              </div>
+              <div className="row-span-2 col-start-1 row-start-4">
+                <img src="https://img.freepik.com/free-photo/shirt-mockup-concept-with-plain-clothing_23-2149448748.jpg?ga=GA1.1.696854174.1725166886&semt=ais_hybrid" alt="Image 4" className="w-full h-full object-cover rounded-lg" />
+              </div>
+              <div className="row-span-3 col-start-2 row-start-3">
+                <img src="https://img.freepik.com/premium-photo/3d-rendered-photo-mens-clothes-ad-backgorund_1198274-27546.jpg?ga=GA1.1.696854174.1725166886&semt=ais_hybrid" alt="Image 5" className="w-full h-full object-cover rounded-lg" />
+              </div>
+              <div className="col-span-2 col-start-3 row-start-5">
+                <img src="https://img.freepik.com/free-photo/clothing-rack-with-hawaiian-shirts-with-floral-print-hat_23-2149366013.jpg?ga=GA1.1.696854174.1725166886&semt=ais_hybrid" alt="Image 8" className="w-full h-full object-cover rounded-lg" />
+              </div>
+              <div className="row-span-2 col-start-3 row-start-3">
+                <img src="https://img.freepik.com/free-photo/assortment-father-son-clothing_23-2148868939.jpg?ga=GA1.1.696854174.1725166886&semt=ais_hybrid" alt="Image 10" className="w-full h-full object-cover rounded-lg" />
+              </div>
+              <div className="col-start-4 row-start-4">
+                <img src="https://img.freepik.com/free-photo/view-hawaiian-shirt-with-pants-sneakers_23-2149366039.jpg?ga=GA1.1.696854174.1725166886&semt=ais_hybrid" alt="Image 11" className="w-full h-full object-cover rounded-lg" />
               </div>
             </div>
           </section>
+          <VelocityScroll
+            text="Fashion On Point"
+            default_velocity={5}
+            className="font-display text-center text-4xl font-bold tracking-[-0.02em] text-black drop-shadow-sm dark:text-white md:text-7xl md:leading-[5rem]"
+          />
+          <div className="textRevel z-10 flex min-h-[16rem] items-center justify-center rounded-lg border bg-white dark:bg-black">
+            <TextReveal  text="Magic UI will change the way you design." />
+          </div>
           <section className="py-12 md:py-16 lg:py-20">
             <div className=" w-full">
               <div className="mb-8 text-center">
@@ -74,105 +88,6 @@ export default function Home() {
             </div>
           </section>
         </main>
-        <VelocityScroll
-          text="Velocity Scroll"
-          default_velocity={5}
-          className="font-display text-center text-4xl font-bold tracking-[-0.02em] text-black drop-shadow-sm dark:text-white md:text-7xl md:leading-[5rem]"
-        />
-        <footer className="bg-muted p-6 md:p-8 lg:p-10">
-          <div className="container">
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-              <div>
-                <h4 className="text-lg font-medium">About</h4>
-                <ul className="mt-4 space-y-2">
-                  <li>
-                    <Link href="#" className="text-sm hover:underline" prefetch={false}>
-                      Our Story
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="#" className="text-sm hover:underline" prefetch={false}>
-                      Careers
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="#" className="text-sm hover:underline" prefetch={false}>
-                      Sustainability
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="text-lg font-medium">Shop</h4>
-                <ul className="mt-4 space-y-2">
-                  <li>
-                    <Link href="#" className="text-sm hover:underline" prefetch={false}>
-                      Women
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="#" className="text-sm hover:underline" prefetch={false}>
-                      Men
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="#" className="text-sm hover:underline" prefetch={false}>
-                      Kids
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="#" className="text-sm hover:underline" prefetch={false}>
-                      Sale
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="text-lg font-medium">Customer Service</h4>
-                <ul className="mt-4 space-y-2">
-                  <li>
-                    <Link href="#" className="text-sm hover:underline" prefetch={false}>
-                      Contact Us
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="#" className="text-sm hover:underline" prefetch={false}>
-                      Returns & Exchanges
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="#" className="text-sm hover:underline" prefetch={false}>
-                      Shipping & Delivery
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="text-lg font-medium">Follow Us</h4>
-                <ul className="mt-4 space-y-2">
-                  <li>
-                    <Link href="#" className="text-sm hover:underline" prefetch={false}>
-                      Instagram
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="#" className="text-sm hover:underline" prefetch={false}>
-                      Facebook
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="#" className="text-sm hover:underline" prefetch={false}>
-                      Twitter
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="mt-8 text-center text-sm text-muted-foreground">
-              &copy; 2024 Fashionista. All rights reserved.
-            </div>
-          </div>
-        </footer>
       </div>
     </main>
   );
