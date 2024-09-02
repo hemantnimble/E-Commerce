@@ -5,10 +5,12 @@ import { useCart } from "./CartContext";
 import { useEffect } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Component() {
   const { cartItems, setCartItems } = useCart();
-  const session = useSession()
+  const session = useSession();
+  const router =useRouter();
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
@@ -21,10 +23,11 @@ export default function Component() {
     };
     fetchCartItems();
   }, []);
+    const currentPath = router.pathname;
   return (
     <section className="r1 fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border h-16 px-4 lg:hidden">
       <ul className="r2 h-full flex items-center justify-around">
-        <li>
+        <li className={currentPath === '/' ? 'active' : ''}>
           <Link href="/" className="flex flex-col items-center">
             <Home className="h-6 w-6" />
             <span className="text-xs mt-1">Home</span>

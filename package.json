@@ -11,6 +11,7 @@
   "dependencies": {
     "@auth/mongodb-adapter": "^3.4.1",
     "@auth/prisma-adapter": "^2.4.1",
+    "@gsap/react": "^2.1.1",
     "@headlessui/react": "^2.1.2",
     "@heroicons/react": "^2.1.5",
     "@radix-ui/react-dialog": "^1.1.1",
@@ -36,6 +37,7 @@
     "flowbite-react": "^0.10.1",
     "formik": "^2.4.6",
     "framer-motion": "^11.3.31",
+    "gsap": "^3.12.5",
     "lodash": "^4.17.21",
     "lucide-react": "^0.436.0",
     "magicui-cli": "^0.1.6",
