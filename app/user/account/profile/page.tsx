@@ -97,7 +97,7 @@ const Profile: React.FC = () => {
                             </svg>
                         </div>
                         <p className="mt-2">
-                            Can't remember your current password? <a className="text-sm font-semibold text-blue-600 underline decoration-2" href="#">Recover Account</a>
+                            Cant remember your current password? <a className="text-sm font-semibold text-blue-600 underline decoration-2" href="#">Recover Account</a>
                         </p>
                         <button type="submit" className="mt-4 rounded-lg bg-blue-600 px-4 py-2 text-white">Save Password</button>
                         <hr className="mt-4 mb-8" />
