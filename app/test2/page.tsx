@@ -42,7 +42,7 @@ const ScrollAnimation = () => {
         moveDown.to(redDivRef.current, {
             y: "350%", // Moves down by 350%
             x: "150%", // Moves further to the right
-            scale: 2,  // Increases size
+            scale: 1.5,  // Increases size
             zIndex:1100,
             ease: "power2.inOut",
         });

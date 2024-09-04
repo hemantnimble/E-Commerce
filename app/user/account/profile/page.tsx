@@ -4,27 +4,37 @@ import { ArrowLeftCircle } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import axios from "axios";
+import ResetPassword from "@/components/ResetPass";
 
 const Profile: React.FC = () => {
     const session = useSession();
     const [oldPass, setOldPass] = useState("");
     const [newPass, setNewPass] = useState("");
-    const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+    const [showPassword, setShowPassword] = useState(false);
+    const [resetPasspopup,setResetPasspopup ] = useState(false);
 
     async function handleSubmit(e: any) {
-       e.preventDefault();
+        e.preventDefault();
         try {
             const response = await axios.post('/api/user/updatepassword', { oldPass, newPass });
-            
+
         } catch (error) {
             console.error("Error updating password:", error);
             alert("Failed to update password. Please try again.");
         }
     }
 
-    // Toggle the visibility of the password
     const togglePasswordVisibility = () => {
         setShowPassword(prevState => !prevState);
+    };
+
+    const handleSendOtp = async() => {
+        try{
+          const response = await axios.post('/api/user/sendotp');
+            console.log(response);
+        }catch{
+         alert("Failed to send otp");
+        }
     };
 
     return (
@@ -96,25 +106,17 @@ const Profile: React.FC = () => {
                                 />
                             </svg>
                         </div>
-                        <p className="mt-2">
-                            Cant remember your current password? <a className="text-sm font-semibold text-blue-600 underline decoration-2" href="#">Recover Account</a>
-                        </p>
+
                         <button type="submit" className="mt-4 rounded-lg bg-blue-600 px-4 py-2 text-white">Save Password</button>
                         <hr className="mt-4 mb-8" />
-                        <div className="mb-10">
-                            <p className="py-2 text-xl font-semibold">Delete Account</p>
-                            <p className="inline-flex items-center rounded-full bg-rose-100 px-4 py-1 text-rose-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="mr-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                                </svg>
-                                Proceed with caution
-                            </p>
-                            <p className="mt-2">Make sure you have taken backup of your account in case you ever need to get access to your data. We will completely wipe your data. There is no way to access your account after this action.</p>
-                            <button className="ml-auto text-sm font-semibold text-rose-600 underline decoration-2">Continue with deletion</button>
-                        </div>
+
                     </form>
+                    <p className="mt-2 pb-6">
+                        Cant remember your current password? <button onClick={handleSendOtp} className="text-sm font-semibold text-blue-600 underline decoration-2">Recover Account</button>
+                    </p>
                 </div>
             </div>
+            <ResetPassword/>
         </div>
     );
 };
