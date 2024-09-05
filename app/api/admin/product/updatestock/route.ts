@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
 export async function PUT(req: NextRequest) {
-    const { id,stock }: { id: string, stock: string } = await req.json();
+    const { id,stock }: { id: string, stock: number } = await req.json();
 
     try {
         const updatedProduct = await prisma.products.update({
