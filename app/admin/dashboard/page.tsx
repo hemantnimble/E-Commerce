@@ -42,69 +42,137 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import axios from "axios"
 
-const data = [
-  {
-    name: "Jan",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Feb",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Mar",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Apr",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "May",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Jun",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-]
+
 interface Product {
   id: string;
   title: string;
-  price: string;
+  price: number;
+  stock: number;
   images: string[],
   createdAt: string;
   updatedAt: string;
 }
+interface Orders {
+  id: string;
+  orderId: string;
+  productId: string;
+  quantity: number;
+  order: {
+    id: string;
+    userId: string;
+    paymentIntentId: string;
+    createdAt: string;
+    updatedAt: string;
+    user: {
+      name: string
+    }
+  };
+  product: {
+    id: string,
+    title: string,
+    price: number,
+    category: string,
+    images: string[],
+    stock: number,
+  }
+}
 export default function Component() {
   const [activeTab, setActiveTab] = useState("dashboard")
+  const [stock, setStock] = useState<number | string>('');
   const [products, setProducts] = useState<Product[]>([])
+  const [orders, setOrders] = useState<Orders[]>([])
+  const [loading, setLoading] = useState(false);
+  const [totalRevenue, setTotalRevenue] = useState<number>(0);
+  const [totalCustomers, setTotalCustomers] = useState<number>(0);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get<{ products: Product[] }>("/api/products/getproducts")
-        setProducts(response.data.products)
-      } catch (error) {
-        console.error("Error fetching products:", error)
-      }
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get<{ products: Product[] }>("/api/products/getproducts")
+      setProducts(response.data.products)
+    } catch (error) {
+      console.error("Error fetching products:", error)
     }
-
+  }
+  const fetchOrders = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get<{ orders: Orders[] }>("/api/admin/orders/get")
+      setOrders(response.data.orders);
+      calculateTotalRevenue(response.data.orders);
+      calculateUniqueUsers(response.data.orders);
+    } catch (error) {
+      console.error("Error fetching products:", error)
+    } finally {
+      setLoading(false);
+    }
+  }
+  useEffect(() => {
     fetchProducts();
+    fetchOrders();
   }, [])
 
-  const addProduct = (product: any) => {
-    setProducts([...products, { ...product, id: products.length + 1 }])
-  }
+  const updateProduct = async (id: string) => {
 
-  const updateProduct = (updatedProduct: any) => {
-    setProducts(products.map(p => p.id === updatedProduct.id ? updatedProduct : p))
-  }
+    try {
+      await axios.put("/api/admin/product/updatestock", { id, stock });
+      alert("Stock updated");
+      fetchProducts();
+    } catch (error: any) {
+      alert("Error updating stock.");
+    }
+  };
 
-  const deleteProduct = (id: any) => {
-    setProducts(products.filter(p => p.id !== id))
-  }
+  const deleteProduct = async (id: string) => {
+    if (window.confirm("Are you sure you want to delete this product?")) {
+      try {
+        await axios.post("/api/products/delete", { id });
+        alert("Product deleted");
+        fetchProducts();
+      } catch (error: any) {
+        alert("Error deleting product.");
+      }
+    }
+  };
 
+  const calculateTotalRevenue = (orders: Orders[]) => {
+    const total = orders.reduce((acc: number, order) => acc + order.product.price, 0);
+    setTotalRevenue(total);
+  };
+
+  function calculateUniqueUsers(orders: Orders[]) {
+    const uniqueUsers = new Set();
+    orders.forEach(order => {
+      uniqueUsers.add(order.order.userId);
+    });
+    setTotalCustomers(uniqueUsers.size);
+  }
+  const data = [
+    {
+      name: "Jan",
+      total: orders.reduce((acc: number, order) => acc + order.product.price, 0),
+    },
+    {
+      name: "Feb",
+      total: Math.floor(Math.random() * 5000) + 1000,
+    },
+    {
+      name: "Mar",
+      total: Math.floor(Math.random() * 5000) + 1000,
+    },
+    {
+      name: "Apr",
+      total: Math.floor(Math.random() * 5000) + 1000,
+    },
+    {
+      name: "May",
+      total: Math.floor(Math.random() * 5000) + 1000,
+    },
+    {
+      name: "Jun",
+      total: Math.floor(Math.random() * 5000) + 1000,
+    },
+  ]
+  console.log(orders)
   return (
     <div className="flex h-screen overflow-hidden">
       {/* Main Content */}
@@ -130,7 +198,9 @@ export default function Component() {
                       <DollarSign className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold">$45,231.89</div>
+                      <div className="text-2xl font-bold">
+                        $ {loading ? "loading..." : totalRevenue}
+                      </div>
                       <p className="text-xs text-muted-foreground">
                         +20.1% from last month
                       </p>
@@ -144,7 +214,7 @@ export default function Component() {
                       <Users className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold">+2350</div>
+                      <div className="text-2xl font-bold">{totalCustomers}</div>
                       <p className="text-xs text-muted-foreground">
                         +180.1% from last month
                       </p>
@@ -214,7 +284,7 @@ export default function Component() {
                     <CardHeader>
                       <CardTitle>Recent Orders</CardTitle>
                       <CardDescription>
-                        You have 265 orders this month.
+                        You have {orders.length} orders this month.
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -228,13 +298,13 @@ export default function Component() {
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          {[...Array(5)].map((_, i) => (
-                            <TableRow key={i}>
-                              <TableCell className="font-medium">ORD-04{i}</TableCell>
-                              <TableCell>{["Pending", "Processing", "Completed"][Math.floor(Math.random() * 3)]}</TableCell>
-                              <TableCell>Customer {i + 1}</TableCell>
+                          {orders.map((order) => (
+                            <TableRow key={order.id}>
+                              <TableCell className="font-medium">{order.product.title}</TableCell>
+                              <TableCell>pendingg</TableCell>
+                              <TableCell>{order.order.user.name} </TableCell>
                               <TableCell className="text-right">
-                                ${(Math.random() * 100).toFixed(2)}
+                                $ {order.product.price}
                               </TableCell>
                             </TableRow>
                           ))}
@@ -270,22 +340,19 @@ export default function Component() {
                             <TableCell>{product.title}</TableCell>
                             <TableCell>${product.price}</TableCell>
                             <TableCell>
-                              {/* {product.stock} */}
-                              12
+                              {product.stock}
                             </TableCell>
                             <TableCell>
                               <div className="flex space-x-2">
-                                <Dialog>
+                                {/* <Dialog>
                                   <DialogTrigger asChild>
-                                    <Button variant="outline" size="sm" >
-                                      <Edit className="h-4 w-4" />
-                                    </Button>
+                                    
                                   </DialogTrigger>
                                   <DialogContent className="sm:max-w-[425px]">
                                     <DialogHeader>
                                       <DialogTitle>Edit Product</DialogTitle>
                                       <DialogDescription>
-                                        Make changes to the product here. Click save when you're done.
+                                        Make changes to the product here. Click save when you are done.
                                       </DialogDescription>
                                     </DialogHeader>
                                     <div className="grid gap-4 py-4">
@@ -293,26 +360,31 @@ export default function Component() {
                                         <Label htmlFor="edit-name" className="text-right">
                                           Name
                                         </Label>
-                                        <Input id="edit-name"  className="col-span-3" />
+                                        <Input id="edit-name" className="col-span-3" />
                                       </div>
                                       <div className="grid grid-cols-4 items-center gap-4">
                                         <Label htmlFor="edit-price" className="text-right">
                                           Price
                                         </Label>
-                                        <Input id="edit-price" type="number"  className="col-span-3" />
+                                        <Input id="edit-price" type="number" className="col-span-3" />
                                       </div>
                                       <div className="grid grid-cols-4 items-center gap-4">
                                         <Label htmlFor="edit-stock" className="text-right">
                                           Stock
                                         </Label>
-                                        <Input id="edit-stock" type="number"  className="col-span-3" />
+                                        <Input id="edit-stock" type="number" className="col-span-3" />
                                       </div>
                                     </div>
                                     <DialogFooter>
                                       <Button type="submit">Save Changes</Button>
                                     </DialogFooter>
                                   </DialogContent>
-                                </Dialog>
+                                </Dialog> */}
+                                <Link href={`/admin/updateproduct/${product.id}`}>
+                                  <Button variant="outline" size="sm" >
+                                    <Edit className="h-4 w-4" />
+                                  </Button>
+                                </Link>
                                 <Button variant="outline" size="sm" onClick={() => deleteProduct(product.id)}>
                                   <Trash2 className="h-4 w-4" />
                                 </Button>
@@ -334,11 +406,11 @@ export default function Component() {
                                         <Label htmlFor="stock-update" className="text-right">
                                           New Stock Level
                                         </Label>
-                                        <Input id="stock-update" type="number"  className="col-span-3" />
+                                        <Input onChange={(e: any) => setStock(e.target.value)} id="stock-update" type="number" className="col-span-3" />
                                       </div>
                                     </div>
                                     <DialogFooter>
-                                      <Button type="submit">Update Stock</Button>
+                                      <Button onClick={() => updateProduct(product.id)}>Update Stock</Button>
                                     </DialogFooter>
                                   </DialogContent>
                                 </Dialog>

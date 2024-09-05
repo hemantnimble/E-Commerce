@@ -127,9 +127,10 @@ model User {
 model Products {
   id         String      @id @default(auto()) @map("_id") @db.ObjectId
   title      String?     @unique
-  price      String?
+  price      Float?
   category   String?
   images     String[]
+  stock      Int
   cartItems  CartItem[]  @relation("ProductCartItems")
   orderItems OrderItem[] @relation("ProductOrderItems")
   createdAt  DateTime    @default(now())

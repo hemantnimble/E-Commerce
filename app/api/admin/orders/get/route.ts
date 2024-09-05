@@ -16,8 +16,16 @@ export async function GET(req: NextRequest, res: NextResponse) {
     try {
         const orders = await prisma.orderItem.findMany({
             include: {
-                order: true,  
-                product: true 
+                order: {
+                    include: {
+                        user: {
+                            select: {
+                                name: true,  // Fetch only the name field
+                            }
+                        }
+                    }
+                },
+                product: true,  // Include product details
             }
         });
 
