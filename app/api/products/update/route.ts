@@ -4,8 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
 export async function PUT(req: NextRequest) {
-    const { id, title, price, images }: { id: string, title: string, price: number, images: string[] } = await req.json();
-
+    const { id, title,stock, price, images } = await req.json();
+    const priceFloat = parseFloat(price);
+    const stockInt = parseInt(stock, 10);
     try {
         const updatedProduct = await prisma.products.update({
             where: {
@@ -13,8 +14,9 @@ export async function PUT(req: NextRequest) {
             },
             data: {
                 title,
-                price,
-                images,  
+                price:priceFloat,
+                stock: stockInt,
+                images,
             },
         });
         return NextResponse.json(updatedProduct, { status: 200 });

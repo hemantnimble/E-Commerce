@@ -10,13 +10,15 @@ import { useForm, SubmitHandler } from "react-hook-form"
 
 type Inputs = {
     title: string
-    price: string
+    price: number
+    stock: number
 }
 
 interface Product {
     id: string;
     title: string;
-    price: string;
+    price: number;
+    stock: number;
     images: string[],
 }
 
@@ -33,6 +35,7 @@ function UpdateProduct() {
                 reset({
                     title: response.data.product.title,
                     price: response.data.product.price,
+                    stock: response.data.product.stock,
                 })
                 setExistingImages(response.data.product.images)
             } catch (error) {
@@ -114,7 +117,21 @@ function UpdateProduct() {
                         <input {...register("price", { required: true })}
                             id="price"
                             name="price"
-                            type="text"
+                            type="number"
+                            required
+                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                    </div>
+                </div>
+                <div>
+                    <label htmlFor="stock" className="block text-sm font-medium leading-6 text-gray-900">
+                        Enter stock
+                    </label>
+                    <div className="mt-2">
+                        <input {...register("stock", { required: true })}
+                            id="stock"
+                            name="stock"
+                            type="number"
                             required
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
