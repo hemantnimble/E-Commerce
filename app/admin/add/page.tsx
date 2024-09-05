@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { useForm, SubmitHandler } from "react-hook-form"
 import "@uploadthing/react/styles.css";
 import { UploadButton } from "@uploadthing/react";
-import { OurFileRouter } from "../app/api/uploadthing/core";
+import { OurFileRouter } from "@/app/api/uploadthing/core";
 import Link from "next/link";
 
 type Inputs = {
@@ -16,7 +16,7 @@ type Inputs = {
 function AddProduct() {
     const {
         register,
-        handleSubmit,
+        handleSubmit, 
         formState: { errors },
     } = useForm<Inputs>()
 

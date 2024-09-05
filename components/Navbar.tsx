@@ -91,7 +91,7 @@ export default function Example() {
                   )}</p>
                 </Link>
               ) : (
-                <Link className='flex gap-1 items-center' href='/signin'>
+                <Link className='flex gap-1 items-center' href='/user/signin'>
                   <UserIcon className='w-6' />
                   <p className='text-lg'>Login</p>
                 </Link>

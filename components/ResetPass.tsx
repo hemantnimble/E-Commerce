@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const ResetPassword = () => {
     const [otp, setOtp] = useState("");
@@ -11,9 +12,11 @@ const ResetPassword = () => {
         try {
             const response = await axios.post('/api/user/resetpassword', { otp, newPassword });
             setMessage(response.data.message);
+            alert(response.data.message);
         } catch (error) {
             console.error(error);
             setMessage("Error resetting password. Please try again.");
+            alert("Failed to reset password. Please try again.");
         }
     };
 

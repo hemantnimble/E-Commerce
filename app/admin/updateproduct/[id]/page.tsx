@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import "@uploadthing/react/styles.css";
 import { UploadButton } from "@uploadthing/react";
-import { OurFileRouter } from "../../api/uploadthing/core";
+import { OurFileRouter } from "../../../api/uploadthing/core";
 import { useForm, SubmitHandler } from "react-hook-form"
 
 type Inputs = {

@@ -2,7 +2,7 @@
 import axios from 'axios';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
-import Card from './Card';
+import Card from '@/components/Card';
 
 interface Product {
     id: string;

@@ -55,7 +55,7 @@ function CheckoutPageSingle({ amount, item }: { amount: number, item: any }) {
             elements,
             clientSecret,
             confirmParams: {
-                return_url: `${returnUrl}/payment-success`,
+                return_url: `${returnUrl}/user/payment-success`,
             },
         });
         if (error) {

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import axios from "axios";
 import ResetPassword from "@/components/ResetPass";
+import toast from "react-hot-toast";
 
 const Profile: React.FC = () => {
     const session = useSession();
@@ -31,7 +32,7 @@ const Profile: React.FC = () => {
     const handleSendOtp = async() => {
         try{
           const response = await axios.post('/api/user/sendotp');
-            console.log(response);
+          alert("OTP sent successfully")
         }catch{
          alert("Failed to send otp");
         }

@@ -4,7 +4,7 @@
 import "@uploadthing/react/styles.css";
 
 import { UploadButton } from "@uploadthing/react";
-import { OurFileRouter } from "../api/uploadthing/core"; // Adjust path as needed
+import { OurFileRouter } from "../../api/uploadthing/core"; // Adjust path as needed
 
 import { useState } from 'react';
 import Link from "next/link";

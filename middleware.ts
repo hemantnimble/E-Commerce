@@ -19,7 +19,7 @@ export default async function middleware(request: NextRequest) {
 
   if (!session) {
     if (isProtected || isAdminRoute) {
-      const absoluteURL = new URL("/signin", request.nextUrl.origin);
+      const absoluteURL = new URL("/user/signin", request.nextUrl.origin);
       return NextResponse.redirect(absoluteURL.toString());
     }
   } else if (isAdminRoute && !userRole.includes("ADMIN")) {

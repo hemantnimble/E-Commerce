@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
 import { MoreHorizontal, Search, ShoppingBag, ShoppingCart, Users, Package, DollarSign, Menu, Plus, Edit, Trash2 } from "lucide-react"
 import Link from "next/link"
@@ -40,6 +40,7 @@ import {
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import axios from "axios"
 
 const data = [
   {
@@ -67,16 +68,30 @@ const data = [
     total: Math.floor(Math.random() * 5000) + 1000,
   },
 ]
-
+interface Product {
+  id: string;
+  title: string;
+  price: string;
+  images: string[],
+  createdAt: string;
+  updatedAt: string;
+}
 export default function Component() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [activeTab, setActiveTab] = useState("dashboard")
-  const [products, setProducts] = useState([
-    { id: 1, name: "Product 1", price: 19.99, stock: 100 },
-    { id: 2, name: "Product 2", price: 29.99, stock: 50 },
-    { id: 3, name: "Product 3", price: 39.99, stock: 75 },
-  ])
-  const [editingProduct, setEditingProduct] = useState(null)
+  const [products, setProducts] = useState<Product[]>([])
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get<{ products: Product[] }>("/api/products/getproducts")
+        setProducts(response.data.products)
+      } catch (error) {
+        console.error("Error fetching products:", error)
+      }
+    }
+
+    fetchProducts();
+  }, [])
 
   const addProduct = (product: any) => {
     setProducts([...products, { ...product, id: products.length + 1 }])
@@ -232,44 +247,11 @@ export default function Component() {
               <TabsContent value="products">
                 <div className="flex justify-between items-center mb-6">
                   <h3 className="text-gray-700 text-3xl font-medium">Products</h3>
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button>
-                        <Plus className="mr-2 h-4 w-4" /> Add New Product
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
-                      <DialogHeader>
-                        <DialogTitle>Add New Product</DialogTitle>
-                        <DialogDescription>
-                          Enter the details of the new product here. Click save when youre done.
-                        </DialogDescription>
-                      </DialogHeader>
-                      <div className="grid gap-4 py-4">
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="name" className="text-right">
-                            Name
-                          </Label>
-                          <Input id="name" className="col-span-3" />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="price" className="text-right">
-                            Price
-                          </Label>
-                          <Input id="price" type="number" className="col-span-3" />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="stock" className="text-right">
-                            Stock
-                          </Label>
-                          <Input id="stock" type="number" className="col-span-3" />
-                        </div>
-                      </div>
-                      <DialogFooter>
-                        <Button type="submit">Save Product</Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
+                  <Link href="/admin/add">
+                    <Button>
+                      <Plus className="mr-2 h-4 w-4" /> Add New Product
+                    </Button>
+                  </Link>
                 </div>
                 <Card>
                   <CardContent>
@@ -285,14 +267,17 @@ export default function Component() {
                       <TableBody>
                         {products.map((product) => (
                           <TableRow key={product.id}>
-                            <TableCell>{product.name}</TableCell>
-                            <TableCell>${product.price.toFixed(2)}</TableCell>
-                            <TableCell>{product.stock}</TableCell>
-                            {/* <TableCell>
+                            <TableCell>{product.title}</TableCell>
+                            <TableCell>${product.price}</TableCell>
+                            <TableCell>
+                              {/* {product.stock} */}
+                              12
+                            </TableCell>
+                            <TableCell>
                               <div className="flex space-x-2">
                                 <Dialog>
                                   <DialogTrigger asChild>
-                                    <Button variant="outline" size="sm" onClick={() => setEditingProduct(product)}>
+                                    <Button variant="outline" size="sm" >
                                       <Edit className="h-4 w-4" />
                                     </Button>
                                   </DialogTrigger>
@@ -308,19 +293,19 @@ export default function Component() {
                                         <Label htmlFor="edit-name" className="text-right">
                                           Name
                                         </Label>
-                                        <Input id="edit-name" defaultValue={editingProduct?.name} className="col-span-3" />
+                                        <Input id="edit-name"  className="col-span-3" />
                                       </div>
                                       <div className="grid grid-cols-4 items-center gap-4">
                                         <Label htmlFor="edit-price" className="text-right">
                                           Price
                                         </Label>
-                                        <Input id="edit-price" type="number" defaultValue={editingProduct?.price} className="col-span-3" />
+                                        <Input id="edit-price" type="number"  className="col-span-3" />
                                       </div>
                                       <div className="grid grid-cols-4 items-center gap-4">
                                         <Label htmlFor="edit-stock" className="text-right">
                                           Stock
                                         </Label>
-                                        <Input id="edit-stock" type="number" defaultValue={editingProduct?.stock} className="col-span-3" />
+                                        <Input id="edit-stock" type="number"  className="col-span-3" />
                                       </div>
                                     </div>
                                     <DialogFooter>
@@ -349,7 +334,7 @@ export default function Component() {
                                         <Label htmlFor="stock-update" className="text-right">
                                           New Stock Level
                                         </Label>
-                                        <Input id="stock-update" type="number" defaultValue={product.stock} className="col-span-3" />
+                                        <Input id="stock-update" type="number"  className="col-span-3" />
                                       </div>
                                     </div>
                                     <DialogFooter>
@@ -358,7 +343,7 @@ export default function Component() {
                                   </DialogContent>
                                 </Dialog>
                               </div>
-                            </TableCell> */}
+                            </TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
