@@ -18,7 +18,7 @@ const ScrollAnimation = () => {
                 start: "-170% 10%", // Adjust start point
                 end: "top 30%", // Adjust end point
                 scrub: true,
-                markers: true,
+                // markers: true,
             },
         });
 
@@ -35,7 +35,7 @@ const ScrollAnimation = () => {
                 start: "0% 30%", // Starts after the first timeline ends
                 end: "300% 50%", // Adjust end point for desired effect
                 scrub: true,
-                markers: true,
+                // markers: true,
             },
         });
 
