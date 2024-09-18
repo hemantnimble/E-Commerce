@@ -7,10 +7,11 @@ const prisma = new PrismaClient()
 
 export async function POST(req: NextRequest,) {
     const session = await auth();
-    const email = session?.user?.email;
+    const sessionEmail = session?.user?.email;
+    const { otp, newPassword,bodyEmail } = await req.json();
+    const email = bodyEmail || sessionEmail;
 
 
-    const { otp, newPassword } = await req.json();
     try {
         const user = await prisma.user.findUnique({ where: { email } });
 

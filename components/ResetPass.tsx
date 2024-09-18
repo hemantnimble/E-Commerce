@@ -61,9 +61,11 @@ import {
     DialogDescription,
 } from "@/components/ui/dialog"
 import axios from 'axios'
+interface ResetPasswordProps {
+    email: string;
+}
 
-
-export default function ResetPassword() {
+const ResetPassword: React.FC<ResetPasswordProps> = ({ email }) => {
     const [open, setOpen] = useState(false)
     const [otp, setOtp] = useState("");
     const [newPassword, setNewPassword] = useState("");
@@ -72,7 +74,7 @@ export default function ResetPassword() {
 
     const sendOtp = async () => {
         try {
-            const response = await axios.post('/api/user/sendotp',{});
+            const response = await axios.post('/api/user/sendotp', {bodyEmail:email});
             alert("OTP sent successfully")
             setOpen(true)
         } catch {
@@ -96,17 +98,17 @@ export default function ResetPassword() {
             return
         }
         try {
-            const response = await axios.post('/api/user/resetpassword', { otp, newPassword });
-            // alert(response.data.message);
+            const response = await axios.post('/api/user/resetpassword', { otp, newPassword,bodyEmail:email });
             setError(response.data.message);
-            if(response.data.message==="Password reset successful"){
+            if (response.data.message === "Password reset successful") {
                 setOpen(false);
+                alert("Password reset successful")
             }
         } catch (error) {
             console.error(error);
             setError("Error resetting password. Please try again.");
             alert("Failed to reset password. Please try again.");
-        } 
+        }
     };
 
     return (
@@ -162,3 +164,5 @@ export default function ResetPassword() {
     )
 }
 
+
+export default ResetPassword
