@@ -5,14 +5,12 @@ import Link from "next/link";
 import { useState } from "react";
 import axios from "axios";
 import ResetPassword from "@/components/ResetPass";
-import toast from "react-hot-toast";
 
-const Profile: React.FC = () => {
+export default function Profile() {
     const session = useSession();
     const [oldPass, setOldPass] = useState("");
     const [newPass, setNewPass] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-    const [resetPasspopup,setResetPasspopup ] = useState(false);
 
     async function handleSubmit(e: any) {
         e.preventDefault();
@@ -29,12 +27,12 @@ const Profile: React.FC = () => {
         setShowPassword(prevState => !prevState);
     };
 
-    const handleSendOtp = async() => {
-        try{
-          const response = await axios.post('/api/user/sendotp');
-          alert("OTP sent successfully")
-        }catch{
-         alert("Failed to send otp");
+    const handleSendOtp = async () => {
+        try {
+            const response = await axios.post('/api/user/sendotp');
+            alert("OTP sent successfully")
+        } catch {
+            alert("Failed to send otp");
         }
     };
 
@@ -112,14 +110,18 @@ const Profile: React.FC = () => {
                         <hr className="mt-4 mb-8" />
 
                     </form>
-                    <p className="mt-2 pb-6">
-                        Cant remember your current password? <button onClick={handleSendOtp} className="text-sm font-semibold text-blue-600 underline decoration-2">Recover Account</button>
+                    <p className="mt-2 pb-6 flex">
+                        Cant remember your current password?
+                        {/* <button onClick={handleSendOtp} className="text-sm font-semibold text-blue-600 underline decoration-2">Recover Account</button> */}
+                        <ResetPassword></ResetPassword>
                     </p>
+
+                    
+
                 </div>
             </div>
-            <ResetPassword/>
+
         </div>
     );
 };
 
-export default Profile;
