@@ -113,7 +113,7 @@ export default function Profile() {
                     <p className="mt-2 pb-6 flex">
                         Cant remember your current password?
                         {/* <button onClick={handleSendOtp} className="text-sm font-semibold text-blue-600 underline decoration-2">Recover Account</button> */}
-                        <ResetPassword></ResetPassword>
+                        <ResetPassword email=""></ResetPassword>
                     </p>
 
                     

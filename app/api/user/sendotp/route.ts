@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     const sessionEmail = session?.user?.email;
     const bodyEmail = await req.json();
     const email = bodyEmail.bodyEmail || sessionEmail;
-
+console.log(email)
     if (!email) {
         return NextResponse.json({ message: 'Email not found in session.' }, { status: 400 });
     }
