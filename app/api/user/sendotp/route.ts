@@ -8,11 +8,14 @@ const prisma = new PrismaClient();
 
 export async function POST(req: NextRequest) {
     const session = await auth();
-    const email = session?.user?.email;
+    const sessionEmail = session?.user?.email;
+    const bodyEmail = await req.json();
+    const email = bodyEmail.bodyEmail || sessionEmail;
 
     if (!email) {
         return NextResponse.json({ message: 'Email not found in session.' }, { status: 400 });
     }
+    console.log(email)
 
     try {
         const user = await prisma.user.findUnique({ where: { email } });

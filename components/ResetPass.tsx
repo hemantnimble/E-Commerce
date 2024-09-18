@@ -72,7 +72,7 @@ export default function ResetPassword() {
 
     const sendOtp = async () => {
         try {
-            const response = await axios.post('/api/user/sendotp');
+            const response = await axios.post('/api/user/sendotp',{});
             alert("OTP sent successfully")
             setOpen(true)
         } catch {

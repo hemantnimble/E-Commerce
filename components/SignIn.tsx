@@ -6,6 +6,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import GoogleSignin from './GoogleSignin';
 import { UserIcon, Eye, EyeOff } from 'lucide-react';
+import axios from 'axios';
 
 export default function LoginForm() {
     const router = useRouter();
@@ -47,7 +48,19 @@ export default function LoginForm() {
     const togglePasswordVisibility = () => {
         setShowPassword(prevState => !prevState);
     };
-
+    const sendOtp = async () => {
+        try {
+            if(!email){
+                alert("Please enter a email");
+            }else{
+                const response = await axios.post('/api/user/sendotp',{bodyEmail: email});
+                alert("OTP sent successfully")
+                // setOpen(true)
+            }
+        } catch {
+            alert("Failed to send otp");
+        }
+    }
     return (
         <>
             <Toaster />
@@ -105,7 +118,7 @@ export default function LoginForm() {
                     </div>
                 </div>
                 <div className="flex-row">
-                    <span className="span">Forgot password?</span>
+                    <span onClick={sendOtp} className="span">Forgot password?</span>
                 </div>
                 <button onClick={loginwithc} className="button-submit">Sign In</button>
                 <p className="p line">Or With</p>
