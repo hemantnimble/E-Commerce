@@ -40,7 +40,7 @@ const Home: React.FC = () => {
               <span className="ml-2">Profile</span>
             </button>
           </Link>
-          <Link href='/user/orders'>
+          <Link href='/user/address'>
             <button className=" w-full flex items-center bg-secondary text-secondary-foreground p-3 rounded-lg shadow-lg hover:bg-secondary/80 transition duration-200">
               <img aria-hidden="true" alt="Coupons" src="https://openui.fly.dev/openui/24x24.svg?text=🎁" />
               <span className="ml-2">Saved Address</span>

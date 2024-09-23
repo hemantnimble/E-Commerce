@@ -83,7 +83,6 @@ export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
         token.name = user.name || ''; 
         token.email = user.email || '';
         token.image = user.image || ''; 
-        // token.roles = user.roles as UserRole;
         token.roles = user.roles || [UserRole.USER];
       }
       return token;

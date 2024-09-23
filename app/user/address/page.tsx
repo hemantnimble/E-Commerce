@@ -1,11 +1,6 @@
-'use client'
-import React, { useEffect, useState } from 'react'
-import CheckoutPageSingle from '@/components/CheckoutSingle'
-import { useParams } from 'next/navigation';
-import axios from 'axios';
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
-import convertToSubcurrency from '@/utils/convertToSubcurrency';
+"use client"
+
+import { useState } from "react"
 import { Plus, Pencil, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -19,7 +14,6 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { useSession } from 'next-auth/react';
 
 interface Address {
     id: number
@@ -30,99 +24,64 @@ interface Address {
     zip: string
     isDefault: boolean
 }
-interface Product {
-    id: string;
-    title: string;
-    price: GLfloat;
-    images: string[];
-    createdAt: string;
-    updatedAt: string;
-}
-function Page() {
-    const session = useSession();
-    const userId = session.data?.user.id;
-    const params = useParams<{ id: string }>()
-    const id = params?.id;
-    const [product, setProduct] = useState<Product | null>(null);
-    const [addresses, setAddress] = useState<Address | null>(null);
-    const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC ?? '');
-    useEffect(() => {
-        const fetchProducts = async (id: any) => {
-            try {
-                const response = await axios.post<{ product: Product }>("/api/products/getsingleproduct", { id })
-                setProduct(response.data.product)
-            } catch (error) {
-                console.error("Error fetching products:", error)
-            }
+
+export default function Addresses() {
+    const [addresses, setAddresses] = useState<Address[]>([])
+    const [editingAddress, setEditingAddress] = useState<Address | null>(null)
+
+    const handleAddAddress = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        const formData = new FormData(event.currentTarget)
+        const newAddress: Address = {
+            id: Date.now(),
+            name: formData.get("name") as string,
+            street: formData.get("street") as string,
+            city: formData.get("city") as string,
+            state: formData.get("state") as string,
+            zip: formData.get("zip") as string,
+            isDefault: addresses.length === 0,
         }
-        const fetchAddress = async () => {
-            try {
-                const response = await axios.get("/api/user/getaddress")
-                setAddress(response.data.addresses)
-            } catch (error) {
-                console.error("Error fetching address:", error)
-            }
+        setAddresses([...addresses, newAddress])
+        event.currentTarget.reset()
+    }
+
+    const handleEditAddress = (address: Address) => {
+        setEditingAddress(address)
+    }
+
+    const handleUpdateAddress = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        const formData = new FormData(event.currentTarget)
+        const updatedAddress: Address = {
+            ...editingAddress!,
+            name: formData.get("name") as string,
+            street: formData.get("street") as string,
+            city: formData.get("city") as string,
+            state: formData.get("state") as string,
+            zip: formData.get("zip") as string,
         }
-        fetchAddress()
-        fetchProducts(id)
-    }, [id])
-    const amount = product?.price ?? 1;
-    const item = product
-    console.log(userId)
+        setAddresses(addresses.map(a => a.id === updatedAddress.id ? updatedAddress : a))
+        setEditingAddress(null)
+    }
+
+    const handleDeleteAddress = (id: number) => {
+        setAddresses(addresses.filter(a => a.id !== id))
+    }
+
+    const handleSetDefaultAddress = (id: number) => {
+        setAddresses(addresses.map(a => ({ ...a, isDefault: a.id === id })))
+    }
+
     return (
-        <div>
-            <div className="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">
-                <div className="px-4 pt-8">
-                    <p className="text-xl font-medium">Order Summary</p>
-                    <p className="text-gray-400">Check your items. And select a suitable shipping method.</p>
-                    <div className="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6">
-                        <div className="flex flex-col rounded-lg bg-white sm:flex-row">
-                            <img className="m-2 h-24 w-28 rounded-md border object-cover object-center" src={product?.images[0]} alt="" />
-                            <div className="flex w-full flex-col px-4 py-4">
-                                <span className="font-semibold">{product?.title}</span>
-                                <span className="float-right text-gray-400">42EU - 8.5US</span>
-                                <p className="text-lg font-bold">${product?.price}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {/* <Card>
-                    <CardHeader>
-                        <CardTitle>Add New Address</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <form className="space-y-4">
-                            <div>
-                                <Label htmlFor="name">Full Name</Label>
-                                <Input id="name" name="name" required />
-                            </div>
-                            <div>
-                                <Label htmlFor="street">Street Address</Label>
-                                <Input id="street" name="street" required />
-                            </div>
-                            <div>
-                                <Label htmlFor="city">City</Label>
-                                <Input id="city" name="city" required />
-                            </div>
-                            <div>
-                                <Label htmlFor="state">State</Label>
-                                <Input id="state" name="state" required />
-                            </div>
-                            <div>
-                                <Label htmlFor="zip">ZIP Code</Label>
-                                <Input id="zip" name="zip" required />
-                            </div>
-                            <Button type="submit">Add Address</Button>
-                        </form>
-                    </CardContent>
-                </Card> */}
-                {/* <Card>
+        <div className="container mx-auto p-4">
+            <h1 className="text-2xl font-bold mb-4">Manage Addresses</h1>
+            <div className="grid gap-4 md:grid-cols-2">
+                <Card>
                     <CardHeader>
                         <CardTitle>Your Addresses</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        {addresses &&
-                            addresses.length === 0 ? (
+                        {addresses.length === 0 ? (
                             <p>No addresses saved yet.</p>
                         ) : (
                             <RadioGroup
@@ -184,24 +143,38 @@ function Page() {
                             </RadioGroup>
                         )}
                     </CardContent>
-                </Card> */}
-                <div className="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
-                    <p className="text-xl font-medium">Payment Details</p>
-                    <p className="text-gray-400">Complete your order by providing your payment details.</p>
-                    <Elements stripe={stripePromise}
-                        options={{
-                            mode: "payment",
-                            amount: convertToSubcurrency(amount),
-                            currency: "usd",
-                        }}
-                    >
-                        <CheckoutPageSingle amount={amount} item={product} />
-                    </Elements>
-                    <button className="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white">Place Order</button>
-                </div>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Add New Address</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <form onSubmit={handleAddAddress} className="space-y-4">
+                            <div>
+                                <Label htmlFor="name">Full Name</Label>
+                                <Input id="name" name="name" required />
+                            </div>
+                            <div>
+                                <Label htmlFor="street">Street Address</Label>
+                                <Input id="street" name="street" required />
+                            </div>
+                            <div>
+                                <Label htmlFor="city">City</Label>
+                                <Input id="city" name="city" required />
+                            </div>
+                            <div>
+                                <Label htmlFor="state">State</Label>
+                                <Input id="state" name="state" required />
+                            </div>
+                            <div>
+                                <Label htmlFor="zip">ZIP Code</Label>
+                                <Input id="zip" name="zip" required />
+                            </div>
+                            <Button type="submit">Add Address</Button>
+                        </form>
+                    </CardContent>
+                </Card>
             </div>
         </div>
     )
 }
-
-export default Page
