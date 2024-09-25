@@ -3,24 +3,29 @@ import { PrismaClient } from "@prisma/client";
 import { NextResponse, NextRequest } from "next/server";
 const prisma = new PrismaClient();
 export const dynamic = 'force-dynamic';
-export async function GET(req: NextRequest) {
+export async function POST(req: NextRequest) {
     const session = await auth();
     const userId = session?.user?.id;
     try {
+
         if (!userId) {
             return NextResponse.json({ message: 'User not authenticated' }, { status: 401 });
-          }
-      
-          // Fetch addresses associated with the user
-          const addresses = await prisma.address.findMany({
+        }
+
+        const { addressId } = await req.json();
+
+        if (!addressId) {
+            return NextResponse.json({ message: 'All address fields are required' }, { status: 400 });
+        }
+
+        const deletedAddress = await prisma.address.delete({
             where: {
-              userId: userId,
+                userId: userId,
+                id: addressId
             },
-          });
-      
-          // Return the list of addresses
-          return NextResponse.json({ addresses });
-      
+        });
+
+        return NextResponse.json({ message: 'Address deleted successfully', address: deletedAddress });
     } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 400 });
     }
