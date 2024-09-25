@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js'
 import convertToSubcurrency from '@/utils/convertToSubcurrency';
+import { Button } from './ui/button';
 
 function CheckoutPageSingle({ amount, item }: { amount: number, item: any }) {
     const stripe = useStripe();
@@ -46,7 +47,7 @@ function CheckoutPageSingle({ amount, item }: { amount: number, item: any }) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ paymentIntentId: clientSecret, item ,quantity:1}),
+            body: JSON.stringify({ paymentIntentId: clientSecret, item, quantity: 1 }),
         });
 
         const returnUrl = process.env.NEXT_PUBLIC_RETURN_URL;
@@ -100,12 +101,16 @@ function CheckoutPageSingle({ amount, item }: { amount: number, item: any }) {
 
             {errorMessage && <div>{errorMessage}</div>}
 
-            <button
+            {/* <button
                 disabled={!stripe || loading}
                 className="text-white w-full p-5 bg-black mt-2 rounded-md font-bold disabled:opacity-50 disabled:animate-pulse"
             >
                 {!loading ? `Pay $${amount}` : "Processing..."}
-            </button>
+            </button> */}
+
+            <Button className="w-full mt-4" disabled={!stripe || loading}>
+                {!loading ? `Pay $${amount}` : "Processing..."}
+            </Button>
         </form>
     )
 }

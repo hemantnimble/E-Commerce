@@ -6,8 +6,12 @@ import axios from 'axios';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import convertToSubcurrency from '@/utils/convertToSubcurrency';
-import AddressSection from '@/components/AddressSection';
-
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import AddressSection from '@/components/AddressSection'
 
 interface Product {
     id: string;
@@ -36,40 +40,50 @@ function Page() {
     const amount = product?.price ?? 1;
     const item = product
     return (
-        <div>
-            <div className="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">
-                <div className="px-4 pt-8">
-                    <p className="text-xl font-medium">Order Summary</p>
-                    <p className="text-gray-400">Check your items. And select a suitable shipping method.</p>
-                    <div className="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6">
-                        <div className="flex flex-col rounded-lg bg-white sm:flex-row">
-                            <img className="m-2 h-24 w-28 rounded-md border object-cover object-center" src={product?.images[0]} alt="" />
-                            <div className="flex w-full flex-col px-4 py-4">
-                                <span className="font-semibold">{product?.title}</span>
-                                <span className="float-right text-gray-400">42EU - 8.5US</span>
-                                <p className="text-lg font-bold">${product?.price}</p>
+        <div className="container mx-auto p-4">
+            <h1 className="text-2xl font-bold mb-6">Checkout</h1>
+            <div className="grid gap-6 lg:grid-cols-2">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Order Summary</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="space-y-4">
+                            <div className="flex gap-4">
+                                <img className="h-24 w-28 rounded-md border object-cover object-center" src={product?.images[0]} alt="" />
+                                <div className='flex flex-col'>
+                                    <span>{product?.title}</span>
+                                    <span>${product?.price}</span>
+                                </div>
+                            </div>
+                            <hr />
+                            <div className="flex justify-between font-bold">
+                                <span>Total</span>
+                                <span>$49.98</span>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </CardContent>
+                </Card>
                 <AddressSection></AddressSection>
-                <div className="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
-                    <p className="text-xl font-medium">Payment Details</p>
-                    <p className="text-gray-400">Complete your order by providing your payment details.</p>
-                    <Elements stripe={stripePromise}
-                        options={{
-                            mode: "payment",
-                            amount: convertToSubcurrency(amount),
-                            currency: "usd",
-                        }}
-                    >
-                        <CheckoutPageSingle amount={amount} item={product} />
-                    </Elements>
-                    <button className="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white">Place Order</button>
-                </div>
+                <Card className="mt-6">
+                    <div className="p-6">
+                        <CardTitle>Payment</CardTitle>
+                        <CardDescription>Enter your payment details</CardDescription>
+                        <Elements stripe={stripePromise}
+                            options={{
+                                mode: "payment",
+                                amount: convertToSubcurrency(amount),
+                                currency: "usd",
+                            }} >
+                            <CheckoutPageSingle amount={amount} item={product} />
+                        </Elements>
+                    </div>
+                </Card>
             </div>
         </div>
     )
 }
 
 export default Page
+
+
