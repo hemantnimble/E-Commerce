@@ -4,7 +4,7 @@ import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js'
 import convertToSubcurrency from '@/utils/convertToSubcurrency';
 import { Button } from './ui/button';
 
-function CheckoutPageSingle({ amount, item,selectedAddress }: { amount: number, item: any,selectedAddress:any }) {
+function CheckoutPageSingle({ amount, item, selectedAddress }: { amount: number, item: any, selectedAddress: any }) {
     const stripe = useStripe();
     const elements = useElements();
     const [errorMessage, setErrorMessage] = useState<string>();
@@ -41,14 +41,14 @@ function CheckoutPageSingle({ amount, item,selectedAddress }: { amount: number, 
         }
         // const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
 
- // Send order creation request to the server
- const response = await fetch('/api/orders/createone', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ paymentIntentId: clientSecret, item, quantity: 1,selectedAddress }),
-});
+        // Send order creation request to the server
+        const response = await fetch('/api/orders/createone', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ paymentIntentId: clientSecret, item, quantity: 1, selectedAddress }),
+        });
 
 
         const returnUrl = process.env.NEXT_PUBLIC_RETURN_URL;
@@ -69,7 +69,7 @@ function CheckoutPageSingle({ amount, item,selectedAddress }: { amount: number, 
             //  Your customer is redirected to your`return_url`.
         }
 
-       
+
         const data = await response.json();
         if (data.success) {
             console.log('data', data)

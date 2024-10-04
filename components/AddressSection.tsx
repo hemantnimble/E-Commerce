@@ -24,9 +24,11 @@ interface Address {
     zipCode: string
     isDefault: boolean
 }
+
 interface AddressSectionProps {
     onSelectAddress: (addressId: number) => void;
 }
+
 const AddressSection: React.FC<AddressSectionProps> = ({ onSelectAddress }) => {
     const [addAddress, setAddAddress] = useState(false);
     const [addresses, setAddresses] = useState<Address[]>([]);
@@ -37,12 +39,19 @@ const AddressSection: React.FC<AddressSectionProps> = ({ onSelectAddress }) => {
     const [zipCode, setZipCode] = useState('');
     const [editAddressId, setEditAddressId] = useState<number | null>(null); // for editing address
     const [message, setMessage] = useState('');
+    const [selectedAddressId, setSelectedAddressId] = useState<number | null>(null); // State for selected address
 
     // Fetch addresses from API
     const fetchAddresses = async () => {
         try {
             const response = await axios.get("/api/user/addresses/get");
-            setAddresses(response.data.addresses);
+            const addresses = response.data.addresses;
+            setAddresses(addresses);
+            // If no address is selected, set the first address as default
+            if (!selectedAddressId && addresses.length > 0) {
+                setSelectedAddressId(addresses[0].id);
+                onSelectAddress(addresses[0].id);
+            }
         } catch (error) {
             console.error("Error fetching addresses:", error);
         }
@@ -112,9 +121,9 @@ const AddressSection: React.FC<AddressSectionProps> = ({ onSelectAddress }) => {
         }
     };
 
-    // Set a default address
-    const handleSetDefaultAddress = async (addressId: any) => {
-        console.log("add sec",addressId)
+    // Handle address selection
+    const handleAddressSelection = (addressId: number) => {
+        setSelectedAddressId(addressId);
         onSelectAddress(addressId);
     };
 
@@ -128,13 +137,9 @@ const AddressSection: React.FC<AddressSectionProps> = ({ onSelectAddress }) => {
                     {addresses.length === 0 ? (
                         <p>No addresses saved yet.</p>
                     ) : (
-                        <RadioGroup
-                            defaultValue={addresses.find(a => a.isDefault)?.id.toString()}
-                            // onValueChange={(value) => handleSetDefaultAddress(Number(value))}
-                        >
+                        <>
                             {addresses.map((address) => (
-                                <div onClick={() => handleSetDefaultAddress((address.id))} key={address.id} className="flex items-center space-x-2 mb-4">
-                                    <RadioGroupItem value={address.id.toString()} id={`address-${address.id}`} />
+                                <div key={address.id} className="flex items-center space-x-2 mb-4">
                                     <Label htmlFor={`address-${address.id}`} className="flex-grow">
                                         <div>
                                             <p className="font-medium">{address.name}</p>
@@ -142,6 +147,12 @@ const AddressSection: React.FC<AddressSectionProps> = ({ onSelectAddress }) => {
                                             <p className="text-sm text-muted-foreground">{`${address.city}, ${address.state} ${address.zipCode}`}</p>
                                         </div>
                                     </Label>
+                                    <Button
+                                        onClick={() => handleAddressSelection(address.id)}
+                                        disabled={selectedAddressId === address.id}
+                                    >
+                                        {selectedAddressId === address.id ? "Delivering Here" : "Deliver Here"}
+                                    </Button>
                                     <Dialog>
                                         <DialogTrigger asChild>
                                             <Button variant="outline" size="icon" onClick={() => handleEditAddress(address)}>
@@ -184,7 +195,7 @@ const AddressSection: React.FC<AddressSectionProps> = ({ onSelectAddress }) => {
                                     </Button>
                                 </div>
                             ))}
-                        </RadioGroup>
+                        </>
                     )}
                     <Button onClick={() => setAddAddress(true)}>Add New Address</Button>
                 </CardContent>
@@ -220,12 +231,12 @@ const AddressSection: React.FC<AddressSectionProps> = ({ onSelectAddress }) => {
                             <Label htmlFor="zip">ZIP Code</Label>
                             <Input id="zip" name="zip" value={zipCode} onChange={(e) => setZipCode(e.target.value)} required />
                         </div>
-                        <Button type="submit">Add Address</Button>
+                        <Button type="submit">Save Address</Button>
                     </form>
                 </DialogContent>
             </Dialog>
         </section>
-    )
-}
+    );
+};
 
-export default AddressSection
+export default AddressSection;

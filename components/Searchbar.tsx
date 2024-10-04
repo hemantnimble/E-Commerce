@@ -2,7 +2,13 @@ import { useState, useCallback } from 'react';
 import axios from 'axios';
 import debounce from 'lodash/debounce';
 
-const SearchBar = ({ onSearch }: { onSearch: (products: any[]) => void }) => {
+const SearchBar =  ({
+  onSearch,
+  onSelect // New prop for handling selection
+}: {
+  onSearch: (products: any[]) => void;
+  onSelect: () => void; // New prop type for selection
+}) => {
   const [query, setQuery] = useState('');
 
   // Define a debounced function

@@ -41,7 +41,7 @@ function Page() {
     }, [id]);
 
     const handleSelectAddress = (addressId: any) => {
-        setSelectedAddress(addressId);  // Set the selected address ID
+        setSelectedAddress(addressId);  
         console.log("Selected Address ID:", addressId);
     };
 
@@ -67,12 +67,12 @@ function Page() {
                             <hr />
                             <div className="flex justify-between font-bold">
                                 <span>Total</span>
-                                <span>$49.98</span>
+                                <span>${product?.price}+tax</span> 
                             </div>
                         </div>
                     </CardContent>
                 </Card>
-                {/* Address Section */}
+                {/* !Address Section */}
                 <AddressSection onSelectAddress={handleSelectAddress} />
                 <Card className="mt-6">
                     <div className="p-6">
