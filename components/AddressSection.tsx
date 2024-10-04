@@ -24,8 +24,10 @@ interface Address {
     zipCode: string
     isDefault: boolean
 }
-
-function AddressSection() {
+interface AddressSectionProps {
+    onSelectAddress: (addressId: number) => void;
+}
+const AddressSection: React.FC<AddressSectionProps> = ({ onSelectAddress }) => {
     const [addAddress, setAddAddress] = useState(false);
     const [addresses, setAddresses] = useState<Address[]>([]);
     const [name, setName] = useState('');
@@ -111,13 +113,9 @@ function AddressSection() {
     };
 
     // Set a default address
-    const handleSetDefaultAddress = async (addressId: number) => {
-        try {
-            await axios.put(`/api/user/addresses/set-default/${addressId}`);
-            fetchAddresses(); // Refresh the address list to reflect default address
-        } catch (error) {
-            setMessage('Failed to set default address');
-        }
+    const handleSetDefaultAddress = async (addressId: any) => {
+        console.log("add sec",addressId)
+        onSelectAddress(addressId);
     };
 
     return (
@@ -132,10 +130,10 @@ function AddressSection() {
                     ) : (
                         <RadioGroup
                             defaultValue={addresses.find(a => a.isDefault)?.id.toString()}
-                            onValueChange={(value) => handleSetDefaultAddress(Number(value))}
+                            // onValueChange={(value) => handleSetDefaultAddress(Number(value))}
                         >
                             {addresses.map((address) => (
-                                <div key={address.id} className="flex items-center space-x-2 mb-4">
+                                <div onClick={() => handleSetDefaultAddress((address.id))} key={address.id} className="flex items-center space-x-2 mb-4">
                                     <RadioGroupItem value={address.id.toString()} id={`address-${address.id}`} />
                                     <Label htmlFor={`address-${address.id}`} className="flex-grow">
                                         <div>

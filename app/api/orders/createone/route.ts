@@ -6,7 +6,7 @@ import { NextResponse, NextRequest } from "next/server";
 const prisma = new PrismaClient();
 export async function POST(req: NextRequest) {
 
-    const { paymentIntentId, item ,quantity} = await req.json();
+    const { paymentIntentId, item ,quantity,selectedAddress} = await req.json();
     const session = await auth();
     const userId = session?.user?.id;
 
@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
             data: {
                 userId,
                 paymentIntentId,
+                addressId:selectedAddress,
                 items: {
                     create: [
                         {

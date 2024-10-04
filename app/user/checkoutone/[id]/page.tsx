@@ -21,10 +21,12 @@ interface Product {
     createdAt: string;
     updatedAt: string;
 }
+
 function Page() {
     const params = useParams<{ id: string }>()
     const id = params?.id;
     const [product, setProduct] = useState<Product | null>(null);
+    const [selectedAddress, setSelectedAddress] = useState(null);
     const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC ?? '');
     const fetchProducts = async (id: any) => {
         try {
@@ -36,7 +38,13 @@ function Page() {
     }
     useEffect(() => {
         fetchProducts(id)
-    }, [id])
+    }, [id]);
+
+    const handleSelectAddress = (addressId: any) => {
+        setSelectedAddress(addressId);  // Set the selected address ID
+        console.log("Selected Address ID:", addressId);
+    };
+
     const amount = product?.price ?? 1;
     const item = product
     return (
@@ -64,7 +72,8 @@ function Page() {
                         </div>
                     </CardContent>
                 </Card>
-                <AddressSection></AddressSection>
+                {/* Address Section */}
+                <AddressSection onSelectAddress={handleSelectAddress} />
                 <Card className="mt-6">
                     <div className="p-6">
                         <CardTitle>Payment</CardTitle>
@@ -75,7 +84,7 @@ function Page() {
                                 amount: convertToSubcurrency(amount),
                                 currency: "usd",
                             }} >
-                            <CheckoutPageSingle amount={amount} item={product} />
+                            <CheckoutPageSingle amount={amount} item={product} selectedAddress={selectedAddress} />
                         </Elements>
                     </div>
                 </Card>
