@@ -69,7 +69,7 @@ function CheckoutPage({ amount, cartItems }: { amount: number, cartItems: CartIt
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ paymentIntentId: clientSecret, cartItems }),
+                body: JSON.stringify({ paymentIntentId: clientSecret, cartItems,selectedAddress:"66ffc110273f5a94d3d7f8c4" }),
             });
 
             const data = await response.json();

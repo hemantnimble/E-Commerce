@@ -34,11 +34,12 @@ export async function POST(req: NextRequest) {
         });
 
         // Optionally: Clear the cart items if needed
-        // await prisma.cartItem.deleteMany({
-        //     where: {
-        //         userId,
-        //     },
-        // });
+        await prisma.cartItem.deleteMany({
+            where: {
+                userId: userId,
+                productId: item.id,
+            },
+        });
 
         return NextResponse.json({ order }, { status: 200 });
     } catch (error: any) {
