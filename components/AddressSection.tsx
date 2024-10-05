@@ -26,8 +26,9 @@ interface Address {
 }
 
 interface AddressSectionProps {
-    onSelectAddress: (addressId: number) => void;
+    onSelectAddress?: (addressId: number) => void;  // Make this optional with ?
 }
+
 
 const AddressSection: React.FC<AddressSectionProps> = ({ onSelectAddress }) => {
     const [addAddress, setAddAddress] = useState(false);
@@ -50,7 +51,9 @@ const AddressSection: React.FC<AddressSectionProps> = ({ onSelectAddress }) => {
             // If no address is selected, set the first address as default
             if (!selectedAddressId && addresses.length > 0) {
                 setSelectedAddressId(addresses[0].id);
-                onSelectAddress(addresses[0].id);
+                if (onSelectAddress) {  // Check if onSelectAddress is passed
+                    onSelectAddress(addresses[0].id);
+                }
             }
         } catch (error) {
             console.error("Error fetching addresses:", error);
@@ -124,7 +127,9 @@ const AddressSection: React.FC<AddressSectionProps> = ({ onSelectAddress }) => {
     // Handle address selection
     const handleAddressSelection = (addressId: number) => {
         setSelectedAddressId(addressId);
-        onSelectAddress(addressId);
+        if (onSelectAddress) {  // Check if onSelectAddress is passed
+            onSelectAddress(addressId);
+        }
     };
 
     return (
