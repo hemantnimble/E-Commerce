@@ -5,12 +5,13 @@ import { useCart } from "./CartContext";
 import { useEffect } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
-export default function Component() {
+export default function BottomNavBar() {
   const { cartItems, setCartItems } = useCart();
   const session = useSession();
-  const router =useRouter();
+  const pathname = usePathname(); // Get current path
+
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
@@ -22,40 +23,41 @@ export default function Component() {
       }
     };
     fetchCartItems();
-  }, []);
-    const currentPath = router.pathname;
+  }, [setCartItems]);
+
+  // Define a function to check if the link is active
+  const isActiveLink = (path: string) => pathname === path;
+
   return (
     <section className="r1 fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border h-16 px-4 lg:hidden">
       <ul className="r2 h-full flex items-center justify-around">
-        <li className={currentPath === '/' ? 'active' : ''}>
-          <Link href="/" className="flex flex-col items-center">
+        <li>
+          <Link href="/" className={`flex flex-col items-center ${isActiveLink('/') ? 'text-primary font-bold' : ''}`}>
             <Home className="h-6 w-6" />
             <span className="text-xs mt-1">Home</span>
           </Link>
         </li>
         <li>
-          <Link href="/explore" className="flex flex-col items-center">
+          <Link href="/explore" className={`flex flex-col items-center ${isActiveLink('/explore') ? 'text-primary font-bold' : ''}`}>
             <Search className="h-6 w-6" />
             <span className="text-xs mt-1">Explore</span>
           </Link>
         </li>
         <li>
-          {
-            session?.data?.user?.roles?.includes("ADMIN") ? (
-              <Link href="/admin/dashboard" className="flex flex-col items-center">
-                <User className="h-6 w-6" />
-                <span className="text-xs mt-1">Account</span>
-              </Link>
-            ) : (
-              <Link href="/user/account" className="flex flex-col items-center">
-                <User className="h-6 w-6" />
-                <span className="text-xs mt-1">Account</span>
-              </Link>
-            )
-          }
+          {session?.data?.user?.roles?.includes("ADMIN") ? (
+            <Link href="/admin/dashboard" className={`flex flex-col items-center ${isActiveLink('/admin/dashboard') ? 'text-primary font-bold' : ''}`}>
+              <User className="h-6 w-6" />
+              <span className="text-xs mt-1">Account</span>
+            </Link>
+          ) : (
+            <Link href="/user/account" className={`flex flex-col items-center ${isActiveLink('/user/account') ? 'text-primary font-bold' : ''}`}>
+              <User className="h-6 w-6" />
+              <span className="text-xs mt-1">Account</span>
+            </Link>
+          )}
         </li>
         <li>
-          <Link href="/user/cart" className="flex flex-col items-center relative">
+          <Link href="/user/cart" className={`flex flex-col items-center relative ${isActiveLink('/user/cart') ? 'text-primary font-bold' : ''}`}>
             <ShoppingCart className="h-6 w-6" />
             {cartItems > 0 && (
               <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
@@ -67,5 +69,5 @@ export default function Component() {
         </li>
       </ul>
     </section>
-  )
+  );
 }

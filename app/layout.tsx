@@ -4,7 +4,7 @@ import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import Navbar from "@/components/Navbar"
 import { CartProvider } from "@/components/CartContext";
-import BottomNav from "@/components/BottomNav";
+import BottomNavbar from "@/components/BottomNavbar";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -28,7 +28,7 @@ export default function RootLayout({
             <div className="pt-16 pb-[64px] lg:pb-0">
               {children}
             </div>
-            <BottomNav></BottomNav>
+            <BottomNavbar></BottomNavbar>
           </CartProvider>
         </SessionProvider>
       </body>
