@@ -1,6 +1,4 @@
-
 'use client'
-
 import { Fragment, useEffect, useState } from 'react'
 import {
   Dialog,
@@ -52,13 +50,18 @@ export default function Example() {
       <nav className='navbar-top flex h-12 mt-3 mx-3 shadow-lg items-center flex-row-reverse lg:flex-row justify-between lg:justify-between bg-white rounded-full px-6 relative'>
         <MagnifyingGlassIcon onClick={() => setOpen(true)} className='w-6 lg:hidden' />
         <div>
-          <Link href='/'>LOGO HERE</Link>
+          <Link href='/'>
+            <span className='flex gap-2 items-center'>
+              <img className='h-8 w-8' src="/assets/logo2.png" alt="" />
+              <h1 className='text-l'>SoundSphere</h1>
+            </span>
+          </Link>
         </div>
         {/* searchbar  */}
         <div className='lg:block hidden'>
           <div className="flex lg:ml-6">
             <div className='relative w-[600px]' >
-            <SearchBar onSearch={setProducts} onSelect={handleSelectProduct} />
+              <SearchBar onSearch={setProducts} onSelect={handleSelectProduct} />
               {products &&
                 <div >
                   {products.map((product) => (
@@ -114,7 +117,7 @@ export default function Example() {
             <div className="flex lg:ml-6 relative mx-3">
               <div className='relative w-full h-12' >
                 <div className='h-full'>
-                <SearchBar onSearch={setProducts} onSelect={handleSelectProduct} />
+                  <SearchBar onSearch={setProducts} onSelect={handleSelectProduct} />
                   {products &&
                     <div >
                       {products.map((product) => (

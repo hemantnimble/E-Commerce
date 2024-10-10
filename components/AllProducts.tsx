@@ -31,7 +31,7 @@ function AllProducts() {
   }, [])
 
   return (
-    <div className="flex flex-wrap justify-evenly">
+    <div className="flex flex-wrap justify-evenly gap-20">
       {products.length > 0 ? (
         products.map(item => (
           <Card key={item.id} item={item}></Card>

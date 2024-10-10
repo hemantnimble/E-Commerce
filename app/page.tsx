@@ -46,20 +46,20 @@ export default function Home() {
             default_velocity={5}
             className="font-display text-center text-4xl font-bold tracking-[-0.02em] text-black drop-shadow-sm dark:text-white md:text-7xl md:leading-[5rem]"
           />
-         
-          <section className="py-12 md:py-16 lg:py-20">
-            <div className=" w-full">
-              <div className="mb-8 text-center">
-                <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Featured Products</h2>
-                <p className="mt-4 text-muted-foreground">Discover our latest fashion collections.</p>
+
+          <section className="bg-white py-12 text-gray-700 sm:py-16 lg:py-20">
+            <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
+              <div className="mx-auto max-w-md text-center">
+                <h2 className="font-serif text-2xl font-bold sm:text-3xl">Our featured Aroma Range</h2>
+                <p className="mt-4 text-base text-gray-700">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Purus faucibus massa dignissim tempus.</p>
               </div>
-              <div className="">
-                <AllProducts />
+              <div className="mt-10 lg:mt-16 lg:grid-cols-4 lg:gap-4">
+                <AllProducts></AllProducts>
               </div>
             </div>
           </section>
           <div className="textRevel z-10 flex min-h-[16rem] items-center justify-center rounded-lg border bg-white dark:bg-black">
-            <TextReveal  text="Magic UI will change the way you design." />
+            <TextReveal text="Immerse yourself in crystal-clear audio with our premium earbuds." />
           </div>
           <section className="py-12 md:py-16 lg:py-20 bg-muted">
             <div className="container">
@@ -91,7 +91,7 @@ export default function Home() {
           </section>
         </main>
       </div>
-      <Footer/>
+      <Footer />
     </main>
   );
 }
