@@ -82,23 +82,23 @@ function Page() {
                     <CardContent>
                         {
                             cartItems.map((item, index) => (
-                                <div className="space-y-4">
-                            <div className="flex gap-4">
-                                <img className="h-24 w-28 rounded-md border object-cover object-center" src={item.product?.images[0]} alt="" />
-                                <div className='flex flex-col'>
-                                    <span>{item.product?.title}</span>
-                                    <span>${item.product?.price}</span>
+                                <div key={item.id} className="space-y-4">
+                                    <div className="flex gap-4">
+                                        <img className="h-24 w-28 rounded-md border object-cover object-center" src={item.product?.images[0]} alt="" />
+                                        <div className='flex flex-col'>
+                                            <span>{item.product?.title}</span>
+                                            <span>${item.product?.price}</span>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div className="flex justify-between font-bold">
+                                        <span>Total</span>
+                                        <span>${item.product?.price}+tax</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <hr />
-                            <div className="flex justify-between font-bold">
-                                <span>Total</span>
-                                <span>${item.product?.price}+tax</span>
-                            </div>
-                        </div>
                             ))
                         }
-                        
+
                     </CardContent>
                 </Card>
                 {/* !Address Section */}
