@@ -5,11 +5,14 @@ import { loadStripe } from '@stripe/stripe-js'
 import CheckoutPage from '@/components/CheckoutPage';
 import convertToSubcurrency from '@/utils/convertToSubcurrency';
 import axios from 'axios';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import AddressSection from '@/components/AddressSection';
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC ?? '');
 interface Product {
     id: string;
     title: string;
     price: string;
+    images: string[];
 }
 
 interface CartItem {
@@ -24,7 +27,7 @@ function Page() {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [totalPrice, setTotalPrice] = useState<number>(0);
     const [loading, setLoading] = useState<boolean>(true);
-
+    const [selectedAddress, setSelectedAddress] = useState(null);
     useEffect(() => {
         const fetchCartItems = async () => {
             try {
@@ -46,7 +49,10 @@ function Page() {
     }, []);
 
     const amount = totalPrice ?? 1;
-
+    const handleSelectAddress = (addressId: any) => {
+        setSelectedAddress(addressId);
+        console.log("Selected Address ID:", addressId);
+    };
     if (loading) {
         return (
             <div className="flex items-center justify-center">
@@ -66,14 +72,54 @@ function Page() {
         return <div>Error: Total price not available.</div>;
     }
     return (
-        <Elements stripe={stripePromise}
-            options={{
-                mode: "payment",
-                amount: convertToSubcurrency(amount),
-                currency: "usd",
-            }}>
-            <CheckoutPage amount={amount} cartItems={cartItems} />
-        </Elements>
+        <div className="container mx-auto p-4">
+            <h1 className="text-2xl font-bold mb-6">Checkout</h1>
+            <div className="grid gap-6 lg:grid-cols-2">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Order Summary</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        {
+                            cartItems.map((item, index) => (
+                                <div className="space-y-4">
+                            <div className="flex gap-4">
+                                <img className="h-24 w-28 rounded-md border object-cover object-center" src={item.product?.images[0]} alt="" />
+                                <div className='flex flex-col'>
+                                    <span>{item.product?.title}</span>
+                                    <span>${item.product?.price}</span>
+                                </div>
+                            </div>
+                            <hr />
+                            <div className="flex justify-between font-bold">
+                                <span>Total</span>
+                                <span>${item.product?.price}+tax</span>
+                            </div>
+                        </div>
+                            ))
+                        }
+                        
+                    </CardContent>
+                </Card>
+                {/* !Address Section */}
+                <AddressSection onSelectAddress={handleSelectAddress} />
+                <Card className="mt-6">
+                    <div className="p-6">
+                        <CardTitle>Payment</CardTitle>
+                        <CardDescription>Enter your payment details</CardDescription>
+                        <Elements stripe={stripePromise}
+                            options={{
+                                mode: "payment",
+                                amount: convertToSubcurrency(amount),
+                                currency: "usd",
+                            }}>
+                            <CheckoutPage amount={amount} cartItems={cartItems} selectedAddress={selectedAddress} />
+                        </Elements>
+                    </div>
+                </Card>
+            </div>
+        </div>
+
     )
 }
 export default Page

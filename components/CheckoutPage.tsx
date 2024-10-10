@@ -18,7 +18,7 @@ interface Product {
     price: string;
 }
 
-function CheckoutPage({ amount, cartItems }: { amount: number, cartItems: CartItem[] }) {
+function CheckoutPage({ amount, cartItems,selectedAddress }: { amount: number, cartItems: CartItem[],selectedAddress: any  }) {
     const stripe = useStripe();
     const elements = useElements();
     const [errorMessage, setErrorMessage] = useState<string>();
