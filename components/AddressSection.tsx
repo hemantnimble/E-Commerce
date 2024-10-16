@@ -152,12 +152,30 @@ const AddressSection: React.FC<AddressSectionProps> = ({ onSelectAddress }) => {
                                             <p className="text-sm text-muted-foreground">{`${address.city}, ${address.state} ${address.zipCode}`}</p>
                                         </div>
                                     </Label>
-                                    <Button
+                                    {/* <Button
                                         onClick={() => handleAddressSelection(address.id)}
                                         disabled={selectedAddressId === address.id}
                                     >
                                         {selectedAddressId === address.id ? "Delivering Here" : "Deliver Here"}
-                                    </Button>
+                                    </Button> */}
+
+                                    {selectedAddressId === address.id ? (
+                                        <Button
+                                            className="cursor-not-allowed bg-gray-300"
+                                            style={{
+                                                cursor: 'not-allowed',
+                                            }}
+                                        >
+                                            Delivering Here
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            onClick={() => handleAddressSelection(address.id)}
+                                        >
+                                            Deliver Here
+                                        </Button>
+                                    )}
+
                                     <Dialog>
                                         <DialogTrigger asChild>
                                             <Button variant="outline" size="icon" onClick={() => handleEditAddress(address)}>
