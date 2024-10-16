@@ -23,12 +23,13 @@ export async function GET() {
                 address: true,
             },
             orderBy: {
-                createdAt: 'desc', // Order by creation date
+                createdAt: 'desc', 
             },
         });
 
         return NextResponse.json({orders }, { status: 200 });
     } catch (err: any) {
+        console.error("Error fetching orders:", err);
         return NextResponse.json({ message: err }, { status: 500 });
 
     }

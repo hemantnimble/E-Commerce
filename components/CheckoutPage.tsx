@@ -18,7 +18,7 @@ interface Product {
     price: string;
 }
 
-function CheckoutPage({ amount, cartItems,selectedAddress }: { amount: number, cartItems: CartItem[],selectedAddress: any  }) {
+function CheckoutPage({ amount, cartItems, selectedAddress }: { amount: number, cartItems: CartItem[], selectedAddress: any }) {
     const stripe = useStripe();
     const elements = useElements();
     const [errorMessage, setErrorMessage] = useState<string>();
@@ -44,6 +44,7 @@ function CheckoutPage({ amount, cartItems,selectedAddress }: { amount: number, c
 
         fetchPaymentIntent();
     }, [amount]);
+    
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -62,18 +63,21 @@ function CheckoutPage({ amount, cartItems,selectedAddress }: { amount: number, c
             setLoading(false);
             return;
         }
-
+        if(!selectedAddress){
+            alert("Please select address")
+            setLoading(false);
+            return;
+        }
         try {
             const response = await fetch('/api/orders/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ paymentIntentId: clientSecret, cartItems,selectedAddress:"66ffc110273f5a94d3d7f8c4" }),
+                body: JSON.stringify({ paymentIntentId: clientSecret, cartItems, selectedAddress}),
             });
 
             const data = await response.json();
-          console.log(data)
             if (data) {
                 console.log('Order created successfully:', data);
                 const returnUrl = process.env.NEXT_PUBLIC_RETURN_URL;

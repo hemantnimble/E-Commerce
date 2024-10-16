@@ -61,6 +61,7 @@ interface Orders {
     id: string;
     userId: string;
     paymentIntentId: string;
+    status: string;
     createdAt: string;
     updatedAt: string;
     user: {
@@ -308,15 +309,26 @@ export default function Component() {
                             <TableHead className="w-[100px]">Order</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead>Customer</TableHead>
-                            <TableHead className="text-right">Amount</TableHead>
+                            <TableHead className="text-right text-gree">Amount</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
                           {orders.map((order) => (
                             <TableRow key={order.id}>
                               <TableCell className="font-medium">{order.product.title}</TableCell>
-                              <TableCell>pendingg</TableCell>
-                              <TableCell>{order.order.user.name} </TableCell>
+                              <TableCell
+                                style={{
+                                  color:
+                                    order.order.status.toLowerCase() === 'delivered'
+                                      ? 'green'
+                                      : order.order.status.toLowerCase() === 'cancelled'
+                                        ? 'red'
+                                        : 'blue', // Default color for other statuses
+                                }}
+                              >
+                                {order.order.status.toLowerCase()}
+                              </TableCell>
+                              <TableCell >{order.order.user.name} </TableCell>
                               <TableCell className="text-right">
                                 $ {order.product.price}
                               </TableCell>

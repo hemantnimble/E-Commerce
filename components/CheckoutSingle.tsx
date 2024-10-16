@@ -39,9 +39,11 @@ function CheckoutPageSingle({ amount, item, selectedAddress }: { amount: number,
             setLoading(false);
             return;
         }
-        // const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
-
-        // Send order creation request to the server
+        if (!selectedAddress) {
+            alert("Please select address")
+            setLoading(false);
+            return;
+        }
         const response = await fetch('/api/orders/createone', {
             method: 'POST',
             headers: {
@@ -99,16 +101,7 @@ function CheckoutPageSingle({ amount, item, selectedAddress }: { amount: number,
     return (
         <form onSubmit={handleSubmit} className="bg-white p-2 rounded-md">
             {clientSecret && <PaymentElement />}
-
             {errorMessage && <div>{errorMessage}</div>}
-
-            {/* <button
-                disabled={!stripe || loading}
-                className="text-white w-full p-5 bg-black mt-2 rounded-md font-bold disabled:opacity-50 disabled:animate-pulse"
-            >
-                {!loading ? `Pay $${amount}` : "Processing..."}
-            </button> */}
-
             <Button className="w-full mt-4" disabled={!stripe || loading}>
                 {!loading ? `Pay $${amount}` : "Processing..."}
             </Button>

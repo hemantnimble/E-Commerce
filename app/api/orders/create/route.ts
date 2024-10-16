@@ -14,7 +14,6 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-        // Create the order
         const order = await prisma.order.create({
             data: {
                 userId,
@@ -32,23 +31,15 @@ export async function POST(req: NextRequest) {
             },
         });
 
-        // Extract product IDs for the items in the order
         const orderedProductIds = cartItems.map((item: any) => item.productId);
-
-        // console.log("Deleting cart items with product IDs:", orderedProductIds); // Log product IDs
-
-        // Delete only the cart items that were part of the order
         const deleteResult = await prisma.cartItem.deleteMany({
             where: {
                 userId: userId,
                 productId: {
-                    in: orderedProductIds, // Delete only ordered items
+                    in: orderedProductIds,
                 },
             },
         });
-
-        console.log("Delete result:", deleteResult); // Log delete operation result
-
         return NextResponse.json({ order }, { status: 200 });
     } catch (error: any) {
         console.log("Error during cart deletion:", error); // Log any errors
