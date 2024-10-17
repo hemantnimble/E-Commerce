@@ -157,6 +157,18 @@ export default function Component() {
     setTotalCustomers(uniqueUsers.size);
   }
 
+  const handleStatusChange = async (orderId: string, newStatus: string) => {
+    try {
+      await axios.post("/api/orders/status", { orderId, status: newStatus });
+      alert("Order status updated");
+      fetchOrders(); // Refetch the orders to get the updated list
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      alert("Error updating status");
+    }
+  };
+
+
   const data = [
     {
       name: "Jan",
@@ -264,7 +276,7 @@ export default function Component() {
                 </div>
 
                 {/* Chart */}
-                <div className="mt-8">
+                {/* <div className="mt-8">
                   <Card>
                     <CardHeader>
                       <CardTitle>Overview</CardTitle>
@@ -291,7 +303,7 @@ export default function Component() {
                       </ResponsiveContainer>
                     </CardContent>
                   </Card>
-                </div>
+                </div> */}
 
                 {/* Recent Orders */}
                 <div className="mt-8">
@@ -307,30 +319,41 @@ export default function Component() {
                         <TableHeader>
                           <TableRow>
                             <TableHead className="w-[100px]">Order</TableHead>
-                            <TableHead>Status</TableHead>
                             <TableHead>Customer</TableHead>
-                            <TableHead className="text-right text-gree">Amount</TableHead>
+                            <TableHead >Amount</TableHead>
+                            <TableHead >Status</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
                           {orders.map((order) => (
                             <TableRow key={order.id}>
                               <TableCell className="font-medium">{order.product.title}</TableCell>
-                              <TableCell
-                                style={{
-                                  color:
-                                    order.order.status.toLowerCase() === 'delivered'
-                                      ? 'green'
-                                      : order.order.status.toLowerCase() === 'cancelled'
-                                        ? 'red'
-                                        : 'blue', // Default color for other statuses
-                                }}
-                              >
-                                {order.order.status.toLowerCase()}
-                              </TableCell>
                               <TableCell >{order.order.user.name} </TableCell>
-                              <TableCell className="text-right">
+                              <TableCell>
                                 $ {order.product.price}
+                              </TableCell>
+                              <TableCell>
+                                <form className="max-w-sm mx-auto">
+                                  <select
+                                    id="status"
+                                    className={`w-28 bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
+        ${order.order.status.toLowerCase() === 'delivered' ? 'text-green-600' : ''}
+        ${order.order.status.toLowerCase() === 'pending' ? 'text-blue-600' : ''}
+        ${order.order.status.toLowerCase() === 'cancelled' ? 'text-red-600' : ''}`}
+                                    onChange={(e) => handleStatusChange(order.order.id, e.target.value.toUpperCase())}
+                                  >
+                                    <option value={order.order.status.toLowerCase()}>
+                                      {order.order.status.toLowerCase()}
+                                    </option>
+                                    {["delivered", "pending", "cancelled"]
+                                      .filter((status) => status !== order.order.status.toLowerCase()) // Filter out the current status
+                                      .map((status) => (
+                                        <option key={status} value={status}>
+                                          {status}
+                                        </option>
+                                      ))}
+                                  </select>
+                                </form>
                               </TableCell>
                             </TableRow>
                           ))}
