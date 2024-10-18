@@ -32,61 +32,75 @@ function Card({ item }: { item: Item }) {
     }
 
     return (
-        <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-            <Link href={`/product/${item.id}`}>
-                <img className="rounded-t-lg" src={`${item.images[0]}`} alt="product image" />
-                <div className="px-5 mt-2">
-                    <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{item.title}</h5>
-                    <div className="flex items-center mt-2.5 mb-5">
-                        <div className="flex items-center space-x-1 rtl:space-x-reverse">
-                            <svg className="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                            </svg>
-                            <svg className="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                            </svg>
-                            <svg className="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                            </svg>
-                            <svg className="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                            </svg>
-                            <svg className="w-4 h-4 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                            </svg>
-                        </div>
-                        <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-3">5.0</span>
-                    </div>
-                </div>
-            </Link>
-            <div className="flex items-center justify-between px-5 pb-5">
-                <span className="text-3xl font-bold text-gray-900 dark:text-white">${item.price}</span>
-                <div
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        handleCart(item.id);
-                    }}
-                    className={`flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300 ${loading ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                >
+        // <Link href={`/product/${item.id}`}>
+        <div className='w-48 relative mb-10'>
+            <div className=''>
+                <img className='rounded-t-lg h-48 w-48 object-cover' src={item.images[0]} alt={`${item.title}`} />
+            </div>
+            <div className='flex justify-between px-2 py-2 bg-[#195c6d] rounded-lg absolute -bottom-[42px] w-48 text-white items-center'>
+                <span className='text-xs font-extralight'>
+                    <h5>{item.title}</h5>
+                    <p>${item.price}</p>
+                </span>
+                <button onClick={(e) => {
+                    e.stopPropagation();
+                    handleCart(item.id);
+                }}
+                    className='h-7 w-7 bg-white rounded-full p-[6px]'>
                     {loading ? (
-                        <svg className="animate-spin h-5 w-5 mr-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
+                        <svg 
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 120 30"
+                        fill="black"
+                        className="h-[15px] w-[15px]"
+                      >
+                        <circle cx="15" cy="15" r="15">
+                          <animate
+                            attributeName="cy"
+                            begin="0s"
+                            dur="0.6s"
+                            values="15;5;15"
+                            calcMode="linear"
+                            repeatCount="indefinite"
+                          />
+                        </circle>
+                        <circle cx="60" cy="15" r="15">
+                          <animate
+                            attributeName="cy"
+                            begin="0.15s"
+                            dur="0.6s"
+                            values="15;5;15"
+                            calcMode="linear"
+                            repeatCount="indefinite"
+                          />
+                        </circle>
+                        <circle cx="105" cy="15" r="15">
+                          <animate
+                            attributeName="cy"
+                            begin="0.3s"
+                            dur="0.6s"
+                            values="15;5;15"
+                            calcMode="linear"
+                            repeatCount="indefinite"
+                          />
+                        </circle>
+                      </svg>
+                      
                     ) : (
                         <>
-                            <svg xmlns="http://www.w3.org/2000/svg" className="mr-2 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="text-black w-full h-full" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                             </svg>
-                            Add to cart
                         </>
                     )}
-                </div>
+                </button>
             </div>
-            {/* </div> */}
         </div>
+        // </Link>
 
     )
 }
 
 export default Card;
+
+

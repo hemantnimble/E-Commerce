@@ -60,7 +60,7 @@ function AllProducts() {
   );
 
   return (
-    <div className="flex flex-wrap justify-evenly gap-20">
+    <section className='w-full flex gap-3 justify-center flex-wrap'>
       {loading ? (
         Array.from({ length: 2 }).map((_, index) => (
           <SkeletonCard key={index} />
@@ -74,7 +74,7 @@ function AllProducts() {
           <p>No products found</p>
         )
       )}
-    </div>
+    </section>
   )
 }
 
