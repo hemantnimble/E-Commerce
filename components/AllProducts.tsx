@@ -60,9 +60,9 @@ function AllProducts() {
   );
 
   return (
-    <section className='w-full flex gap-3 justify-center flex-wrap'>
+    <section className='w-full grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5'>
       {loading ? (
-        Array.from({ length: 2 }).map((_, index) => (
+        Array.from({ length: 1 }).map((_, index) => (
           <SkeletonCard key={index} />
         ))
       ) : (

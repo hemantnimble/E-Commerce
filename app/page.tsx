@@ -49,12 +49,72 @@ export default function Home() {
 
           <section className="bg-white py-12 text-gray-700 sm:py-16 lg:py-20">
             <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
-              <div className="mx-auto max-w-md text-center">
-                <h2 className="font-serif text-2xl font-bold sm:text-3xl">Our featured Aroma Range</h2>
+              <div className="max-w-md">
+                <h2 className="text-2xl font-bold sm:text-3xl">Our Best Selling Profuct</h2>
                 <p className="mt-4 text-base text-gray-700">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Purus faucibus massa dignissim tempus.</p>
               </div>
               <div className="mt-10 lg:mt-16 lg:grid-cols-4 lg:gap-4">
                 <AllProducts></AllProducts>
+              </div>
+            </div>
+          </section>
+
+          <section className="mx-3">
+            <div className="overflow-hidden rounded-xl">
+              <div className="flex flex-col overflow-hidden bg-white sm:flex-row md:h-80">
+                <div className="relative order-first ml-auto h-48 w-full bg-gray-700 sm:order-none sm:h-auto sm:w-1/2 lg:w-full">
+                  <img className="h-full w-full object-cover relative" src="assets/sofa.jpeg" loading="lazy" alt="kjk" />
+                  {/* LAMP DOT  */}
+                  <div className="absolute top-[33%] left-[16%]">
+                    <div className="relative flex items-center justify-center">
+                      {/* <!-- Dot --> */}
+                      <div className="absolute w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                      {/* <!-- Ring --> */}
+                      <div className="absolute w-4 h-4 border-[2px] border-white rounded-full animate-pulse"></div>
+                    </div>
+                    <div>
+                      <hr className="absolute w-12" />
+                      <span className="text-[#0d3945] text-sm flex items-center justify-center w-20 h-6 bg-[#ffffff66] backdrop-blur-sm rounded-xl absolute -top-[12px] left-[48px] text-center">Lamps</span>
+                    </div>
+                  </div>
+                  {/* PILLOW DOT  */}
+                  <div className="absolute top-[44%] left-[58%]">
+                    <div className="relative flex items-center justify-center">
+                      {/* <!-- Dot --> */}
+                      <div className="absolute w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                      {/* <!-- Ring --> */}
+                      <div className="absolute w-4 h-4 border-[2px] border-white rounded-full animate-pulse"></div>
+                    </div>
+                    <div>
+                      <hr className="absolute w-12 rotate-90 top-[-32px] left-[-24px]" />
+                      <span className="text-white text-sm w-20 h-6 bg-[#ffffff66] backdrop-blur-sm rounded-xl absolute -top-[79px] -left-[40px] flex items-center justify-center">Pillows</span>
+                    </div>
+                  </div>
+                  {/* TABLE DOT  */}
+                  <div className="absolute top-[70%] right-[24%]">
+                    <div className="relative flex items-center justify-center">
+                      {/* <!-- Dot --> */}
+                      <div className="absolute w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                      {/* <!-- Ring --> */}
+                      <div className="absolute w-4 h-4 border-[2px] border-white rounded-full animate-pulse"></div>
+                    </div>
+                    <div>
+                      <hr className="absolute md:w-12 w-9" />
+                      <span className="text-white text-sm flex items-center justify-center w-16 h-6 bg-[#ffffff66] backdrop-blur-sm rounded-xl absolute -top-[12px] left-[25px] md:left-[48px] text-center">Table</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex w-full flex-col p-4 sm:w-1/2 sm:p-8 lg:w-3/5">
+                  <h2 className="text-xl font-bold text-gray-900 md:text-2xl lg:text-4xl">Winter Collection</h2>
+                  <p className="mt-2 text-lg">By Luis Vuitton</p>
+                  <p className="mt-4 mb-8 max-w-md text-gray-500">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aliquam iusto, cumque dolores sit odio ex.</p>
+                  <a href="#" className="group mt-auto flex w-44 cursor-pointer select-none items-center justify-center rounded-md bg-black px-6 py-2 text-white transition">
+                    <span className="group flex w-full items-center justify-center rounded py-1 text-center font-bold"> Shop now </span>
+                    <svg className="flex-0 group-hover:w-6 ml-4 h-6 w-0 transition-all" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </a>
+                </div>
               </div>
             </div>
           </section>
