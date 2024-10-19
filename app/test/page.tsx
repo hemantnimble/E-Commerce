@@ -15,7 +15,7 @@ const Model = ({ path }: ModelProps) => {
 
 export default function ModelViewer() {
   return (
-    <div className=" border-2 border-black">
+    <div className=" border-2 border-black w-1/2">
       <Canvas>
         <Suspense fallback={null}>
           <ambientLight intensity={0.5} />
