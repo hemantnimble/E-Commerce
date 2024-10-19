@@ -59,24 +59,26 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="mx-3">
+          <section className="mx-3 bg-[#f2f2f]">
             <div className="overflow-hidden rounded-xl">
-              <div className="flex flex-col overflow-hidden bg-white sm:flex-row md:h-80">
+              <div className="flex flex-col overflow-hidden bg-[#f5f5f5] sm:flex-row md:h-80">
                 <div className="relative order-first ml-auto h-48 w-full bg-gray-700 sm:order-none sm:h-auto sm:w-1/2 lg:w-full">
                   <img className="h-full w-full object-cover relative" src="assets/sofa.jpeg" loading="lazy" alt="kjk" />
                   {/* LAMP DOT  */}
-                  <div className="absolute top-[33%] left-[16%]">
-                    <div className="relative flex items-center justify-center">
-                      {/* <!-- Dot --> */}
-                      <div className="absolute w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                      {/* <!-- Ring --> */}
-                      <div className="absolute w-4 h-4 border-[2px] border-white rounded-full animate-pulse"></div>
+                  <Link href="/explore">
+                    <div className="absolute top-[33%] left-[16%]">
+                      <div className="relative flex items-center justify-center">
+                        {/* <!-- Dot --> */}
+                        <div className="absolute w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                        {/* <!-- Ring --> */}
+                        <div className="absolute w-4 h-4 border-[2px] border-white rounded-full animate-pulse"></div>
+                      </div>
+                      <div>
+                        <hr className="absolute w-12" />
+                        <span className="hover:underline text-[#0d3945] text-sm flex items-center justify-center w-20 h-6 bg-[#ffffff66] backdrop-blur-sm rounded-xl absolute -top-[12px] left-[48px] text-center">Lamps</span>
+                      </div>
                     </div>
-                    <div>
-                      <hr className="absolute w-12" />
-                      <span className="text-[#0d3945] text-sm flex items-center justify-center w-20 h-6 bg-[#ffffff66] backdrop-blur-sm rounded-xl absolute -top-[12px] left-[48px] text-center">Lamps</span>
-                    </div>
-                  </div>
+                  </Link>
                   {/* PILLOW DOT  */}
                   <div className="absolute top-[44%] left-[58%]">
                     <div className="relative flex items-center justify-center">
@@ -105,18 +107,30 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="flex w-full flex-col p-4 sm:w-1/2 sm:p-8 lg:w-3/5">
-                  <h2 className="text-xl font-bold text-gray-900 md:text-2xl lg:text-4xl">Winter Collection</h2>
-                  <p className="mt-2 text-lg">By Luis Vuitton</p>
-                  <p className="mt-4 mb-8 max-w-md text-gray-500">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aliquam iusto, cumque dolores sit odio ex.</p>
-                  <a href="#" className="group mt-auto flex w-44 cursor-pointer select-none items-center justify-center rounded-md bg-black px-6 py-2 text-white transition">
+                  <h2 className=" border-2 border-[#7bb4c0] text-l font-normal text-[#3f6a6a] md:text-xl bg-[#dae9ec] w-fit px-5 rounded-full py-1">Furniture Design Ideas</h2>
+                  <p className="mt-4 mb-4 max-w-md text-gray-500">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aliquam iusto, cumque dolores sit odio ex.</p>
+                  <a href="#" className="group mt-auto flex w-44 cursor-pointer select-none items-center justify-center rounded-full bg-[#115564] px-6 py-2 text-white transition">
                     <span className="group flex w-full items-center justify-center rounded py-1 text-center font-bold"> Shop now </span>
-                    <svg className="flex-0 group-hover:w-6 ml-4 h-6 w-0 transition-all" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <svg className="flex-0 group-hover:w-10 ml-4 h-6 w-6 transition-all" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                     </svg>
                   </a>
                 </div>
               </div>
             </div>
+          </section>
+
+          <section className="p-4">
+
+
+            <div className="grid grid-cols-5 grid-rows-5 gap-4 h-[26rem]">
+              <div className="col-span-3 row-span-2"><img className="object-cover w-full h-full rounded-lg" src="assets/sofa.jpeg" alt="" /></div>
+              <div className="col-span-2 row-span-5 col-start-4"><img className="object-cover w-full h-full rounded-lg" src="assets/sofa.jpeg" alt="" /></div>
+              <div className="col-span-2 row-span-3 row-start-3"><img className="object-cover w-full h-full rounded-lg" src="assets/sofa.jpeg" alt="" /></div>
+              <div className="row-span-3 col-start-3 row-start-3"><img className="object-cover w-full h-full rounded-lg" src="assets/sofa.jpeg" alt="" /></div>
+            </div>
+
+
           </section>
           <div className="textRevel z-10 flex min-h-[16rem] items-center justify-center rounded-lg border bg-white dark:bg-black">
             <TextReveal text="Immerse yourself in crystal-clear audio with our premium earbuds." />
