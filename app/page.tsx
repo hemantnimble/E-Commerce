@@ -120,18 +120,31 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="p-4">
-
-
+          <section className="px-20 py-8">
             <div className="grid grid-cols-5 grid-rows-5 gap-4 h-[26rem]">
-              <div className="col-span-3 row-span-2"><img className="object-cover w-full h-full rounded-lg" src="assets/sofa.jpeg" alt="" /></div>
-              <div className="col-span-2 row-span-5 col-start-4"><img className="object-cover w-full h-full rounded-lg" src="assets/sofa.jpeg" alt="" /></div>
-              <div className="col-span-2 row-span-3 row-start-3"><img className="object-cover w-full h-full rounded-lg" src="assets/sofa.jpeg" alt="" /></div>
-              <div className="row-span-3 col-start-3 row-start-3"><img className="object-cover w-full h-full rounded-lg" src="assets/sofa.jpeg" alt="" /></div>
+              <div className="col-span-3 row-span-2 bg-[#f5f5f5] rounded-lg flex py-4 px-8">
+                <div className="w-1/2">
+                  <span>1300+ items</span>
+                  <span><ul><li>folding table</li>
+                    <li>desk</li>
+                    <li>dinning table</li>
+                    <li>coffee table</li></ul>
+                  </span>
+                  <button>View all →</button>
+                </div>
+                <img className="object-contain w-1/2 h-full" src="assets/table.png" alt="" />
+              </div>
+              <div className="col-span-2 row-span-5 col-start-4 bg-[#e9eef1] rounded-lg"><img className="object-contain w-full h-full" src="assets/chair.png" alt="" /></div>
+              <div className="col-span-2 row-span-3 row-start-3 bg-[#feefdc] rounded-lg"><img className="object-contain w-full h-full" src="assets/lamp.png" alt="" /></div>
+              <div className="relative row-span-3 col-start-3 row-start-3 bg-gradient-to-br from-[#21758d] to-black rounded-lg">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+                  <span className="bg-[#e6a950] rounded-full text-xs px-3 py-1 mb-3 w-max border-2 border-gray-500 text-white">Get Discount</span>
+                  <span className="text-lg text-white w-max text-center font-light">30% OFFER</span>
+                </div>
+              </div>
             </div>
-
-
           </section>
+
           <div className="textRevel z-10 flex min-h-[16rem] items-center justify-center rounded-lg border bg-white dark:bg-black">
             <TextReveal text="Immerse yourself in crystal-clear audio with our premium earbuds." />
           </div>

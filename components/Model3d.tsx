@@ -12,14 +12,14 @@ const Model = ({ path }: ModelProps) => {
     return <primitive object={scene} scale={3} />;
 };
 
-function Model3d() {
+function Model3d({ productName }: { productName: any }) {
     return (
         <div className="w-full h-full">
             <Canvas>
                 <Suspense fallback={null}>
                     <ambientLight intensity={0.5} />
                     <directionalLight position={[0, 5, 5]} intensity={1} />
-                    <Model path="/assets/sofa3d.glb" />
+                    <Model path={`/assets/${productName}.glb`} />
                     <OrbitControls enableZoom={true} />
                 </Suspense>
             </Canvas>

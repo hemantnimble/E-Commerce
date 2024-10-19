@@ -123,7 +123,7 @@ export default function Component() {
                                 ))}
                                 <Button onClick={() => {
                                     setModal3d(true)
-                                    window.onscroll = function () { window.scrollTo(0, 0); }
+                                    // window.onscroll = function () { window.scrollTo(0, 0); }
                                 }} className="absolute bottom-2 right-2">View 3d</Button>
                             </CarouselContent>
                             <CarouselPrevious />
@@ -274,9 +274,9 @@ export default function Component() {
                 <div className="w-full h-screen bg-white absolute top-0">
                     <Button onClick={() => {
                                     setModal3d(false)
-                                    window.onscroll = null;
-                                }} className="absolute top-20 left-4 underline z-10">View 3d</Button>
-                    <Model3d />
+                                    // window.onscroll = null;
+                                }} className="absolute top-20 left-4 underline z-10">close</Button>
+                    <Model3d productName={product?.title} />
                 </div>
             }
         </>
