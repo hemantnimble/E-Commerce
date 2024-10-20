@@ -30,10 +30,10 @@ function Explore() {
             <div className="max-w-screen-md">
                 <div className="bg-white py-2 px-3">
                     <nav className="flex flex-wrap gap-4">
-                        <a href="#" className="whitespace-nowrap inline-flex rounded-lg py-2 px-3 text-sm font-medium text-gray-600 transition-all duration-200 ease-in-out hover:bg-gray-200 hover:text-gray-900"> All </a>
+                        <a href="#" className="whitespace-nowrap inline-flex rounded-lg bg-gray-200 py-2 px-3 text-sm font-medium text-gray-900 transition-all duration-200 ease-in-out"> All </a>
                         <a href="#" className="whitespace-nowrap inline-flex rounded-lg py-2 px-3 text-sm font-medium text-gray-600 transition-all duration-200 ease-in-out hover:bg-gray-200 hover:text-gray-900"> Tables </a>
                         <a href="#" className="whitespace-nowrap inline-flex rounded-lg py-2 px-3 text-sm font-medium text-gray-600 transition-all duration-200 ease-in-out hover:bg-gray-200 hover:text-gray-900"> Chairs </a>
-                        <a href="#" className="whitespace-nowrap inline-flex rounded-lg bg-gray-200 py-2 px-3 text-sm font-medium text-gray-900 transition-all duration-200 ease-in-out"> Lamps </a>
+                        <a href="#" className="whitespace-nowrap inline-flex rounded-lg py-2 px-3 text-sm font-medium text-gray-600 transition-all duration-200 ease-in-out hover:bg-gray-200 hover:text-gray-900"> Lamps </a>
                         <a href="#" className="whitespace-nowrap inline-flex rounded-lg py-2 px-3 text-sm font-medium text-gray-600 transition-all duration-200 ease-in-out hover:bg-gray-200 hover:text-gray-900"> Sofas </a>
                     </nav>
                 </div>
@@ -55,9 +55,7 @@ function Explore() {
                     </div>
                 </div>
             </div>
-            {/* card multope */}
-
-
+            {/* best selling items */}
             <section className="py-4">
                 <div className="max-w-md mx-3 mb-4">
                     <h2 className="text-2xl font-bold sm:text-3xl">Our Best Selling Products.</h2>

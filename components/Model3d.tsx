@@ -17,8 +17,8 @@ function Model3d({ productName }: { productName: any }) {
         <div className="w-full h-full">
             <Canvas>
                 <Suspense fallback={null}>
-                    <ambientLight intensity={0.5} />
-                    <directionalLight position={[0, 5, 5]} intensity={1} />
+                    <ambientLight intensity={2} />
+                    <directionalLight position={[0, 5, 5]} intensity={2} />
                     <Model path={`/assets/${productName}.glb`} />
                     <OrbitControls enableZoom={true} />
                 </Suspense>

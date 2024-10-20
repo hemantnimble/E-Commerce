@@ -92,8 +92,8 @@ function Card({ item }: { item: Item }) {
             </div>
 
             <Link href={`/product/${item.id}`}>
-                <div className=''>
-                    <img className='rounded-lg object-cover w-full h-56 sm:h-72' src={item.images[0]} alt={`${item.title}`} />
+                <div className='bg-[#eaeaea]'>
+                    <img className='rounded-lg object-contain w-full h-56 sm:h-72' src={item.images[0]} alt={`${item.title}`} />
                 </div>
                 <div className='flex justify-between px-2 py-2 items-start'>
                     <span className=''>

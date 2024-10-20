@@ -16,28 +16,28 @@ export default function Home() {
           <section className="relative h-[60vh] lg:h-[85vh] w-full overflow-hidden">
             <div className="grid grid-cols-4 grid-rows-5 gap-2 lg:gap-4 w-full h-full py-3 px-6">
               <div className="row-span-3">
-                <img src="https://img.freepik.com/free-psd/gadget-concept-poster-template_23-2148626930.jpg?semt=ais_hybrid" alt="Image 1" className="rounded-lg w-full h-full object-cover" />
+                <img src="https://img.freepik.com/free-photo/picture-frame-by-velvet-armchair_53876-132788.jpg?t=st=1729422991~exp=1729426591~hmac=cc28093b74acd4d4ec3c698df4dd074737b03a8ea7dd55c4a582733cf153da3d&w=360" alt="Image 1" className="rounded-lg w-full h-full object-cover" />
               </div>
               <div className="col-span-2 row-span-2">
-                <img src="https://img.freepik.com/premium-psd/airpods-cover-case-mockup_23-2150263561.jpg?semt=ais_hybrid" alt="Image 2" className="w-full h-full object-cover rounded-lg" />
+                <img src="https://img.freepik.com/free-photo/interior-design-with-photoframes-plants_23-2149385437.jpg?t=st=1729423015~exp=1729426615~hmac=52d95c826a09075e45c9d63eb6acade57aa8414d419d80e5e065b64c8c4e6f23&w=900" className="w-full h-full object-cover rounded-lg" />
               </div>
               <div className="row-span-3 col-start-4">
-                <img src="https://img.freepik.com/premium-psd/airpods-cover-case-mockup_23-2150263512.jpg?semt=ais_hybrid" alt="Image 3" className="w-full h-full object-cover rounded-lg" />
+                <img src="https://img.freepik.com/premium-psd/mockup-frame-office_23-2147968616.jpg?w=900" alt="Image 3" className="w-full h-full object-cover rounded-lg" />
               </div>
               <div className="row-span-2 col-start-1 row-start-4">
-                <img src="https://img.freepik.com/premium-psd/wireless-earphones-case-mockup-psd-template_77323-1942.jpg?semt=ais_hybrid" alt="Image 4" className="w-full h-full object-cover rounded-lg" />
+                <img src="https://img.freepik.com/premium-psd/living-room-frame-mockup_388313-1630.jpg?w=740" alt="Image 4" className="w-full h-full object-cover rounded-lg" />
               </div>
               <div className="row-span-3 col-start-2 row-start-3">
-                <img src="https://img.freepik.com/premium-psd/airpods-cover-case-mockup_23-2150263528.jpg?semt=ais_hybrid" alt="Image 5" className="w-full h-full object-cover rounded-lg" />
+                <img src="https://img.freepik.com/premium-photo/lamp-book-table-living-room_1169327-267607.jpg?w=900" className="w-full h-full object-cover rounded-lg" />
               </div>
               <div className="col-span-2 col-start-3 row-start-5">
-                <img src="https://img.freepik.com/premium-psd/airpods-cover-case-mockup_23-2150263504.jpg?semt=ais_hybrid" alt="Image 8" className="w-full h-full object-cover rounded-lg" />
+                <img src="https://img.freepik.com/premium-photo/four-orange-chairs-illustration-with-blue-wall-gray-floor_1088041-74129.jpg?w=1060" alt="Image 8" className="w-full h-full object-cover rounded-lg" />
               </div>
               <div className="row-span-2 col-start-3 row-start-3">
-                <img src="https://img.freepik.com/premium-psd/airpods-cover-case-mockup_23-2150263590.jpg?semt=ais_hybrid" alt="Image 10" className="w-full h-full object-cover rounded-lg" />
+                <img src="https://img.freepik.com/free-photo/modern-styled-entryway_23-2150695875.jpg?t=st=1729423174~exp=1729426774~hmac=012b5b2da022f91b8179dedb3d795625c751a8feb0afdfed2cd259820509ebd6&w=900" alt="Image 10" className="w-full h-full object-cover rounded-lg" />
               </div>
               <div className="col-start-4 row-start-4">
-                <img src="https://img.freepik.com/premium-psd/airpods-cover-case-mockup_23-2150263488.jpg?semt=ais_hybrid" alt="Image 11" className="w-full h-full object-cover rounded-lg" />
+                <img src="https://img.freepik.com/free-photo/blue-armchair-against-blue-wall-living-room-interior-elegant-interior-design-with-copy-space-ai-generative_123827-23719.jpg?t=st=1729423656~exp=1729427256~hmac=a41c7671dca8bb7d6143caf163691ac62e9b47b83f7c6f279e451ee3c4867718&w=1380" alt="Image 11" className="w-full h-full object-cover rounded-lg" />
               </div>
             </div>
           </section>
@@ -47,23 +47,11 @@ export default function Home() {
             className="font-display text-center text-4xl font-bold tracking-[-0.02em] text-black drop-shadow-sm dark:text-white md:text-7xl md:leading-[5rem]"
           />
 
-          {/* <section className="bg-white py-12 text-gray-700 sm:py-16 lg:py-20">
-            <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
-              <div className="max-w-md">
-                <h2 className="text-2xl font-bold sm:text-3xl">Our Best Selling Profuct</h2>
-                <p className="mt-4 text-base text-gray-700">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Purus faucibus massa dignissim tempus.</p>
-              </div>
-              <div className="mt-10 lg:mt-16 lg:grid-cols-4 lg:gap-4">
-                <AllProducts></AllProducts>
-              </div>
-            </div>
-          </section> */}
-
           <section className="mx-3 bg-[#f2f2f] mt-20">
             <div className="overflow-hidden rounded-xl">
               <div className="flex flex-col overflow-hidden bg-[#f5f5f5] sm:flex-row md:h-80">
                 <div className="relative order-first ml-auto h-48 w-full bg-gray-700 sm:order-none sm:h-auto sm:w-1/2 lg:w-full">
-                  <img className="h-full w-full object-cover relative" src="assets/sofa.jpeg" loading="lazy" alt="kjk" />
+                  <img className="h-full w-full object-cover relative" src="assets/furniture.jpeg" loading="lazy" alt="kjk" />
                   {/* LAMP DOT  */}
                   <Link href="/explore">
                     <div className="absolute top-[33%] left-[16%]">
@@ -184,30 +172,21 @@ export default function Home() {
           <div className="textRevel z-10 flex min-h-[16rem] items-center justify-center rounded-lg border bg-white dark:bg-black">
             <TextReveal text="Immerse yourself in crystal-clear audio with our premium earbuds." />
           </div>
-          <section className="py-12 md:py-16 lg:py-20 bg-muted">
+         
+          <section className="py-12 md:py-16 lg:py-20 ">
             <div className="container">
-              <div className="mb-8 text-center">
-                <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">New Arrivals</h2>
-                <p className="mt-4 text-muted-foreground">Check out our latest fashion collections.</p>
-              </div>
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                {/* ////////// */}
-              </div>
-            </div>
-          </section>
-          <section className="py-12 md:py-16 lg:py-20">
-            <div className="container">
-              <div className="mb-8 text-center">
+              <div className="mb-8">
                 <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Explore Our Collections</h2>
                 <p className="mt-4 text-muted-foreground">Browse our latest fashion trends and must-have pieces.</p>
               </div>
-              <div className="flex justify-center">
+              <AllProducts></AllProducts>
+              <div className="flex justify-start">
                 <Link
                   href="#"
                   className="inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                   prefetch={false}
                 >
-                  Shop Now
+                  Shop All
                 </Link>
               </div>
             </div>

@@ -108,13 +108,13 @@ export default function Component() {
                                     <CarouselItem key={index}>
                                         <div className="overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800">
                                             <img
-                                                alt={`Earpods Pro - View ${index + 1}`}
-                                                className="object-cover w-full h-full"
+                                                alt={`${product.title}${index + 1}`}
+                                                className="object-contain w-full h-full"
                                                 height="600"
                                                 src={image}
                                                 style={{
                                                     aspectRatio: "1/1",
-                                                    objectFit: "cover",
+                                                    objectFit: "contain",
                                                 }}
                                                 width="600"
                                             />
@@ -273,9 +273,9 @@ export default function Component() {
                 modal3d &&
                 <div className="w-full h-screen bg-white absolute top-0">
                     <Button onClick={() => {
-                                    setModal3d(false)
-                                    // window.onscroll = null;
-                                }} className="absolute top-20 left-4 underline z-10">close</Button>
+                        setModal3d(false)
+                        // window.onscroll = null;
+                    }} className="absolute top-20 left-4 underline z-10">close</Button>
                     <Model3d productName={product?.title} />
                 </div>
             }
