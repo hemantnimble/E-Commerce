@@ -276,7 +276,7 @@ export default function Component() {
                         setModal3d(false)
                         // window.onscroll = null;
                     }} className="absolute top-20 left-4 underline z-10">close</Button>
-                    <Model3d productName={product?.title} />
+                    <Model3d  />
                 </div>
             }
         </>
