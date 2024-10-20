@@ -8,19 +8,20 @@ interface Product {
   id: string;
   title: string;
   price: string;
+  category: string;
   images: string[],
   createdAt: string;
   updatedAt: string;
 }
 
-function AllProducts() {
+function AllProducts({ category }: { category: string }) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get<{ products: Product[] }>("/api/products/getproducts")
+        const response = await axios.post<{ products: Product[] }>("/api/products/filter", {category})
         setProducts(response.data.products)
       } catch (error) {
         console.error("Error fetching products:", error)
@@ -30,7 +31,7 @@ function AllProducts() {
     }
 
     fetchProducts();
-  }, [])
+  }, [category])
 
   const SkeletonCard = () => (
     <div className="mb-10 relative">

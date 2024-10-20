@@ -7,7 +7,7 @@ import TextReveal from "@/components/magicui/text-reveal";
 import Footer from "@/components/Footer";
 
 export default function Home() {
-
+const category="All";
   return (
     <main className="flex flex-col gap-5">
       <Toaster />
@@ -179,10 +179,10 @@ export default function Home() {
                 <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Explore Our Collections</h2>
                 <p className="mt-4 text-muted-foreground">Browse our latest fashion trends and must-have pieces.</p>
               </div>
-              <AllProducts></AllProducts>
+              <AllProducts category={category}></AllProducts>
               <div className="flex justify-start">
                 <Link
-                  href="#"
+                  href="/explore"
                   className="inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                   prefetch={false}
                 >

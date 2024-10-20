@@ -13,7 +13,6 @@ const Model = ({ path }: ModelProps) => {
 };
 
 function Model3d({ productName }: { productName: any }) {
-    console.log("first",productName)
     return (
         <div className="w-full h-full">
             <Canvas>

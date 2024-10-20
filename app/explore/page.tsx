@@ -8,6 +8,13 @@ import toast from 'react-hot-toast';
 function Explore() {
     const [loading, setLoading] = useState(false);
     const { cartItems, setCartItems } = useCart();
+    const [category, setCategory] = useState("All");
+    const [activeCategory, setActiveCategory] = useState<string>('All');
+
+    function handleCategory(category:string) {
+        setActiveCategory(category)
+        setCategory(category)
+    }
 
     const handleCart = async (productId: string) => {
         setLoading(true);
@@ -30,16 +37,28 @@ function Explore() {
             <div className="max-w-screen-md">
                 <div className="bg-white py-2 px-3">
                     <nav className="flex flex-wrap gap-4">
-                        <a href="#" className="whitespace-nowrap inline-flex rounded-lg bg-gray-200 py-2 px-3 text-sm font-medium text-gray-900 transition-all duration-200 ease-in-out"> All </a>
-                        <a href="#" className="whitespace-nowrap inline-flex rounded-lg py-2 px-3 text-sm font-medium text-gray-600 transition-all duration-200 ease-in-out hover:bg-gray-200 hover:text-gray-900"> Tables </a>
-                        <a href="#" className="whitespace-nowrap inline-flex rounded-lg py-2 px-3 text-sm font-medium text-gray-600 transition-all duration-200 ease-in-out hover:bg-gray-200 hover:text-gray-900"> Chairs </a>
-                        <a href="#" className="whitespace-nowrap inline-flex rounded-lg py-2 px-3 text-sm font-medium text-gray-600 transition-all duration-200 ease-in-out hover:bg-gray-200 hover:text-gray-900"> Lamps </a>
-                        <a href="#" className="whitespace-nowrap inline-flex rounded-lg py-2 px-3 text-sm font-medium text-gray-600 transition-all duration-200 ease-in-out hover:bg-gray-200 hover:text-gray-900"> Sofas </a>
+                        {/* <span onClick={() => setCategory("All")} className="whitespace-nowrap inline-flex rounded-lg bg-gray-200 py-2 px-3 text-sm font-medium text-gray-900 transition-all duration-200 ease-in-out"> All </span>
+                        <span onClick={() => setCategory("table")} className="whitespace-nowrap inline-flex rounded-lg py-2 px-3 text-sm font-medium text-gray-600 transition-all duration-200 ease-in-out hover:bg-gray-200 hover:text-gray-900"> Tables </span>
+                        <span onClick={() => setCategory("chair")} className="whitespace-nowrap inline-flex rounded-lg py-2 px-3 text-sm font-medium text-gray-600 transition-all duration-200 ease-in-out hover:bg-gray-200 hover:text-gray-900"> Chairs </span>
+                        <span onClick={() => setCategory("lamp")} className="whitespace-nowrap inline-flex rounded-lg py-2 px-3 text-sm font-medium text-gray-600 transition-all duration-200 ease-in-out hover:bg-gray-200 hover:text-gray-900"> Lamps </span>
+                        <span onClick={() => setCategory("sofa")} className="whitespace-nowrap inline-flex rounded-lg py-2 px-3 text-sm font-medium text-gray-600 transition-all duration-200 ease-in-out hover:bg-gray-200 hover:text-gray-900"> Sofas </span> */}
+                        {['All', 'table', 'chair', 'lamp', 'sofa'].map((category) => (
+                            <span
+                                key={category}
+                                onClick={()=>handleCategory(category)} // Set active category on click
+                                className={`whitespace-nowrap inline-flex rounded-lg py-2 px-3 text-sm font-medium transition-all duration-200 ease-in-out ${activeCategory === category
+                                    ? 'bg-gray-200 text-gray-900' // Active state styles
+                                    : 'text-gray-600 hover:bg-gray-200 hover:text-gray-900'
+                                    }`}
+                            >
+                                {category}
+                            </span>
+                        ))}
                     </nav>
                 </div>
             </div>
             <div className='mx-3'>
-                <AllProducts />
+                <AllProducts category={category} />
             </div>
             {/* content */}
             <div>
