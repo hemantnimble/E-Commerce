@@ -33,36 +33,43 @@ function AllProducts() {
   }, [])
 
   const SkeletonCard = () => (
-    <article className="relative  h-96 w-80 animate-pulse">
-      <div className="h-full w-full bg-gray-200"></div>
-      <div className="absolute top-0 m-1 rounded-full bg-white">
-        <div className="text-[10px] rounded-full bg-gray-300 p-1 sm:px-3 sm:py-1 h-4 w-12"></div>
-      </div>
-      <div className="mt-4 flex items-start justify-between">
-        <div>
-          <div className="h-4 bg-gray-300 rounded w-32 sm:w-40 mb-2"></div>
-          <div className="flex space-x-1">
-            <div className="h-3 w-3 bg-gray-300 rounded-full"></div>
-            <div className="h-3 w-3 bg-gray-300 rounded-full"></div>
-            <div className="h-3 w-3 bg-gray-300 rounded-full"></div>
-            <div className="h-3 w-3 bg-gray-300 rounded-full"></div>
-            <div className="h-3 w-3 bg-gray-300 rounded-full"></div>
-          </div>
-        </div>
-        <div className="text-right">
-          <div className="h-4 w-16 bg-gray-300 mb-1"></div>
-          <div className="h-4 w-10 bg-gray-300"></div>
+    <div className="mb-10 relative">
+      <div className="relative group">
+        {/* Skeleton for Cart Button */}
+        <div className="h-8 w-8 bg-gray-200 rounded-full absolute top-2 right-2 animate-pulse"></div>
+
+        {/* Tooltip Skeleton */}
+        <div className="absolute top-10 right-0 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black text-white text-xs p-2 rounded-lg">
+          Add to Cart
         </div>
       </div>
-      <div className="mt-4 flex items-center justify-center bg-gray-300 rounded-md h-10 w-full"></div>
-    </article>
+
+      {/* Skeleton for Image */}
+      <div className="w-full h-56 sm:h-72 bg-gray-200 rounded-lg animate-pulse"></div>
+
+      <div className="flex justify-between px-2 py-2 items-start">
+        <span>
+          {/* Skeleton for Title */}
+          <div className="w-32 h-4 bg-gray-200 rounded-md animate-pulse mb-2"></div>
+          {/* Skeleton for Price */}
+          <div className="w-16 h-4 bg-gray-200 rounded-md animate-pulse"></div>
+        </span>
+        <span className="flex items-center gap-1">
+          {/* Skeleton for Star Icon */}
+          <div className="w-4 h-4 bg-gray-200 rounded-full animate-pulse"></div>
+          {/* Skeleton for Rating */}
+          <div className="w-8 h-4 bg-gray-200 rounded-md animate-pulse"></div>
+        </span>
+      </div>
+    </div>
+
 
   );
 
   return (
     <section className='w-full grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5'>
       {loading ? (
-        Array.from({ length: 1 }).map((_, index) => (
+        Array.from({ length: 2 }).map((_, index) => (
           <SkeletonCard key={index} />
         ))
       ) : (
