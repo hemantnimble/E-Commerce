@@ -47,7 +47,7 @@ export default function Home() {
             className="font-display text-center text-4xl font-bold tracking-[-0.02em] text-black drop-shadow-sm dark:text-white md:text-7xl md:leading-[5rem]"
           />
 
-          <section className="bg-white py-12 text-gray-700 sm:py-16 lg:py-20">
+          {/* <section className="bg-white py-12 text-gray-700 sm:py-16 lg:py-20">
             <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
               <div className="max-w-md">
                 <h2 className="text-2xl font-bold sm:text-3xl">Our Best Selling Profuct</h2>
@@ -57,9 +57,9 @@ export default function Home() {
                 <AllProducts></AllProducts>
               </div>
             </div>
-          </section>
+          </section> */}
 
-          <section className="mx-3 bg-[#f2f2f]">
+          <section className="mx-3 bg-[#f2f2f] mt-20">
             <div className="overflow-hidden rounded-xl">
               <div className="flex flex-col overflow-hidden bg-[#f5f5f5] sm:flex-row md:h-80">
                 <div className="relative order-first ml-auto h-48 w-full bg-gray-700 sm:order-none sm:h-auto sm:w-1/2 lg:w-full">
@@ -120,23 +120,106 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="px-20 py-8">
-            <div className="grid grid-cols-5 grid-rows-5 gap-4 h-[26rem]">
+          {/* <section className="md:px-20 px-4 md:py-8 mt-14">
+            <div className="md:grid m:grid-cols-5 md:grid-rows-5 gap-4 md:h-[26rem] flex flex-col">
               <div className="col-span-3 row-span-2 bg-[#f5f5f5] rounded-lg flex py-4 px-8">
-                <div className="w-1/2">
-                  <span>1300+ items</span>
-                  <span><ul><li>folding table</li>
+                <div className="w-1/2 flex flex-col">
+                  <span className="bg-white rounded-full px-2 py-1 text-sm font-light w-fit"><span className="text-teal-600 font-bold">130+</span>items</span>
+                  <span className="font-extrabold text-xl m-1">Light</span>
+                  <span><ul className="text-gray-400 text-sm font-light mb-1"><li>chadelier</li>
+                    <li>desk</li>
+                    <li>dinning table</li>
+                    <li>pendent light</li></ul>
+                  </span>
+                  <button className="w-fit underline font-light text-sm">View all →</button>
+                </div>
+                <img className="object-contain w-1/2 h-full" src="assets/lamp.png" alt="" />
+              </div>
+              <div className="col-span-2 row-span-5 col-start-4 bg-[#e9eef1] rounded-lg flex py-4 px-8 relative">
+                <div className="w-1/2 flex flex-col relative z-10">
+                  <span className="bg-white rounded-full px-2 py-1 text-sm font-light w-fit"><span className="text-teal-600 font-bold">130+</span>items</span>
+                  <span className="font-extrabold text-xl m-1">Chairs</span>
+                  <span><ul className="text-gray-400 text-sm font-light mb-1"><li>gaming chair</li>
+                    <li>office chair</li>
+                    <li>lunge chair</li>
+                    <li>adirondack chairs</li></ul>
+                  </span>
+                  <button className="w-fit underline font-light text-sm">View all →</button>
+                </div>
+                <img className="object-contain w-[85%] h-[78%] absolute bottom-2 right-0" src="assets/chair.png" alt="" /></div>
+              <div className="col-span-2 row-span-3 row-start-3 bg-[#feefdc] rounded-lg flex py-4 px-8">
+                <div className="w-1/2 flex flex-col">
+                  <span className="bg-white rounded-full px-2 py-1 text-sm font-light w-fit"><span className="text-teal-600 font-bold">130+</span>items</span>
+                  <span className="font-extrabold text-xl m-1">Tables</span>
+                  <span><ul className="text-gray-400 text-sm font-light mb-1"><li>folding table</li>
                     <li>desk</li>
                     <li>dinning table</li>
                     <li>coffee table</li></ul>
                   </span>
-                  <button>View all →</button>
+                  <button className="w-fit underline font-light text-sm">View all →</button>
+                </div>
+                <img className="object-contain w-[80%] h-full" src="assets/table.png" alt="" /></div>
+              <div className="relative hidden lg:block row-span-3 col-start-3 row-start-3 bg-gradient-to-br from-[#21758d] to-black rounded-lg">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+                  <span className="bg-[#e6a950] rounded-full text-xs px-3 py-1 mb-3 w-max border-2 border-gray-500 text-white">Get Discount</span>
+                  <span className="text-lg text-white w-max text-center font-light">30% OFFER</span>
+                </div>
+              </div>
+            </div>
+          </section> */}
+
+          <section className="md:px-20 px-4 md:py-8 mt-14">
+            <div className="grid grid-cols-2 grid-rows-3 gap-5 md:grid-cols-6 md:grid-rows-6 md:h-[26rem]">
+              {/* Div 1: Occupies all columns in the first row on mobile, first 4 columns and first 3 rows on large screens */}
+              <div className="col-span-2 row-span-1 md:col-span-4 md:row-span-3 bg-[#f5f5f5] rounded-lg flex py-4 px-8">
+                <div className="w-1/2 flex flex-col">
+                  <span className="bg-white rounded-full px-2 py-1 text-sm font-light w-fit"><span className="text-teal-600 font-bold">130+</span>items</span>
+                  <span className="font-extrabold text-xl m-1">Tables</span>
+                  <span><ul className="text-gray-400 text-sm font-light mb-1">
+                    <li>folding table</li>
+                    <li>desk</li>
+                    <li>dining table</li>
+                    <li>coffee table</li>
+                  </ul></span>
+                  <button className="w-fit underline font-light text-sm">View all →</button>
                 </div>
                 <img className="object-contain w-1/2 h-full" src="assets/table.png" alt="" />
               </div>
-              <div className="col-span-2 row-span-5 col-start-4 bg-[#e9eef1] rounded-lg"><img className="object-contain w-full h-full" src="assets/chair.png" alt="" /></div>
-              <div className="col-span-2 row-span-3 row-start-3 bg-[#feefdc] rounded-lg"><img className="object-contain w-full h-full" src="assets/lamp.png" alt="" /></div>
-              <div className="relative row-span-3 col-start-3 row-start-3 bg-gradient-to-br from-[#21758d] to-black rounded-lg">
+
+              {/* Div 2: Occupies all columns in the second row on mobile, last 2 columns and all rows on large screens */}
+              <div className="col-span-2 row-span-1 md:col-span-2 md:row-span-6 bg-[#e9eef1] rounded-lg flex py-4 px-8 relative">
+                <div className="w-1/2 flex flex-col relative z-10">
+                  <span className="bg-white rounded-full px-2 py-1 text-sm font-light w-fit"><span className="text-teal-600 font-bold">130+</span>items</span>
+                  <span className="font-extrabold text-xl m-1">Chairs</span>
+                  <span><ul className="text-gray-400 text-sm font-light mb-1">
+                    <li>gaming chair</li>
+                    <li>office chair</li>
+                    <li>lounge chair</li>
+                    <li>adirondack chairs</li>
+                  </ul></span>
+                  <button className="w-fit underline font-light text-sm">View all →</button>
+                </div>
+                <img className="object-contain md:w-[85%] w-[63%] h-[78%] absolute bottom-2 right-0" src="assets/chair.png" alt="" />
+              </div>
+
+              {/* Div 3: Occupies first column in the third row on mobile, first 2 columns and last 3 rows on large screens */}
+              <div className="col-span-1 row-span-1 md:col-span-3 md:row-start-4 md:row-span-3 bg-[#feefdc] rounded-lg flex py-4 px-8">
+                <div className="w-1/2 flex flex-col">
+                  <span className="bg-white rounded-full px-2 py-1 text-sm font-light w-fit"><span className="text-teal-600 font-bold">130+</span>items</span>
+                  <span className="font-extrabold text-xl m-1">Light</span>
+                  <span><ul className="text-gray-400 text-sm font-light mb-1">
+                    <li>chandelier</li>
+                    {/* <li>desk</li> */}
+                    {/* <li>dining table</li> */}
+                    <li>pendent light</li>
+                  </ul></span>
+                  <button className="w-fit underline font-light text-sm">View all →</button>
+                </div>
+                <img className="object-contain w-[80%] h-full" src="assets/lamp.png" alt="" />
+              </div>
+
+              {/* Div 4: Occupies second column in the third row on mobile, 3rd and 4th columns and last 3 rows on large screens */}
+              <div className="col-span-1 row-span-1 md:col-span-1 md:row-start-4 md:row-span-3 bg-gradient-to-br from-[#21758d] to-black rounded-lg relative">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
                   <span className="bg-[#e6a950] rounded-full text-xs px-3 py-1 mb-3 w-max border-2 border-gray-500 text-white">Get Discount</span>
                   <span className="text-lg text-white w-max text-center font-light">30% OFFER</span>
@@ -145,17 +228,18 @@ export default function Home() {
             </div>
           </section>
 
-          <div className="textRevel z-10 flex min-h-[16rem] items-center justify-center rounded-lg border bg-white dark:bg-black">
+
+          {/* <div className="textRevel z-10 flex min-h-[16rem] items-center justify-center rounded-lg border bg-white dark:bg-black">
             <TextReveal text="Immerse yourself in crystal-clear audio with our premium earbuds." />
-          </div>
-          <section className="py-12 md:py-16 lg:py-20 bg-muted">
+          </div> */}
+          {/* <section className="py-12 md:py-16 lg:py-20 bg-muted">
             <div className="container">
               <div className="mb-8 text-center">
                 <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">New Arrivals</h2>
                 <p className="mt-4 text-muted-foreground">Check out our latest fashion collections.</p>
               </div>
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                {/*  */}
+                
               </div>
             </div>
           </section>
@@ -175,7 +259,7 @@ export default function Home() {
                 </Link>
               </div>
             </div>
-          </section>
+          </section> */}
         </main>
       </div>
       <Footer />
