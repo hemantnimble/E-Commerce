@@ -4,7 +4,6 @@ const prisma = new PrismaClient();
 export const dynamic = 'force-dynamic';
 export async function POST(req: NextRequest) {
         const { category } = await req.json();
-
         try {
             let products;
             if (category && category !== 'All') {
@@ -14,8 +13,6 @@ export async function POST(req: NextRequest) {
             } else {
                 products = await prisma.products.findMany(); // Fetch all products
             }
-
-
             return NextResponse.json({products});
         } catch (error: any) {
             return NextResponse.json({ error: error.message }, { status: 400 });

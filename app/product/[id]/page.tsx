@@ -18,6 +18,9 @@ import toast from "react-hot-toast";
 import Link from "next/link";
 import Reviews from '@/components/magicui/Reviews'
 import Model3d from "@/components/Model3d";
+import { useSession } from "next-auth/react";
+import SubmitReview from "@/components/SubmitReview";
+import ProductReviews from "@/components/ProductReviews";
 
 interface Product {
     id: string;
@@ -34,7 +37,8 @@ export default function Component() {
     const [product, setProduct] = useState<Product | null>(null);
     const [ploading, setPloading] = useState(true);
     const [modal3d, setModal3d] = useState(false)
-
+    const session = useSession();
+    const userId = session.data?.user.id;
     useEffect(() => {
         const fetchProduct = async (productId: string) => {
             try {
@@ -164,7 +168,6 @@ export default function Component() {
                             <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                                 Experience unparalleled sound quality with our latest Earpods Pro. Featuring active noise cancellation,
                                 adaptive EQ, and a customizable fit, these earpods deliver an exceptional listening experience. With up to
-                                6 hours of listening time and an additional 24 hours with the charging case, your music never stops.
                             </p>
                         </div>
                         <div className="flex justify-between">
@@ -195,7 +198,7 @@ export default function Component() {
 
                     </div>
                 </div>
-                <div className="space-y-4">
+                {/* <div className="space-y-4">
                     <h3 className="text-lg font-semibold">Key Features</h3>
                     <ul className="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300">
                         <li>Active Noise Cancellation</li>
@@ -204,9 +207,10 @@ export default function Component() {
                         <li>Water and sweat resistant</li>
                         <li>30 hours total listening time with charging case</li>
                     </ul>
-                </div>
-                <div className="bg-gray-50">
-                    {/* Reviews */}
+                </div> */}
+                {/* /Reviews */}
+                <div className="bg-gray-50 mt-14 mb-14">
+                    <h2 className="text-xl font-semibold">Reviews</h2>
                     <div>
                         <div className="flex items-center mb-2">
                             <svg className="w-4 h-4 text-yellow-300 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
@@ -265,8 +269,17 @@ export default function Component() {
                             <span className="text-sm font-medium text-gray-500 dark:text-gray-400">1%</span>
                         </div>
                     </div>
-                    <Reviews></Reviews>
-                    {/* /Reviews */}
+                    {/* <Reviews></Reviews> */}
+                    <div>
+                        <h1>{product?.title}</h1>
+                        <p>{product?.price}</p>
+
+                        {/* Review Submission Form */}
+                        <SubmitReview productId={product?.id} userId={userId} />
+
+                        {/* Display Reviews */}
+                        <ProductReviews productId={product?.id} />
+                    </div>
                 </div>
             </div>
             {

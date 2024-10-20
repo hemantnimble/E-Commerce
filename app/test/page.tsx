@@ -1,29 +1,12 @@
-
 'use client'
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, useGLTF } from '@react-three/drei';
-import { Suspense } from 'react';
+import React from 'react'
 
-interface ModelProps {
-  path: string;
-}
-
-const Model = ({ path }: ModelProps) => {
-  const { scene } = useGLTF(path);
-  return <primitive object={scene} scale={[5.5, 5.5, 5.5]} />;
-};
-
-export default function ModelViewer() {
+function Reviews() {
   return (
-    <div className=" border-2 border-black w-1/2">
-      <Canvas>
-        <Suspense fallback={null}>
-          <ambientLight intensity={0.5} />
-          <directionalLight position={[0, 5, 5]} intensity={1} />
-          <Model path="assets/sofa3d.glb" />
-          <OrbitControls enableZoom={true} />
-        </Suspense>
-      </Canvas>
-    </div>
-  );
+    <>
+    <p>jkj</p>
+    </>
+  )
 }
+
+export default Reviews
