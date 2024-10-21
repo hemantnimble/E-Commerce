@@ -7,9 +7,7 @@ export async function POST(req: NextRequest) {
     const session = await auth();
     const userId = session?.user?.id;
     try {
-        if (!userId) {
-            return NextResponse.json({ message: 'User not authenticated' }, { status: 401 });
-          }
+      
           const { productId } = await req.json();
 
           const reviews = await prisma.review.findMany({

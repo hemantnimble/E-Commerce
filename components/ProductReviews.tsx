@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import { FaStar } from 'react-icons/fa';
 import { Trash } from 'lucide-react';
+import { has } from 'lodash';
 
 interface Review {
     id: string;
@@ -23,6 +24,8 @@ const ProductReviews = ({ productId }: { productId: any }) => {
     const [hoverRating, setHoverRating] = useState(0);
     const session = useSession();
     const userId = session.data?.user.id;
+    const [orders, setOrders] = useState<any[]>([]);
+
 
     const fetchReviews = async () => {
         try {
@@ -32,13 +35,30 @@ const ProductReviews = ({ productId }: { productId: any }) => {
             console.error('Error fetching reviews:', error);
         }
     };
+    const fetchOrders = async () => {
+        try {
+            const response = await axios.get(`/api/orders/get`);
+            setOrders(response.data.orders);
+
+
+        } catch (error) {
+            alert('Failed to load orders');
+        } finally {
+
+        }
+    };
     useEffect(() => {
+        fetchOrders();
         fetchReviews();
     }, [productId]);
 
-    const averageRating = reviews.length
-        ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
-        : 0;
+    const hasOrderedItem = orders.some((order: {
+        userId: string | undefined; items: any[];
+    }) =>
+        order.items.some(item => item.productId === productId && order.userId === userId)
+    );
+    console.log("has", hasOrderedItem)
+    const averageRating = reviews.length ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length : 0;
 
     const renderStars = (rating: any) => {
         const stars = [];
@@ -78,7 +98,7 @@ const ProductReviews = ({ productId }: { productId: any }) => {
             <div className="flex items-center gap-1">
                 {/* Render full stars */}
                 {[...Array(fullStars)].map((_, index) => (
-                    <svg key={`full-${index}`} xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 30 30" fill="none">
+                    <svg key={`full-${index}`} xmlns="http://www.w3.org/2000/svg" width={15} height={15} viewBox="0 0 30 30" fill="none">
                         <g clipPath="url(#clip0_13624_2974)">
                             <path d="M14.1033 2.56698C14.4701 1.82374 15.5299 1.82374 15.8967 2.56699L19.1757 9.21093C19.3214 9.50607 19.6029 9.71064 19.9287 9.75797L27.2607 10.8234C28.0809 10.9426 28.4084 11.9505 27.8149 12.5291L22.5094 17.7007C22.2737 17.9304 22.1662 18.2614 22.2218 18.5858L23.4743 25.8882C23.6144 26.7051 22.7569 27.3281 22.0233 26.9424L15.4653 23.4946C15.174 23.3415 14.826 23.3415 14.5347 23.4946L7.9767 26.9424C7.24307 27.3281 6.38563 26.7051 6.52574 25.8882L7.7782 18.5858C7.83384 18.2614 7.72629 17.9304 7.49061 17.7007L2.1851 12.5291C1.59159 11.9505 1.91909 10.9426 2.73931 10.8234L10.0713 9.75797C10.3971 9.71064 10.6786 9.50607 10.8243 9.21093L14.1033 2.56698Z" fill="#FBBF24" />
                         </g>
@@ -91,7 +111,7 @@ const ProductReviews = ({ productId }: { productId: any }) => {
                 ))}
                 {/* Render half star if applicable */}
                 {hasHalfStar && (
-                    <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 30 30" fill="none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width={15} height={15} viewBox="0 0 30 30" fill="none">
                         <g clipPath="url(#clip0_13624_2974)">
                             <path d="M14.1033 2.56698C14.4701 1.82374 15.5299 1.82374 15.8967 2.56699L19.1757 9.21093C19.3214 9.50607 19.6029 9.71064 19.9287 9.75797L27.2607 10.8234C28.0809 10.9426 28.4084 11.9505 27.8149 12.5291L22.5094 17.7007C22.2737 17.9304 22.1662 18.2614 22.2218 18.5858L23.4743 25.8882C23.6144 26.7051 22.7569 27.3281 22.0233 26.9424L15.4653 23.4946C15.174 23.3415 14.826 23.3415 14.5347 23.4946L7.9767 26.9424C7.24307 27.3281 6.38563 26.7051 6.52574 25.8882L7.7782 18.5858C7.83384 18.2614 7.72629 17.9304 7.49061 17.7007L2.1851 12.5291C1.59159 11.9505 1.91909 10.9426 2.73931 10.8234L10.0713 9.75797C10.3971 9.71064 10.6786 9.50607 10.8243 9.21093L14.1033 2.56698Z" fill="#FBBF24" />
                         </g>
@@ -104,7 +124,7 @@ const ProductReviews = ({ productId }: { productId: any }) => {
                 )}
                 {/* Render empty stars */}
                 {[...Array(totalStars - fullStars - (hasHalfStar ? 1 : 0))].map((_, index) => (
-                    <svg key={`empty-${index}`} xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 30 30" fill="none">
+                    <svg key={`empty-${index}`} xmlns="http://www.w3.org/2000/svg" width={15} height={15} viewBox="0 0 30 30" fill="none">
                         <g clipPath="url(#clip0_13624_2974)">
                             <path d="M14.1033 2.56698C14.4701 1.82374 15.5299 1.82374 15.8967 2.56699L19.1757 9.21093C19.3214 9.50607 19.6029 9.71064 19.9287 9.75797L27.2607 10.8234C28.0809 10.9426 28.4084 11.9505 27.8149 12.5291L22.5094 17.7007C22.2737 17.9304 22.1662 18.2614 22.2218 18.5858L23.4743 25.8882C23.6144 26.7051 22.7569 27.3281 22.0233 26.9424L15.4653 23.4946C15.174 23.3415 14.826 23.3415 14.5347 23.4946L7.9767 26.9424C7.24307 27.3281 6.38563 26.7051 6.52574 25.8882L7.7782 18.5858C7.83384 18.2614 7.72629 17.9304 7.49061 17.7007L2.1851 12.5291C1.59159 11.9505 1.91909 10.9426 2.73931 10.8234L10.0713 9.75797C10.3971 9.71064 10.6786 9.50607 10.8243 9.21093L14.1033 2.56698Z" fill="#E5E7EB" />
                         </g>
@@ -121,6 +141,11 @@ const ProductReviews = ({ productId }: { productId: any }) => {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
+        if (userId && hasOrderedItem) return true;
+        else {
+            alert('Please login to leave a review');
+            return;
+        }
         try {
             const response = await axios.post('/api/user/reviews/add', {
                 productId,
@@ -152,6 +177,7 @@ const ProductReviews = ({ productId }: { productId: any }) => {
             fetchReviews();
         }
     };
+    // console.log("id",orders[0].items.product.id)
     return (
         <div >
             <h2 className="font-bold text-2xl sm:text-4xl leading-10 text-black mb-5">
@@ -178,7 +204,13 @@ const ProductReviews = ({ productId }: { productId: any }) => {
                         </div>
                         <div className="col-span-12 md:col-span-4 max-lg:mt-8 md:pl-8">
                             <div className="flex items-center flex-col justify-center w-full h-full ">
-                                <button onClick={() => setReviewPopup(true)} className="rounded-full px-6 py-4 bg-indigo-600 font-semibold text-lg text-white whitespace-nowrap mb-6 w-full text-center shadow-sm shadow-transparent transition-all duration-500 hover:bg-indigo-700 hover:shadow-indigo-400">
+                                <button onClick={() => {
+                                    if (userId && hasOrderedItem) setReviewPopup(true);
+                                    else {
+                                        alert('Please login to leave a review');
+                                        return;
+                                    }
+                                }} className="rounded-full px-6 py-4 bg-indigo-600 font-semibold text-lg text-white whitespace-nowrap mb-6 w-full text-center shadow-sm shadow-transparent transition-all duration-500 hover:bg-indigo-700 hover:shadow-indigo-400">
                                     Write A Review
                                 </button>
                             </div>
@@ -195,16 +227,14 @@ const ProductReviews = ({ productId }: { productId: any }) => {
                     reviews.map((review: any) => (
                         <div key={review.id}>
                             <div className="flex sm:items-center flex-col sm:flex-row justify-between  mb-4">
-                            <StarRating rating={review.rating} /> 
                                 <div className="flex items-center gap-3">
                                     <h6 className="font-semibold text-lg leading-8 text-black">@{review.user.name}</h6>
                                     <p className="font-medium text-base leading-7 text-gray-400">{new Date(review.createdAt).toLocaleDateString()}</p>
-                                    {/* <button >X</button> */}
-                                    <Trash className='cursor-pointer hover:text-red-600 hover:animate-pulse' onClick={(e) => deleteReview(review.id, e)}></Trash>
                                 </div>
+                                <StarRating rating={review.rating} />
                             </div>
                             <p className="font-normal text-lg leading-8 text-gray-500 ">
-                                {review.content}
+                                {review.content}.
                             </p>
                         </div>
                     ))
@@ -254,6 +284,7 @@ const ProductReviews = ({ productId }: { productId: any }) => {
                         >
                             Submit Review
                         </button>
+                        <button onClick={() => setReviewPopup(false)} className="px-4 py-2 bg-black text-white rounded-md hover:bg-slate-700 ml-2">close</button>
                     </form>
                 </section>
             }
