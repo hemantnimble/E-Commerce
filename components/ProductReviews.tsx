@@ -193,8 +193,8 @@ const ProductReviews = ({ productId }: { productId: any }) => {
                 {reviews &&
                     reviews.length > 0 ? (
                     reviews.map((review: any) => (
-                        <div>
-                            <div key={review.id} className="flex sm:items-center flex-col sm:flex-row justify-between  mb-4">
+                        <div key={review.id}>
+                            <div className="flex sm:items-center flex-col sm:flex-row justify-between  mb-4">
                             <StarRating rating={review.rating} /> 
                                 <div className="flex items-center gap-3">
                                     <h6 className="font-semibold text-lg leading-8 text-black">@{review.user.name}</h6>
