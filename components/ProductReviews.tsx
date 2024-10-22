@@ -24,6 +24,7 @@ const ProductReviews = ({ productId }: { productId: any }) => {
     const [hoverRating, setHoverRating] = useState(0);
     const session = useSession();
     const userId = session.data?.user.id;
+    const isAdmin = session.data?.user.roles.includes("ADMIN");
     const [orders, setOrders] = useState<any[]>([]);
 
 
@@ -177,10 +178,9 @@ const ProductReviews = ({ productId }: { productId: any }) => {
             fetchReviews();
         }
     };
-    // console.log("id",orders[0].items.product.id)
     return (
         <div >
-            <h2 className="font-bold text-2xl sm:text-4xl leading-10 text-black mb-5">
+            <h2 className="font-semibold text-xl leading-10 text-black">
                 Customer reviews &amp;
                 rating</h2>
             <div className="grid grid-cols-12 mb-11">
@@ -190,7 +190,7 @@ const ProductReviews = ({ productId }: { productId: any }) => {
                         <div className="col-span-12 md:col-span-8 flex items-center">
                             <div className="flex flex-col sm:flex-row items-center max-lg:justify-center w-full h-full">
                                 <div className="sm:pr-3 sm:border-r border-gray-200 flex items-center justify-center flex-col">
-                                    <h2 className="font-manrope font-bold text-5xl text-black text-center mb-4">
+                                    <h2 className="font-manrope font-bold m:0text-5xl text-[2rem] text-black text-center mb-4">
                                         {averageRating ? averageRating.toFixed(1) : 'No ratings yet'}
                                     </h2>
                                     <div className="flex items-center gap-3 mb-4">
@@ -219,23 +219,25 @@ const ProductReviews = ({ productId }: { productId: any }) => {
                 </div>
             </div>
             {/* reviews display  */}
-            <div className="pb-8 border-b border-gray-200 ">
-                <h4 className="font-manrope font-semibold text-3xl leading-10 text-black mb-6">Most helpful positive
+            <div className="pb-2 ">
+                <h4 className="font-manrope font-semibold text-xl leading-10 text-black mb-6">Most helpful positive
                     review</h4>
                 {reviews &&
                     reviews.length > 0 ? (
                     reviews.map((review: any) => (
-                        <div key={review.id}>
+                        <div key={review.id} className='mb-4'>
                             <div className="flex sm:items-center flex-col sm:flex-row justify-between  mb-4">
                                 <div className="flex items-center gap-3">
                                     <h6 className="font-semibold text-lg leading-8 text-black">@{review.user.name}</h6>
                                     <p className="font-medium text-base leading-7 text-gray-400">{new Date(review.createdAt).toLocaleDateString()}</p>
+                            {isAdmin&&<Trash className='hover:animate-pulse cursor-pointer text-red-600' onClick={(e)=>deleteReview(review.id,e)}></Trash>}
                                 </div>
                                 <StarRating rating={review.rating} />
                             </div>
                             <p className="font-normal text-lg leading-8 text-gray-500 ">
                                 {review.content}.
                             </p>
+                            <hr />
                         </div>
                     ))
                 ) : (

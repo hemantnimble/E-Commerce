@@ -18,6 +18,7 @@ import toast from "react-hot-toast";
 import Link from "next/link";
 import Model3d from "@/components/Model3d";
 import ProductReviews from "@/components/ProductReviews";
+import Footer from "@/components/Footer";
 
 interface Product {
     id: string;
@@ -99,7 +100,7 @@ export default function Component() {
 
     return (
         <>
-            <div className="max-w-7xl mx-auto px-4 py-8 bg-gray-50 dark:bg-gray-900">
+            <div className="max-w-7xl mx-auto px-4 py-8">
                 <div className="grid lg:grid-cols-2 gap-12 items-start">
                     <div className="space-y-4">
                         <Carousel className="carousel w-full max-w-xl">
@@ -132,8 +133,8 @@ export default function Component() {
                     </div>
                     <div className="space-y-8">
                         <div className="space-y-2">
-                            <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">{product?.title || 'Earpods Pro'}</h1>
-                            <div className="flex items-center">
+                            <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">{product?.title || 'Loading...'}</h1>
+                            {/* <div className="flex items-center">
                                 <svg className="w-4 h-4 text-yellow-300 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
                                     <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
                                 </svg>
@@ -152,12 +153,12 @@ export default function Component() {
                                 <p className="ms-1 text-sm font-medium text-gray-500 dark:text-gray-400">4.95</p>
                                 <p className="ms-1 text-sm font-medium text-gray-500 dark:text-gray-400">out of</p>
                                 <p className="ms-1 text-sm font-medium text-gray-500 dark:text-gray-400">5</p>
-                            </div>
+                            </div> */}
 
                         </div>
                         <div>
-                            <p className="text-4xl font-bold">{product ? `$${product.price}` : '$249.99'}</p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Free shipping on orders over $100</p>
+                            <p className="text-4xl font-bold">{product ? `₹${product.price}` : 'Loading...'}</p>
+                            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Free shipping on orders over ₹10,000</p>
                         </div>
                         <div className="space-y-4">
                             <h2 className="text-xl font-semibold">Description</h2>
@@ -166,7 +167,7 @@ export default function Component() {
                                 adaptive EQ, and a customizable fit, these earpods deliver an exceptional listening experience. With up to
                             </p>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex justify-between md:justify-start md:gap-2">
                             <div
                                 onClick={() => handleCart(product?.id)}
                                 className={`flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300 ${loading ? 'cursor-not-allowed' : 'cursor-pointer'}`}  >
@@ -205,13 +206,12 @@ export default function Component() {
                     </ul>
                 </div> */}
                 {/* /Reviews */}
-                <section className="py-24 relative">
-                    <div className="w-full max-w-7xl px-4 md:px-5 lg:px-6 mx-auto">
+                <section className="mt-8 relative">
+                    <div className="w-full max-w-7xl mx-auto">
                         {/* display review  */}
                         <ProductReviews productId={product?.id} />
                     </div>
                 </section>
-                
             </div>
             {modal3d &&
                 <div className="w-full h-screen bg-white absolute top-0">
@@ -221,6 +221,7 @@ export default function Component() {
                     }} className="absolute top-20 left-4 underline z-10">close</Button>
                     <Model3d productName={product?.title.toLowerCase()} />
                 </div>}
+                <Footer/>
         </>
 
     );
