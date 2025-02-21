@@ -7,12 +7,12 @@ import type { ConfettiRef } from "@/components/magicui/confetti";
 import Confetti from "@/components/magicui/confetti";
 
 export default function PaymentSuccess({
-    searchParams: { amount },
+    searchParams: { redirect_status },
 }: {
-    searchParams: { amount: string };
+    searchParams: { redirect_status: string };
 }) {
     const confettiRef = useRef<ConfettiRef>(null);
-
+console.log('ststus pay',redirect_status)
     return (
         <main className="max-w-6xl mx-auto p-10 text-white text-center border m-10 rounded-md bg-gradient-to-tr from-blue-500 to-purple-500">
             <div className="relative flex h-[500px] w-full flex-col items-center justify-center overflow-hidden rounded-lg border bg-background md:shadow-xl">
@@ -33,7 +33,7 @@ export default function PaymentSuccess({
                 <h2 className="text-2xl">You successfully sent</h2>
 
                 <div className="bg-white p-2 rounded-md text-purple-500 mt-5 text-4xl font-bold">
-                    ${amount}
+                    {/* ${amount} */}
                 </div>
             </div>
         </main>

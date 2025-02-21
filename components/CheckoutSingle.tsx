@@ -44,14 +44,7 @@ function CheckoutPageSingle({ amount, item, selectedAddress }: { amount: number,
             setLoading(false);
             return;
         }
-        const response = await fetch('/api/orders/createone', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ paymentIntentId: clientSecret, item, quantity: 1, selectedAddress }),
-        });
-
+       
 
         const returnUrl = process.env.NEXT_PUBLIC_RETURN_URL;
 
@@ -65,20 +58,27 @@ function CheckoutPageSingle({ amount, item, selectedAddress }: { amount: number,
         if (error) {
             //  This point is only reached if there's an immediate error when
             //  confirming the payment.Show the error to your customer(for example, payment details incomplete)
+            alert("An error occurred")  
             setErrorMessage(error.message);
         } else {
-            //  The payment UI automatically closes with a success animation.
-            //  Your customer is redirected to your`return_url`.
+            const response = await fetch('/api/orders/createone', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ paymentIntentId: clientSecret, item, quantity: 1, selectedAddress }),
+            });
+    
         }
 
 
-        const data = await response.json();
-        if (data.success) {
-            console.log('data', data)
-            // Handle successful order creation (e.g., redirect or show a success message)
-        } else {
-            setErrorMessage('Failed to create order');
-        }
+        // const data = await response.json();
+        // if (data.success) {
+        //     console.log('data', data)
+        //     // Handle successful order creation (e.g., redirect or show a success message)
+        // } else {
+        //     setErrorMessage('Failed to create order');
+        // }
 
         setLoading(false);
     };

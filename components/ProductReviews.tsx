@@ -142,11 +142,12 @@ const ProductReviews = ({ productId }: { productId: any }) => {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
-        if (userId && hasOrderedItem) return true;
-        else {
-            alert('Please login to leave a review');
-            return;
-        }
+        console.log("clicked")
+        if (!userId && !hasOrderedItem) alert('Please login to leave a review');
+        // else {
+        //     alert('Please login to leave a review');
+        //     return;
+        // }
         try {
             const response = await axios.post('/api/user/reviews/add', {
                 productId,
