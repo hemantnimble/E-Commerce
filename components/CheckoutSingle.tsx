@@ -1,112 +1,114 @@
 'use client'
-import React, { useEffect, useState } from 'react'
-import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js'
-import convertToSubcurrency from '@/utils/convertToSubcurrency';
+import React, { useEffect, useState } from 'react';
 import { Button } from './ui/button';
+import { useRouter } from 'next/navigation'; // Import useRouter for redirection
 
 function CheckoutPageSingle({ amount, item, selectedAddress }: { amount: number, item: any, selectedAddress: any }) {
-    const stripe = useStripe();
-    const elements = useElements();
     const [errorMessage, setErrorMessage] = useState<string>();
-    const [clientSecret, setClientSecret] = useState("");
     const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-        fetch("/api/paymentIntent", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ amount: convertToSubcurrency(amount) }),
-        })
-            .then((res) => res.json())
-            .then((data) => setClientSecret(data.clientSecret));
-    }, [amount]);
-
+    const router = useRouter(); // Initialize useRouter
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setLoading(true);
 
-        if (!stripe || !elements) {
-            return;
-        }
-
-        const { error: submitError } = await elements.submit();
-
-        if (submitError) {
-            setErrorMessage(submitError.message);
-            setLoading(false);
-            return;
-        }
         if (!selectedAddress) {
-            alert("Please select address")
+            alert("Please select address");
             setLoading(false);
             return;
         }
-       
 
-        const returnUrl = process.env.NEXT_PUBLIC_RETURN_URL;
-
-        const { error } = await stripe.confirmPayment({
-            elements,
-            clientSecret,
-            confirmParams: {
-                return_url: `${returnUrl}/user/payment-success`,
-            },
-        });
-        if (error) {
-            //  This point is only reached if there's an immediate error when
-            //  confirming the payment.Show the error to your customer(for example, payment details incomplete)
-            alert("An error occurred")  
-            setErrorMessage(error.message);
-        } else {
-            const response = await fetch('/api/orders/createone', {
-                method: 'POST',
+        try {
+            // Step 1: Create a Razorpay order
+            const razorpayResponse = await fetch("/api/orders/createrazor", {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ paymentIntentId: clientSecret, item, quantity: 1, selectedAddress }),
+                body: JSON.stringify({ amount }),
             });
-    
+
+            const razorpayOrder = await razorpayResponse.json();
+
+            // Step 2: Load Razorpay script dynamically
+            const script = document.createElement("script");
+            script.src = "https://checkout.razorpay.com/v1/checkout.js";
+            script.async = true;
+            document.body.appendChild(script);
+
+            script.onload = () => {
+                const options = {
+                    key: process.env.NEXT_PUBLIC_PAYMENT_PUBLIC, // Use your Razorpay key ID
+                    amount: razorpayOrder.order.amount * 100,
+                    currency: razorpayOrder.order.currency,
+                    name: "Your Company Name",
+                    description: "Test Transaction",
+                    image: "https://example.com/your_logo.png",
+                    order_id: razorpayOrder.order.id,
+                    handler: async function (response: any) {
+                        // Step 3: Handle successful payment
+                        alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);
+
+                        // Step 4: Create an order in your database
+                        try {
+                            const orderResponse = await fetch("/api/orders/createone", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                    paymentIntentId: response.razorpay_payment_id,
+                                    item,
+                                    quantity: 1, // Assuming quantity is 1 for single product
+                                    selectedAddress,
+                                }),
+                            });
+
+                            const order = await orderResponse.json();
+
+                            if (orderResponse.ok) {
+                                // Step 5: Redirect to the success page or order details page
+                                router.push(`http://localhost:3001/user/orders`); // Redirect to order details page
+                            } else {
+                                setErrorMessage("Failed to create order. Please contact support.");
+                            }
+                        } catch (error) {
+                            console.error("Order creation failed:", error);
+                            setErrorMessage("Order creation failed. Please contact support.");
+                        }
+                    },
+                    prefill: {
+                        name: "John Doe",
+                        email: "john.doe@example.com",
+                        contact: "9999999999",
+                    },
+                    notes: {
+                        address: "Razorpay Corporate Office",
+                    },
+                    theme: {
+                        color: "#3399cc",
+                    },
+                };
+
+                const rzp = new (window as any).Razorpay(options);
+                rzp.open();
+            };
+        } catch (error) {
+            console.error("Payment failed:", error);
+            setErrorMessage("Payment failed. Please try again.");
+        } finally {
+            setLoading(false);
         }
-
-
-        // const data = await response.json();
-        // if (data.success) {
-        //     console.log('data', data)
-        //     // Handle successful order creation (e.g., redirect or show a success message)
-        // } else {
-        //     setErrorMessage('Failed to create order');
-        // }
-
-        setLoading(false);
     };
-
-    if (!clientSecret || !stripe || !elements) {
-        return (
-            <div className="flex items-center justify-center">
-                <div
-                    className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
-                    role="status"
-                >
-                    <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-                        Loading...
-                    </span>
-                </div>
-            </div>
-        );
-    }
 
     return (
         <form onSubmit={handleSubmit} className="bg-white p-2 rounded-md">
-            {clientSecret && <PaymentElement />}
-            {errorMessage && <div>{errorMessage}</div>}
-            <Button className="w-full mt-4" disabled={!stripe || loading}>
+            {errorMessage && <div className="text-red-500 mb-4">{errorMessage}</div>}
+            <Button className="w-full mt-4" disabled={loading}>
                 {!loading ? `Pay $${amount}` : "Processing..."}
             </Button>
         </form>
-    )
+    );
 }
 
-export default CheckoutPageSingle
+export default CheckoutPageSingle;

@@ -3,9 +3,6 @@ import React, { useEffect, useState } from 'react'
 import CheckoutPageSingle from '@/components/CheckoutSingle'
 import { useParams } from 'next/navigation';
 import axios from 'axios';
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
-import convertToSubcurrency from '@/utils/convertToSubcurrency';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import AddressSection from '@/components/AddressSection'
 
@@ -23,7 +20,6 @@ function Page() {
     const id = params?.id;
     const [product, setProduct] = useState<Product | null>(null);
     const [selectedAddress, setSelectedAddress] = useState(null);
-    const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC ?? '');
     const fetchProducts = async (id: any) => {
         try {
             const response = await axios.post<{ product: Product }>("/api/products/getsingleproduct", { id })
@@ -37,7 +33,7 @@ function Page() {
     }, [id]);
 
     const handleSelectAddress = (addressId: any) => {
-        setSelectedAddress(addressId);  
+        setSelectedAddress(addressId);
         console.log("Selected Address ID:", addressId);
     };
 
@@ -63,7 +59,7 @@ function Page() {
                             <hr />
                             <div className="flex justify-between font-bold">
                                 <span>Total</span>
-                                <span>${product?.price}+tax</span> 
+                                <span>${product?.price}+tax</span>
                             </div>
                         </div>
                     </CardContent>
@@ -74,14 +70,7 @@ function Page() {
                     <div className="p-6">
                         <CardTitle>Payment</CardTitle>
                         <CardDescription>Enter your payment details</CardDescription>
-                        <Elements stripe={stripePromise}
-                            options={{
-                                mode: "payment",
-                                amount: convertToSubcurrency(amount),
-                                currency: "usd",
-                            }} >
-                            <CheckoutPageSingle amount={amount} item={product} selectedAddress={selectedAddress} />
-                        </Elements>
+                        <CheckoutPageSingle amount={amount} item={product} selectedAddress={selectedAddress} />
                     </div>
                 </Card>
             </div>

@@ -31,6 +31,7 @@ const PaymentButton = ({ amount }: { amount: number }) => {
           description: "Test Transaction",
           image: "https://example.com/your_logo.png",
           order_id: order.order.id,
+          callback_url: 'user/orders',
           handler: function (response: any) {
             alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);
           },
