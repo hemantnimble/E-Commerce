@@ -1,13 +1,9 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { Elements } from '@stripe/react-stripe-js'
-import { loadStripe } from '@stripe/stripe-js'
 import CheckoutPage from '@/components/CheckoutPage';
-import convertToSubcurrency from '@/utils/convertToSubcurrency';
 import axios from 'axios';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import AddressSection from '@/components/AddressSection';
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC ?? '');
 interface Product {
     id: string;
     title: string;
@@ -107,14 +103,7 @@ function Page() {
                     <div className="p-6">
                         <CardTitle>Payment</CardTitle>
                         <CardDescription>Enter your payment details</CardDescription>
-                        <Elements stripe={stripePromise}
-                            options={{
-                                mode: "payment",
-                                amount: convertToSubcurrency(amount),
-                                currency: "usd",
-                            }}>
-                            <CheckoutPage amount={amount} cartItems={cartItems} selectedAddress={selectedAddress} />
-                        </Elements>
+                        <CheckoutPage amount={amount} cartItems={cartItems} selectedAddress={selectedAddress} />
                     </div>
                 </Card>
             </div>

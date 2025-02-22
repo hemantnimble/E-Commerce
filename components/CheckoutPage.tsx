@@ -1,8 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js'
-import convertToSubcurrency from '@/utils/convertToSubcurrency';
-import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 interface CartItem {
     id: string;
@@ -19,112 +17,113 @@ interface Product {
 }
 
 function CheckoutPage({ amount, cartItems, selectedAddress }: { amount: number, cartItems: CartItem[], selectedAddress: any }) {
-    const stripe = useStripe();
-    const elements = useElements();
     const [errorMessage, setErrorMessage] = useState<string>();
-    const [clientSecret, setClientSecret] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
-
-    useEffect(() => {
-        const fetchPaymentIntent = async () => {
-            try {
-                const response = await fetch("/api/paymentIntent", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ amount: convertToSubcurrency(amount) }),
-                });
-                const data = await response.json();
-                setClientSecret(data.clientSecret);
-            } catch (error) {
-                console.error("Error fetching payment intent:", error);
-            }
-        };
-
-        fetchPaymentIntent();
-    }, [amount]);
-    
+    const router = useRouter(); // Initialize useRouter
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setLoading(true);
 
-        if (!stripe || !elements) {
-            setErrorMessage("Stripe.js has not loaded yet.");
-            setLoading(false);
-            return;
-        }
-
-        const { error: submitError } = await elements.submit();
-
-        if (submitError) {
-            setErrorMessage(submitError.message);
-            setLoading(false);
-            return;
-        }
-        if(!selectedAddress){
+        if (!selectedAddress) {
             alert("Please select address")
             setLoading(false);
             return;
         }
+
         try {
-            const response = await fetch('/api/orders/create', {
-                method: 'POST',
+            // Step 1: Create a Razorpay order
+            const razorpayResponse = await fetch("/api/orders/createrazor", {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ paymentIntentId: clientSecret, cartItems, selectedAddress}),
+                body: JSON.stringify({ amount }),
             });
 
-            const data = await response.json();
-            if (data) {
-                console.log('Order created successfully:', data);
-                const returnUrl = process.env.NEXT_PUBLIC_RETURN_URL;
-                const { error } = await stripe.confirmPayment({
-                    elements,
-                    clientSecret,
-                    confirmParams: {
-                        return_url: `${returnUrl}/user/payment-success`,
-                    },
-                });
+            const razorpayOrder = await razorpayResponse.json();
 
-                if (error) {
-                    setErrorMessage(error.message);
-                }
-            } else {
-                setErrorMessage('Failed to create order');
-            }
+            // Step 2: Load Razorpay script dynamically
+            const script = document.createElement("script");
+            script.src = "https://checkout.razorpay.com/v1/checkout.js";
+            script.async = true;
+            document.body.appendChild(script);
+
+            script.onload = () => {
+                const options = {
+                    key: process.env.NEXT_PUBLIC_PAYMENT_PUBLIC, // Use your Razorpay key ID
+                    amount: razorpayOrder.order.amount * 100,
+                    currency: razorpayOrder.order.currency,
+                    name: "Your Company Name",
+                    description: "Test Transaction",
+                    image: "https://example.com/your_logo.png",
+                    order_id: razorpayOrder.order.id,
+                    handler: async function (response: any) {
+                        // Step 3: Handle successful payment
+                        alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);
+
+                        // Step 4: Create an order in your database
+                        try {
+                            const orderResponse = await fetch("/api/orders/create", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                    paymentIntentId: response.razorpay_payment_id,
+                                    cartItems,
+                                    quantity: 1, // Assuming quantity is 1 for single product
+                                    selectedAddress,
+                                }),
+                            });
+
+                            const order = await orderResponse.json();
+
+                            if (orderResponse.ok) {
+                                // Step 5: Redirect to the success page or order details page
+                                router.push(`http://localhost:3000/user/orders`); // Redirect to order details page
+                            } else {
+                                setErrorMessage("Failed to create order. Please contact support.");
+                            }
+                        } catch (error) {
+                            console.error("Order creation failed:", error);
+                            setErrorMessage("Order creation failed. Please contact support.");
+                        }
+                    },
+                    prefill: {
+                        name: "John Doe",
+                        email: "john.doe@example.com",
+                        contact: "9999999999",
+                    },
+                    notes: {
+                        address: "Razorpay Corporate Office",
+                    },
+                    theme: {
+                        color: "#3399cc",
+                    },
+                };
+
+                const rzp = new (window as any).Razorpay(options);
+                rzp.open();
+            };
         } catch (error) {
-            setErrorMessage('An error occurred while creating the order.');
+            console.error("Payment failed:", error);
+            setErrorMessage("Payment failed. Please try again.");
+        } finally {
+            setLoading(false);
         }
+
 
         setLoading(false);
     };
 
-    if (!clientSecret || !stripe || !elements) {
-        return (
-            <div className="flex items-center justify-center">
-                <div
-                    className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
-                    role="status"
-                >
-                    <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-                        Loading...
-                    </span>
-                </div>
-            </div>
-        );
-    }
+
 
     return (
         <form onSubmit={handleSubmit} className="bg-white p-2 rounded-md">
-            {clientSecret && <PaymentElement />}
-
             {errorMessage && <div>{errorMessage}</div>}
-
             <button
-                disabled={!stripe || loading}
+                disabled={loading}
                 className="text-white w-full p-5 bg-black mt-2 rounded-md font-bold disabled:opacity-50 disabled:animate-pulse"
             >
                 {!loading ? `Pay $${amount}` : "Processing..."}

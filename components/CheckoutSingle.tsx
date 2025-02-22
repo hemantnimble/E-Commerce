@@ -51,7 +51,7 @@ function CheckoutPageSingle({ amount, item, selectedAddress }: { amount: number,
 
                         // Step 4: Create an order in your database
                         try {
-                            const orderResponse = await fetch("/api/orders/createone", {
+                            const orderResponse = await fetch("/api/orders/create", {
                                 method: "POST",
                                 headers: {
                                     "Content-Type": "application/json",
@@ -68,7 +68,7 @@ function CheckoutPageSingle({ amount, item, selectedAddress }: { amount: number,
 
                             if (orderResponse.ok) {
                                 // Step 5: Redirect to the success page or order details page
-                                router.push(`http://localhost:3001/user/orders`); // Redirect to order details page
+                                router.push(`http://localhost:3000/user/orders`); // Redirect to order details page
                             } else {
                                 setErrorMessage("Failed to create order. Please contact support.");
                             }
