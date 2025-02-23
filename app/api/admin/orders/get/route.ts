@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET() {
     const session = await auth();
     if (!session) {
         return NextResponse.json({ message: "User not authenticated" }, { status: 401 });
