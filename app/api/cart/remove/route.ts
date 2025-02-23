@@ -3,6 +3,8 @@ import { PrismaClient } from "@prisma/client";
 import { NextResponse, NextRequest } from "next/server";
 
 const prisma = new PrismaClient();
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
     const session = await auth();
     const userId = session?.user?.id;
