@@ -90,3 +90,5 @@ export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
 
   },
 });
+// Force Node.js runtime for NextAuth.js
+export const runtime = 'nodejs';
