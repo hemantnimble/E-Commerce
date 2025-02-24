@@ -2,6 +2,7 @@
 
 import { auth, signIn, signOut } from "@/auth";
 import { db } from "@/db";
+import { AuthError } from "next-auth";
 import { revalidatePath } from "next/cache";
 
 const getUserByEmail = async (email: string) => {
@@ -40,22 +41,19 @@ export const loginWithCreds = async (formData: FormData) => {
     console.log(existingUser);
 
     try {
-        const result = await signIn("credentials", rawFormData);
-
-        // Handle the result of signIn
-        if (result?.error) {
-            switch (result.error) {
+        await signIn("credentials", rawFormData);
+    } catch (error: any) {
+        if (error instanceof AuthError) {
+            switch (error.type) {
                 case "CredentialsSignin":
                     return { error: "Invalid credentials!" };
                 default:
                     return { error: "Something went wrong!" };
             }
         }
-    } catch (error: any) {
-        console.error(error);
-        return { error: "An unexpected error occurred." };
-    }
 
+        throw error;
+    }
     revalidatePath("/");
 };
 

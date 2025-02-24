@@ -1,10 +1,10 @@
 import NextAuth from "next-auth";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { db } from "./db";
 import { saltAndHashPassword } from "./utils/helper";
-import Google from "next-auth/providers/google";
+import Google from "next-auth/providers/google"
 import { UserRole } from "@prisma/client";
 
 export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
@@ -69,11 +69,11 @@ export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
   callbacks: {
     session: async ({ session, token }) => {
       if (token) {
-        session.user.name = token.name;
-        session.user.id = token.id as string;
-        session.user.email = token.email as string;
-        session.user.image = token.image as string;
-        session.user.roles = token.roles || [UserRole.USER];
+        session.user.name = token.name
+        session.user.id = token.id as string
+        session.user.email = token.email as string
+        session.user.image = token.image as string
+        session.user.roles = token.roles || [UserRole.USER]
       }
       return session;
     },
@@ -87,5 +87,6 @@ export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
       }
       return token;
     },
+
   },
 });
