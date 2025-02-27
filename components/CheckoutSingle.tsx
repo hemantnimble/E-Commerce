@@ -68,7 +68,7 @@ function CheckoutPageSingle({ amount, item, selectedAddress }: { amount: number,
 
                             if (orderResponse.ok) {
                                 // Step 5: Redirect to the success page or order details page
-                                router.push(`http://localhost:3000/user/orders`); // Redirect to order details page
+                                router.push(`${process.env.NEXT_PUBLIC_RETURN_URL}/user/orders`); // Redirect to order details page
                             } else {
                                 setErrorMessage("Failed to create order. Please contact support.");
                             }

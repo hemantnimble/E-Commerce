@@ -10,6 +10,7 @@ import { UserRole } from "@prisma/client";
 export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(db) as any,
   session: { strategy: "jwt" },
+  trustHost: true,
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
