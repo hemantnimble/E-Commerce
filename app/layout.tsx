@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
-import Navbar from "@/components/Navbar"
+import Navbar from "@/components/Navbar";
 import { CartProvider } from "@/components/CartContext";
 import BottomNavbar from "@/components/BottomNavbar";
-
+import StoreProvider from "@/app/StoreProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,15 +22,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <SessionProvider>
-          <CartProvider>
-            <Navbar></Navbar>
-            <div className="pt-16 pb-[64px] lg:pb-0">
-              {children}
-            </div>
-            <BottomNavbar></BottomNavbar>
-          </CartProvider>
-        </SessionProvider>
+        <StoreProvider>
+          <SessionProvider>
+            <CartProvider>
+              <Navbar />
+              <div className="pt-16 pb-[64px] lg:pb-0">
+                {children}
+              </div>
+              <BottomNavbar />
+            </CartProvider>
+          </SessionProvider>
+        </StoreProvider>
       </body>
     </html>
   );

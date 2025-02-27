@@ -8,7 +8,7 @@ import Google from "next-auth/providers/google"
 import { UserRole } from "@prisma/client";
 
 export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
-  adapter: PrismaAdapter(db),
+  adapter: PrismaAdapter(db) as any,
   session: { strategy: "jwt" },
   providers: [
     Google({

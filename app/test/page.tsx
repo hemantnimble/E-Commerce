@@ -1,82 +1,69 @@
-'use client'
-import React, { useState } from "react";
+'use client';
+import React, { useRef, useEffect } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+import ReactLenis from "lenis/react";
 
-const ReviewFormPopup = () => {
 
+const ScrollAnimation = () => {
+  const redDivRef = useRef(null);
+
+  // Register the ScrollTrigger plugin
+  gsap.registerPlugin(ScrollTrigger);
+
+  useGSAP(() => {
+    // Timeline for moving the image up
+    const moveUp = gsap.timeline({
+      scrollTrigger: {
+        trigger: redDivRef.current,
+        start: "-170% 10%", // Adjust start point
+        end: "top 30%", // Adjust end point
+        scrub: true,
+        markers: true,
+      },
+    });
+
+    moveUp.to(redDivRef.current, {
+      y: "-100%", // Moves up by 100%
+      x: "50%", // Moves right by 50%
+      ease: "power2.inOut",
+    });
+
+    // Timeline for moving the image down
+    const moveDown = gsap.timeline({
+      scrollTrigger: {
+        trigger: redDivRef.current,
+        start: "0% 30%", // Starts after the first timeline ends
+        end: "300% 50%", // Adjust end point for desired effect
+        scrub: true,
+        markers: true,
+      },
+    });
+
+    moveDown.to(redDivRef.current, {
+      y: "350%", // Moves down by 350%
+      x: "150%", // Moves further to the right
+      scale: 2,  // Increases size
+      zIndex: 1100,
+      ease: "power2.inOut",
+    });
+  }, { scope: redDivRef });
 
   return (
-    <div className='main-container w-[318px] h-[665px] bg-[rgba(0,0,0,0)] relative overflow-hidden mx-auto my-0'>
-      <div className='h-[665px] bg-[rgba(0,0,0,0)] absolute top-0 left-0 right-0'>
-        <div className='w-[318px] h-[32px] bg-[rgba(0,0,0,0)] relative z-[38] mt-0 mr-0 mb-0 ml-0'>
-          <span className="flex h-[12px] justify-start items-center font-['Inter'] text-[7.900000095367432px] font-semibold leading-[9.561px] text-[#5e7f94] absolute bottom-[9px] right-[271px] text-left whitespace-nowrap z-[41]">
-            19:02
-          </span>
-          <div className='w-[13px] h-[9px] bg-red-600 bg-cover bg-no-repeat absolute bottom-[10px] right-[42px] z-40' />
-          <div className='w-[14px] h-[7px] bg-red-400 bg-cover bg-no-repeat absolute bottom-[11px] right-[21px] z-[39]' />
-        </div>
-        <div className='w-[318px] h-[46px] bg-[rgba(0,0,0,0)] relative z-[36] mt-[14px] mr-0 mb-0 ml-0'>
-          <div className='w-[38px] h-[37px] bg-blue-700 bg-cover bg-no-repeat rounded-[18.5px] relative z-[37] mt-[3px] mr-0 mb-0 ml-[29px]' />
-        </div>
-        <div className='w-[318px] h-[516px] text-[0px] bg-[rgba(0,0,0,0)] relative z-[2] mt-[23px] mr-0 mb-0 ml-0'>
-          <span className="block h-[19px] font-['Inter'] text-[18.899999618530273px] font-semibold leading-[19px] text-[#b1c5cf] relative text-left whitespace-nowrap z-[35] mt-0 mr-0 mb-0 ml-[73px]">
-            Create an account
-          </span>
-          <span className="flex w-[219px] h-[33px] justify-center items-center font-['Inter'] text-[11.5px] font-normal leading-[13.918px] text-[#7ca0bc] relative text-center overflow-hidden z-[34] mt-[14px] mr-0 mb-0 ml-[50.667px]">
-            Unlock Your Potential, Register Now for
-            <br />
-            an Empowering Journey!
-          </span>
-          <div className='w-[318px] h-[79px] text-[0px] bg-[rgba(0,0,0,0)] relative z-[26] mt-[59px] mr-0 mb-0 ml-0'>
-            <span className="block h-[12px] font-['Inter'] text-[11px] font-semibold leading-[12px] text-[#5e6567] relative text-left whitespace-nowrap z-[33] mt-[6px] mr-0 mb-0 ml-[21px]">
-              Name
-            </span>
-            <div className='w-[283px] h-[52px] bg-[rgba(0,0,0,0)] relative overflow-hidden z-[27] mt-[6px] mr-0 mb-0 ml-[18px]'>
-              <input className='w-[283px] h-[52px] bg-transparent border-none absolute top-0 left-0 z-[32]' />
-            </div>
+    <>
+      <ReactLenis root>
+        <section className='grid justify-center w-full h-[100vh] items-center'>
+          <div className='relative'>
+            <img className='w-56 relative z-0' src="/assets/up.png" alt="" />
+            <img className='w-56 relative z-10' src="/assets/bottom.png" alt="" />
+            <img ref={redDivRef} className='absolute w-[4.5rem] top-6 left-32' src="/assets/earpopsingle.png" alt="" />
           </div>
-          <div className='w-[318px] h-[87px] text-[0px] bg-[rgba(0,0,0,0)] relative z-[19] mt-[10px] mr-0 mb-0 ml-0'>
-            <span className="block h-[12px] font-['Inter'] text-[10.699999809265137px] font-semibold leading-[12px] text-[#5c5f63] relative text-left whitespace-nowrap z-[25] mt-[6px] mr-0 mb-0 ml-[21px]">
-              Email
-            </span>
-            <div className='w-[283px] h-[52px] bg-[rgba(0,0,0,0)] relative z-20 mt-[6px] mr-0 mb-0 ml-[18px]'>
-              <div className='w-[277px] h-[47px] bg-[#f5f7f9] rounded-[6px] relative overflow-hidden z-[21] mt-[3px] mr-0 mb-0 ml-[4px]'>
-                <div className='w-px h-[21px] bg-red-950 bg-cover bg-no-repeat absolute bottom-[14px] right-[226px] z-[23]' />
-                <span className="flex h-[15px] justify-start items-center font-['Inter'] text-[9px] font-semibold leading-[10.892px] text-[#9fa4b1] absolute bottom-[17px] right-[102px] text-left whitespace-nowrap z-[22]">
-                  Enter Your E-mail...
-                </span>
-                <div className='w-[14px] h-[14px] bg-blue-900 bg-cover bg-no-repeat absolute bottom-[17px] right-[245px] z-[24]' />
-              </div>
-            </div>
-          </div>
-          <span className="block h-[12px] font-['Inter'] text-[9.5px] font-semibold leading-[11.497px] text-[#676b6e] relative text-left whitespace-nowrap z-[18] mt-[8px] mr-0 mb-0 ml-[21px]">
-            Password
-          </span>
-          <div className='w-[284px] h-[51px] bg-[rgba(0,0,0,0)] relative z-[9] mt-[7px] mr-0 mb-0 ml-[16px]'>
-            <div className='w-[283px] h-[51px] bg-[rgba(0,0,0,0)] relative overflow-hidden z-10 mt-[-1px] mr-0 mb-0 ml-[2px]'>
-              <div className='w-[283px] h-[51px] bg-purple-700 bg-cover bg-no-repeat absolute bottom-0 right-0 z-[12]'>
-                <input className='w-[283px] h-[51px] bg-transparent border-none absolute top-0 left-0 z-[17]' />
-              </div>
-            </div>
-          </div>
-          <span className="block h-[13px] font-['Inter'] text-[9.5px] font-semibold leading-[11.497px] text-[#d2a093] relative text-left whitespace-nowrap z-[6] mt-[54px] mr-0 mb-0 ml-[116px]">
-            An Error Occured!
-          </span>
-          <button className='w-[280px] h-[44px] bg-[rgba(0,0,0,0)] border-none relative z-[3] pointer mt-[26px] mr-0 mb-0 ml-[19px]'>
-            <div className='w-[276px] h-[41px] bg-[#fae379] rounded-[18px] border-solid border border-[#f6e797] relative z-[4] mt-[2px] mr-0 mb-0 ml-[3px]'>
-              <span className="flex h-[15px] justify-start items-center font-['Inter'] text-[10.800000190734863px] font-semibold leading-[13.07px] text-[#635d32] absolute bottom-[12px] right-[113px] text-left whitespace-nowrap z-[5]">
-                Register
-              </span>
-            </div>
-          </button>
-          <div className='w-[18px] h-[18px] bg-purple-900 bg-cover bg-no-repeat rounded-[2.25px] absolute bottom-[108px] right-[279px] z-[8]' />
-          <span className="flex h-[14px] justify-start items-center font-['Inter'] text-[9.100000381469727px] font-semibold leading-[11.013px] text-[#d0d2d3] absolute bottom-[111px] right-[86px] text-left whitespace-nowrap z-[7]">
-            You accept the terms and conditions?
-          </span>
-        </div>
-      </div>
-      <div className='w-[318px] h-[665px] bg-green-600 bg-cover bg-no-repeat absolute bottom-0 right-0 z-[1]' />
-    </div>
+        </section>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nulla consequuntur ea dolore veritatis voluptas officiis. Voluptatem fugit deserunt numquam eius reiciendis neque ut placeat architecto atque officiis debitis, iste delectus, eveniet nobis impedit quo ratione iure! In possimus magnam facilis nesciunt, consequuntur deserunt perspiciatis, dolor impedit, commodi modi itaque dolores eius cupiditate. Dolor maiores repudiandae sapiente tempore nobis nesciunt. Neque deserunt quibusdam maiores nemo officiis odio quasi tempora voluptatem dignissimos sint reprehenderit repellat veritatis a itaque ullam, cum reiciendis. Inventore eveniet ipsam quo, fugiat officiis cupiditate neque iusto ipsum corporis molestiae. Corrupti officia exercitationem non totam aliquam nisi at molestias ad! Aspernatur voluptas fugit quam cumque, error voluptatibus consectetur eum ducimus repellat ex modi enim omnis, similique numquam tenetur architecto dolorem perspiciatis magni. Dolore, autem architecto. Incidunt saepe cumque dicta deleniti cum natus esse sit alias quia magni nulla ducimus perspiciatis ea possimus exercitationem ratione neque sequi rem quos dolor officia nostrum, ex architecto! Et molestias provident amet vero fugiat nostrum quo corporis veritatis rerum, sunt consectetur tenetur doloremque dolor atque. Doloremque est praesentium porro soluta consectetur perferendis reprehenderit sequi placeat aliquam delectus, vero cumque totam vitae facere commodi asperiores magni quibusdam quisquam. Illo laborum, distinctio fugit nihil nisi reprehenderit iusto voluptas cumque, accusantium eligendi pariatur magnam rem laboriosam modi. Deserunt excepturi beatae ratione delectus facilis? Aliquam deserunt pariatur officia illum, laborum placeat cupiditate saepe id sed aliquid provident eius iusto veniam atque dolorum necessitatibus repellendus exercitationem animi voluptate dolorem! Aliquid veritatis dolorem eum, dolore quasi quia, tenetur aut amet rerum numquam, corrupti tempora earum? Odio impedit iusto distinctio quos explicabo tempore dolores praesentium corporis nesciunt, esse, quo delectus suscipit et velit sunt facilis doloribus! Ipsum, mollitia tempora quasi iusto eveniet architecto, doloremque tempore blanditiis minus accusamus similique culpa. Eligendi beatae molestias aut quia libero doloremque id, unde labore molestiae ratione sapiente nam nulla quisquam itaque amet dicta nihil. Delectus eaque debitis omnis, qui blanditiis dignissimos commodi nostrum dolorum. Consequatur enim aspernatur impedit! Et dicta harum, minus porro soluta itaque, perspiciatis doloremque cumque labore provident optio? Earum nam soluta iste debitis quia officiis molestiae ad? Est ducimus, pariatur, consequuntur optio maiores sunt aliquid rem, ut quam explicabo libero accusamus! Quod, optio? Voluptatibus impedit eos fuga assumenda a beatae sapiente corporis quis temporibus, officiis, doloribus rerum eveniet at ab optio saepe architecto commodi soluta. Id voluptas ea blanditiis voluptate, nobis quidem, asperiores ipsum nesciunt corrupti qui sequi totam rem, excepturi quo cumque reiciendis in nisi ratione aperiam ducimus exercitationem minima! Totam facere inventore debitis nihil quas expedita iure nemo aperiam. Nisi iusto, temporibus accusamus quod aliquid perspiciatis cumque voluptate porro repudiandae distinctio omnis ipsam alias quaerat vitae nam enim possimus recusandae laudantium provident ipsum quibusdam! Dolorum expedita iure aut velit, atque optio soluta fuga odit dolor placeat deserunt, asperiores, necessitatibus fugit illum distinctio laboriosam. Repudiandae beatae earum quasi porro dolore. Fuga maiores veniam ducimus tempora. Aliquam illum, dolor nemo placeat quae blanditiis iusto cumque aut officiis, magni repudiandae culpa deserunt quaerat nulla omnis libero corporis est dolore possimus? Quibusdam, iste veritatis.</p>
+      </ReactLenis>
+    </>
   );
 };
 
-export default ReviewFormPopup;
+export default ScrollAnimation;
