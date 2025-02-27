@@ -11,8 +11,8 @@ const Model = ({ path }: ModelProps) => {
     const { scene } = useGLTF(path);
     return <primitive object={scene} scale={3} />;
 };
-
 function Model3d({ productName }: { productName: any }) {
+    // console.log(productName)
     return (
         <div className="w-full h-full">
             <Canvas>

@@ -58,7 +58,7 @@ const ProductReviews = ({ productId }: { productId: any }) => {
     }) =>
         order.items.some(item => item.productId === productId && order.userId === userId)
     );
-    console.log("has", hasOrderedItem)
+    // console.log("has", hasOrderedItem)
     const averageRating = reviews.length ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length : 0;
 
     const renderStars = (rating: any) => {
@@ -142,7 +142,7 @@ const ProductReviews = ({ productId }: { productId: any }) => {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
-        console.log("clicked")
+        // console.log("clicked")
         if (!userId && !hasOrderedItem) alert('Please login to leave a review');
         // else {
         //     alert('Please login to leave a review');
