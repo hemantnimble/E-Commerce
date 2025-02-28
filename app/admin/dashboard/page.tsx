@@ -42,6 +42,8 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import axios from "axios"
 import { signOut } from "next-auth/react"
+import { fetchProducts } from '@/lib/store/features/products/productSlice';
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 
 interface Product {
   id: string;
@@ -78,6 +80,9 @@ interface Orders {
   }
 }
 export default function Component() {
+  const dispatch = useAppDispatch();
+  const { items, status, error } = useAppSelector((state) => state.products);
+  const category = "All";
   const [activeTab, setActiveTab] = useState("dashboard")
   const [stock, setStock] = useState<number | string>('');
   const [products, setProducts] = useState<Product[]>([])
@@ -95,7 +100,7 @@ export default function Component() {
       alert('Error signing out');
     }
   };
-  const fetchProducts = async () => {
+  const fetchProductss = async () => {
     try {
       const response = await axios.get<{ products: Product[] }>("/api/products/getproducts")
       setProducts(response.data.products)
@@ -117,16 +122,20 @@ export default function Component() {
     }
   }
   useEffect(() => {
-    fetchProducts();
+    // fetchProducts();
+    if (items.length === 0) {
+      dispatch(fetchProducts(category));
+    }
+
     fetchOrders();
-  }, [])
+  }, [items.length, dispatch])
 
   const updateProduct = async (id: string) => {
 
     try {
       await axios.put("/api/admin/product/updatestock", { id, stock });
       alert("Stock updated");
-      fetchProducts();
+      fetchProductss();
     } catch (error: any) {
       alert("Error updating stock.");
     }
@@ -137,7 +146,7 @@ export default function Component() {
       try {
         await axios.post("/api/products/delete", { id });
         alert("Product deleted");
-        fetchProducts();
+        fetchProductss();
       } catch (error: any) {
         alert("Error deleting product.");
       }
@@ -384,7 +393,7 @@ export default function Component() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {products.map((product) => (
+                        {items.map((product) => (
                           <TableRow key={product.id}>
                             <TableCell>{product.title}</TableCell>
                             <TableCell>${product.price}</TableCell>

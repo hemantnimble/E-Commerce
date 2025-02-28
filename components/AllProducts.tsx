@@ -1,37 +1,20 @@
-'use client'
-import axios from "axios"
-import { useState, useEffect } from "react"
-import Card from "./Card";
+'use client';
+import { useEffect } from 'react';
+import Card from './Card';
+import { fetchProducts } from '@/lib/store/features/products/productSlice';
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 
-interface Product {
-  id: string;
-  title: string;
-  price: string;
-  category: string;
-  images: string[],
-  createdAt: string;
-  updatedAt: string;
-}
 
 function AllProducts({ category }: { category: string }) {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useAppDispatch();
+  const { items, status, error } = useAppSelector((state) => state.products);
 
+  // Fetch products when the category changes
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.post<{ products: Product[] }>("/api/products/filter", {category})
-        setProducts(response.data.products)
-      } catch (error) {
-        console.error("Error fetching products:", error)
-      } finally {
-        setLoading(false);
-      }
-    }
+    dispatch(fetchProducts(category));
+  }, [category, dispatch]);
 
-    fetchProducts();
-  }, [category])
-
+  // Skeleton loading component
   const SkeletonCard = () => (
     <div className="mb-10 relative">
       <div className="relative group">
@@ -62,27 +45,37 @@ function AllProducts({ category }: { category: string }) {
         </span>
       </div>
     </div>
-
-
   );
 
-  return (
-    <section className='w-full grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5'>
-      {loading ? (
-        Array.from({ length: 2 }).map((_, index) => (
+  // Handle loading state
+  if (status === 'loading') {
+    return (
+      <section className="w-full grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5">
+        {Array.from({ length: items.length }).map((_, index) => (
           <SkeletonCard key={index} />
-        ))
-      ) : (
-        products.length > 0 ? (
-          products.map(item => (
-            <Card key={item.id} item={item}></Card>
-          ))
-        ) : (
-          <p>No products found</p>
-        )
-      )}
+        ))}
+      </section>
+    );
+  }
+
+  // Handle error state
+  if (status === 'failed') {
+    return <p className="text-red-500">Error: {error}</p>;
+  }
+
+  // Handle empty state
+  if (items.length === 0) {
+    return <p>No products found</p>;
+  }
+
+  // Render the products
+  return (
+    <section className="w-full grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5">
+      {items.map((item) => (
+        <Card key={item.id} item={item} />
+      ))}
     </section>
-  )
+  );
 }
 
 export default AllProducts;
