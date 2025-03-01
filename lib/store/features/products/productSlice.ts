@@ -1,19 +1,15 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// Define the Product type
 export interface Product {
     id: string;
     title: string;
-    price: string;
-    category: string;
+    price: number;
     stock: number;
     images: string[];
-    createdAt: string;
-    updatedAt: string;
+    category: string;
 }
 
-// Define the initial state
 interface ProductState {
     items: Product[];
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
@@ -35,12 +31,25 @@ export const fetchProducts = createAsyncThunk(
     }
 );
 
+// Async Thunk to fetch single product
+export const fetchSingleProduct = createAsyncThunk(
+    'products/fetchSingleProduct',
+    async (id: string, { rejectWithValue }) => {
+        try {
+            const response = await axios.post<{ product: Product }>('/api/products/getsingleproduct', { id });
+            return response.data.product;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data || 'Failed to fetch product');
+        }
+    }
+);
+
 // Async Thunk to add a product
 export const addProduct = createAsyncThunk(
     'products/addProduct',
-    async (newProduct: Omit<Product, 'id'>, { rejectWithValue }) => {
+    async (newProduct: any, { rejectWithValue }) => {
         try {
-            const response = await axios.post<Product>('/api/products', newProduct); // Replace with your API endpoint
+            const response = await axios.post<Product>('/api/products/add', newProduct); // Replace with your API endpoint
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error.response?.data || 'Failed to add product');
@@ -53,7 +62,7 @@ export const updateProduct = createAsyncThunk(
     'products/updateProduct',
     async (updatedProduct: Product, { rejectWithValue }) => {
         try {
-            const response = await axios.put<Product>(`/api/products/${updatedProduct.id}`, updatedProduct); // Replace with your API endpoint
+            const response = await axios.put<Product>(`/api/products/update`, updatedProduct);
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error.response?.data || 'Failed to update product');
@@ -64,22 +73,20 @@ export const updateProduct = createAsyncThunk(
 // Async Thunk to delete a product
 export const deleteProduct = createAsyncThunk(
     'products/deleteProduct',
-    async (productId: string, { rejectWithValue }) => {
+    async (id: any, { rejectWithValue }) => {
         try {
-            await axios.delete(`/api/products/${productId}`); // Replace with your API endpoint
-            return productId;
+            await axios.post('/api/products/delete', { id }); // Replace with your API endpoint
+            return id;
         } catch (error: any) {
             return rejectWithValue(error.response?.data || 'Failed to delete product');
         }
     }
 );
 
-// Create the slice
 const productSlice = createSlice({
     name: 'products',
     initialState,
     reducers: {
-        // Synchronous reducers (if needed)
     },
     extraReducers: (builder) => {
         builder
@@ -94,6 +101,22 @@ const productSlice = createSlice({
             .addCase(fetchProducts.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message || 'Failed to fetch products';
+            })
+
+            // Fetch Single Product
+            .addCase(fetchSingleProduct.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchSingleProduct.fulfilled, (state, action: PayloadAction<Product>) => {
+                state.status = 'succeeded';
+                const index = state.items.findIndex((p) => p.id === action.payload.id);
+                if (index === -1) {
+                    state.items.push(action.payload);
+                }
+            })
+            .addCase(fetchSingleProduct.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload as string || 'Failed to fetch product';
             })
 
             // Add Product
@@ -140,6 +163,4 @@ const productSlice = createSlice({
     },
 });
 
-// Export actions and reducer
-export const { /* synchronous actions if any */ } = productSlice.actions;
 export default productSlice.reducer;

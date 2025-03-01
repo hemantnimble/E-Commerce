@@ -1,12 +1,13 @@
 'use client'
 import axios from 'axios'
-import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import "@uploadthing/react/styles.css";
 import { UploadButton } from "@uploadthing/react";
 import { OurFileRouter } from "../../../api/uploadthing/core";
 import { useForm, SubmitHandler } from "react-hook-form"
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { updateProduct, fetchSingleProduct } from '@/lib/store/features/products/productSlice';
 
 type Inputs = {
     title: string
@@ -23,30 +24,15 @@ interface Product {
 }
 
 function UpdateProduct() {
+    const dispatch = useAppDispatch();
+    const { items, status, error } = useAppSelector((state) => state.products);
+    
     const params = useParams<{ id: string }>()
     const id = params?.id;
     const [existingImages, setExistingImages] = useState<string[]>([]);
     const [newImages, setNewImages] = useState<string[]>([]);
-
-    useEffect(() => {
-        const fetchProducts = async (id: string) => {
-            try {
-                const response = await axios.post<{ product: Product }>("/api/products/getsingleproduct", { id })
-                reset({
-                    title: response.data.product.title,
-                    price: response.data.product.price,
-                    stock: response.data.product.stock,
-                })
-                setExistingImages(response.data.product.images)
-            } catch (error) {
-                console.error("Error fetching products:", error)
-            }
-        }
-        if (id) {
-            fetchProducts(id);
-        }
-    }, [id]);
-
+    
+    const product = items.find((p) => p.id === id);
     const {
         register,
         reset,
@@ -54,21 +40,49 @@ function UpdateProduct() {
         formState: { errors },
     } = useForm<Inputs>()
 
-    const onSubmit: SubmitHandler<Inputs> = (data) => {
+
+    useEffect(() => {
+        if (id) {
+            if (items.length === 0) {
+                // Fetch single product if items array is empty
+                dispatch(fetchSingleProduct(id))
+                    .unwrap()
+                    .then((product) => {
+                        reset({
+                            title: product.title,
+                            price: product.price,
+                            stock: product.stock,
+                        });
+                        setExistingImages(product.images);
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching product:", error);
+                    });
+            } else if (product) {
+                // Prefill form if product is found in items array
+                reset({
+                    title: product.title,
+                    price: product.price,
+                    stock: product.stock,
+                });
+                setExistingImages(product.images);
+            }
+        }
+    }, [id, items, product, dispatch, reset]);
+
+
+
+    const onSubmit: SubmitHandler<Inputs> = async (data) => {
         const allImages = [...existingImages, ...newImages];
-        axios.put("/api/products/update", { id, ...data, images: allImages })
-            .then(response => {
-                console.log('API response:', response);
-                if (response.status === 200) {
-                    alert('Product updated successfully!');
-                } else if (response.status === 500) {
-                    alert('Failed to update product. Please try again.');
-                }
-            })
-            .catch(error => {
-                console.error('There was an error!', error);
-            });
-    }
+        const updatedProduct = { id, ...data, images: allImages };
+
+        try {
+            await dispatch(updateProduct(updatedProduct)).unwrap();
+            alert('Product updated successfully!');
+        } catch (error) {
+            alert(`Failed to update product: ${error}`);
+        }
+    };
 
     const imgList = (
         <>

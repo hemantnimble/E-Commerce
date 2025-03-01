@@ -6,7 +6,8 @@ import "@uploadthing/react/styles.css";
 import { UploadButton } from "@uploadthing/react";
 import { OurFileRouter } from "@/app/api/uploadthing/core";
 import Link from "next/link";
-import { Button } from '@headlessui/react';
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { addProduct } from '@/lib/store/features/products/productSlice';
 
 type Inputs = {
     title: string
@@ -16,6 +17,8 @@ type Inputs = {
 }
 
 function AddProduct() {
+    const dispatch = useAppDispatch();
+    const { items, status, error } = useAppSelector((state) => state.products);
     const {
         register,
         handleSubmit,
@@ -49,12 +52,12 @@ function AddProduct() {
                 images: images.map(image => image.url), // Extract image URLs
             };
 
-            const response = await axios.post("/api/products/add", productData);
-
-            console.log('API response:', response);
-            if (response.status === 200) {
+            // const response = await axios.post("/api/products/add", productData);
+            dispatch(addProduct(productData))
+            // console.log('API response:', response);
+            if (status === "succeeded") {
                 alert('Product added successfully!');
-            } else if (response.status === 500) {
+            } else if (status === "failed") {
                 alert('Failed to add product. Please try again.');
             }
         } catch (error) {

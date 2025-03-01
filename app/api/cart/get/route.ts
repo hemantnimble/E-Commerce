@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
       include: { product: true }, // Include product details if needed
     });
 
-    return NextResponse.json(cartItems, { status: 200 });
+    return NextResponse.json({cartItems:cartItems}, { status: 200 });
   } catch (err:any) {
     return NextResponse.json({ message: err.message }, { status: 500 });
   }

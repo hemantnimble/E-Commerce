@@ -1,50 +1,40 @@
 'use client'
 import { Fragment, useEffect, useState } from 'react'
-import {
-  Dialog,
-  DialogBackdrop,
-  DialogPanel,
-  Popover,
-  PopoverButton,
-  PopoverGroup,
-  PopoverPanel,
-  Tab,
-  TabGroup,
-  TabList,
-  TabPanel,
-  TabPanels,
-} from '@headlessui/react'
 import { MagnifyingGlassIcon, Bars3Icon, ShoppingBagIcon, XMarkIcon, UserIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import SearchBar from "@/components/Searchbar"
 import axios from 'axios'
-import { useCart } from './CartContext'
 import { ShoppingCart } from "lucide-react"
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { fetchCartItems } from '@/lib/store/features/cart/cartSlice';
 
 
 export default function Example() {
+  const dispatch = useAppDispatch();
+  const { cartItems, status, error } = useAppSelector((state) => state.cart)
   const [open, setOpen] = useState(false)
   const session = useSession();
   const [products, setProducts] = useState<any[]>([]);
 
-  const { cartItems, setCartItems } = useCart();
-
   useEffect(() => {
-    const fetchCartItems = async () => {
-      try {
-        const response = await axios.get('/api/cart/get');
-        const items = response.data.length;
-        setCartItems(items);
-      } catch (error) {
-        console.error('Error fetching cart items:', error);
-      }
+    const loadCartItems = async () => {
+        try {
+            await dispatch(fetchCartItems()).unwrap();
+            // If successful, the cart items are already in the Redux state
+        } catch (error) {
+            // Handle the error (e.g., show a toast or log the error)
+            console.error('Failed to fetch cart items:', error);
+        }
     };
-    fetchCartItems();
-  }, []);
+
+    loadCartItems();
+}, [dispatch]);
+
   const handleSelectProduct = () => {
     setProducts([]); // Clear the products when a product is selected
   };
+
   return (
     <header className='fixed z-10 w-full'>
       <nav className='navbar-top flex h-12 mt-3 mx-3 shadow-lg items-center flex-row-reverse lg:flex-row justify-between lg:justify-between bg-white rounded-full px-6 relative'>
@@ -103,7 +93,7 @@ export default function Example() {
               )}
               <Link className='flex gap-1 items-center' href='/user/cart'>
                 <ShoppingCart className='w-6' />
-                <p className='text-lg relative'>Cart<span className='absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center'>{cartItems}</span></p>
+                <p className='text-lg relative'>Cart<span className='absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center'>{cartItems.length}</span></p>
               </Link>
             </div>
           )

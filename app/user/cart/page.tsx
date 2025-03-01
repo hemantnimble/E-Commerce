@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import CartLoading from '@/components/CartLoading';
 import WordPullUp from "@/components/magicui/word-pull-up";
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { fetchCartItems } from '@/lib/store/features/cart/cartSlice';
 
 interface Product {
     id: string;
@@ -22,29 +23,33 @@ interface CartItem {
 }
 
 export default function CartPage() {
-    const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const dispatch = useAppDispatch();
+    const { cartItems, status, error } = useAppSelector((state) => state.cart)
+    // const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [totalPrice, setTotalPrice] = useState<number>(0);
     const [loading, setLoading] = useState(true);
 
-    const fetchCartItems = async () => {
-        try {
-            const response = await axios.get('/api/cart/get');
-            const items = response.data;
-            setCartItems(items);
-            const total = items.reduce((sum: number, item: CartItem) => {
-                const price = parseFloat(item.product.price);
-                return sum + price * item.quantity;
-            }, 0);
-            setTotalPrice(total);
-        } catch (error) {
-            console.error('Error fetching cart items:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    // const fetchCartItems = async () => {
+    //     try {
+    //         const response = await axios.get('/api/cart/get');
+    //         const items = response.data;
+    //         setCartItems(items);
+    //         const total = items.reduce((sum: number, item: CartItem) => {
+    //             const price = parseFloat(item.product.price);
+    //             return sum + price * item.quantity;
+    //         }, 0);
+    //         setTotalPrice(total);
+    //     } catch (error) {
+    //         console.error('Error fetching cart items:', error);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
     useEffect(() => {
-        fetchCartItems();
+        dispatch(fetchCartItems());
+        setLoading(false)
+
     }, []);
 
     async function handleDelete(productId: string) {
@@ -62,11 +67,11 @@ export default function CartPage() {
 
         try {
             await axios.post('/api/cart/update', { productId, quantity: updatedQuantity });
-            setCartItems(cartItems.map(item =>
-                item.product.id === productId
-                    ? { ...item, quantity: updatedQuantity }
-                    : item
-            ));
+            // setCartItems(cartItems.map(item =>
+            //     item.product.id === productId
+            //         ? { ...item, quantity: updatedQuantity }
+            //         : item
+            // ));
         } catch (error) {
             toast.error("Error updating quantity.");
         }

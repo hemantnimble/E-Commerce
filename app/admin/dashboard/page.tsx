@@ -42,7 +42,7 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import axios from "axios"
 import { signOut } from "next-auth/react"
-import { fetchProducts } from '@/lib/store/features/products/productSlice';
+import { fetchProducts,deleteProduct } from '@/lib/store/features/products/productSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 
 interface Product {
@@ -51,8 +51,6 @@ interface Product {
   price: number;
   stock: number;
   images: string[],
-  createdAt: string;
-  updatedAt: string;
 }
 interface Orders {
   id: string;
@@ -141,12 +139,13 @@ export default function Component() {
     }
   };
 
-  const deleteProduct = async (id: string) => {
+  const deleteProductt = async (id: string) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
-        await axios.post("/api/products/delete", { id });
+        dispatch(deleteProduct(id))
+        // await axios.post("/api/products/delete", { id });
         alert("Product deleted");
-        fetchProductss();
+        // fetchProductss();
       } catch (error: any) {
         alert("Error deleting product.");
       }
@@ -443,7 +442,7 @@ export default function Component() {
                                     <Edit className="h-4 w-4" />
                                   </Button>
                                 </Link>
-                                <Button variant="outline" size="sm" onClick={() => deleteProduct(product.id)}>
+                                <Button variant="outline" size="sm" onClick={() => deleteProductt(product.id)}>
                                   <Trash2 className="h-4 w-4" />
                                 </Button>
                                 <Dialog>

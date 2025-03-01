@@ -7,6 +7,7 @@ export const dynamic = 'force-dynamic';
 export async function POST(req: NextRequest) {
     try {
         const { title, price, category, images, stock } = await req.json();
+        console.log(price,stock,title)
 
         // Convert `price` to Float and `stock` to Int
         const priceFloat = parseFloat(price);

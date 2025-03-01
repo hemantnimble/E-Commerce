@@ -7,7 +7,7 @@ import { Star } from 'lucide-react';
 
 interface Item {
     id: string;
-    price: string;
+    price: number;
     title: string;
     images: string[];
 }
