@@ -12,14 +12,14 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ message: "User not authenticated" }, { status: 401 });
     }
 
-    const { productId, quantity } = await req.json();
+    const { id, quantity } = await req.json();
 
     try {
         const cartItem = await prisma.cartItem.upsert({
             where: {
                 userId_productId: {
                     userId: session.user.id,
-                    productId,
+                    productId:id,
                 },
             },
             update: {
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
             },
             create: {
                 userId: session.user.id,
-                productId,
+                productId:id,
                 quantity,
             },
         });

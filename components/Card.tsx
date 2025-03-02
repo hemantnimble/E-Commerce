@@ -4,6 +4,8 @@ import toast from 'react-hot-toast';
 import { useState } from 'react';
 import { useCart } from './CartContext';
 import { Star } from 'lucide-react';
+import { useAppDispatch } from '@/lib/store/hooks';
+import { addCartItem } from '@/lib/store/features/cart/cartSlice';
 
 interface Item {
     id: string;
@@ -14,19 +16,17 @@ interface Item {
 
 function Card({ item }: { item: Item }) {
     const [loading, setLoading] = useState(false);
-    const { cartItems, setCartItems } = useCart();
+    const dispatch=useAppDispatch();
 
     const handleCart = async (productId: string) => {
         setLoading(true);
         try {
-            const response1 = await axios.post("/api/cart/add", { productId, quantity: 1 });
-            const response = await axios.get('/api/cart/get');
-            const items = response.data.length;
-            setCartItems(items);
+            // const response1 = await axios.post("/api/cart/add", { productId, quantity: 1 });
+            await dispatch(addCartItem(productId))
             toast.success('Product added to cart');
         } catch (error) {
             console.error('Error adding to cart:', error);
-            toast.error('Failed to add product to cart');
+            toast.error('Failed to add product to cart component');
         } finally {
             setLoading(false);
         }

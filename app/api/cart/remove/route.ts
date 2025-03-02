@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic';
 export async function POST(req: NextRequest) {
     const session = await auth();
     const userId = session?.user?.id;
-    const { productId } = await req.json();
+    const { id } = await req.json();
 
     if (!userId) {
         return NextResponse.json({ message: "User not authenticated" }, { status: 401 });
@@ -18,10 +18,7 @@ export async function POST(req: NextRequest) {
     try {
         const removeItem = await prisma.cartItem.delete({
             where: {
-                userId_productId: {
-                    userId,
-                    productId,
-                },
+                id
             },
         })
         return NextResponse.json({ removeItem }, { status: 200 });

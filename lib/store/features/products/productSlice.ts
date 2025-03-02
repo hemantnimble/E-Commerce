@@ -109,10 +109,10 @@ const productSlice = createSlice({
             })
             .addCase(fetchSingleProduct.fulfilled, (state, action: PayloadAction<Product>) => {
                 state.status = 'succeeded';
-                const index = state.items.findIndex((p) => p.id === action.payload.id);
-                if (index === -1) {
+                // const index = state.items.findIndex((p) => p.id === action.payload.id);
+                // if (index === -1) {
                     state.items.push(action.payload);
-                }
+                // }
             })
             .addCase(fetchSingleProduct.rejected, (state, action) => {
                 state.status = 'failed';

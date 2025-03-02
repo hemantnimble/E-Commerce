@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-
 interface Product {
     id: string;
     title: string;
@@ -9,16 +8,18 @@ interface Product {
     stock: number;
     images: string[];
     category: string;
-   
-}
-// Define the CartItem type
-export interface CartItem {
-    id: string;
-    quantity: number;
-    product: Product;
 }
 
-// Define the initial state
+export interface CartItem {
+    id: string;
+    userId: string;
+    productId: string; // Use productId instead of product
+    quantity: number;
+    product:Product;
+    createdAt?: string;
+    updatedAt?: string;
+}
+
 interface CartState {
     cartItems: CartItem[];
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
@@ -43,10 +44,10 @@ export const fetchCartItems = createAsyncThunk(
 // Async Thunk to add a cart item
 export const addCartItem = createAsyncThunk(
     'cart/addCartItem',
-    async (cartItem: Omit<CartItem, 'id'>, { rejectWithValue }) => {
+    async (productId: string, { rejectWithValue }) => {
         try {
-            const response = await axios.post<CartItem>('/api/cart/add', cartItem);
-            return response.data;
+            const response = await axios.post<{ adCart: CartItem }>('/api/cart/add', { productId, quantity: 1 });
+            return response.data.adCart; // Ensure this includes the `product` object
         } catch (error: any) {
             return rejectWithValue(error.response?.data || 'Failed to add item to cart');
         }
@@ -56,12 +57,12 @@ export const addCartItem = createAsyncThunk(
 // Async Thunk to update a cart item
 export const updateCartItem = createAsyncThunk(
     'cart/updateCartItem',
-    async (updatedCartItem: CartItem, { rejectWithValue }) => {
+    async ({ id, quantity }: { id: string; quantity: number }, { rejectWithValue }) => {
         try {
-            const response = await axios.put<CartItem>(`/api/cart/update`, updatedCartItem);
-            return response.data;
+            await axios.post('/api/cart/update', { id, quantity });
+            return { id, quantity }; // Return the updated item
         } catch (error: any) {
-            return rejectWithValue(error.response?.data || 'Failed to update cart item');
+            return rejectWithValue(error.response?.data || 'Failed to update item');
         }
     }
 );
@@ -69,10 +70,10 @@ export const updateCartItem = createAsyncThunk(
 // Async Thunk to remove a cart item
 export const removeCartItem = createAsyncThunk(
     'cart/removeCartItem',
-    async (cartItemId: string, { rejectWithValue }) => {
+    async (cartItemId: string, { rejectWithValue }) => { // Use cartItemId instead of productId
         try {
-            await axios.delete(`/api/cart/remove`, { data: { id: cartItemId } });
-            return cartItemId;
+            await axios.post(`/api/cart/remove`, { id: cartItemId }); // Pass cartItemId to the API
+            return cartItemId; // Return the cartItemId
         } catch (error: any) {
             return rejectWithValue(error.response?.data || 'Failed to remove item from cart');
         }
@@ -107,22 +108,28 @@ const cartSlice = createSlice({
             })
             .addCase(addCartItem.fulfilled, (state, action: PayloadAction<CartItem>) => {
                 state.status = 'succeeded';
-                state.cartItems.push(action.payload);
+                const existingItem = state.cartItems.find((item) => item.product.id === action.payload.product.id);
+                if (existingItem) {
+                    // Replace the quantity with the value returned by the API
+                    existingItem.quantity = action.payload.quantity;
+                } else {
+                    // Add the new item to the cart
+                    state.cartItems.push(action.payload);
+                }
             })
             .addCase(addCartItem.rejected, (state, action) => {
                 state.status = 'failed';
-                state.error = action.payload as string || 'Failed to add item to cart';
+                state.error = action.payload as string || 'Failed to add item to cart redu case';
             })
 
             // Update Cart Item
             .addCase(updateCartItem.pending, (state) => {
                 state.status = 'loading';
             })
-            .addCase(updateCartItem.fulfilled, (state, action: PayloadAction<CartItem>) => {
-                state.status = 'succeeded';
-                const index = state.cartItems.findIndex((item) => item.id === action.payload.id);
-                if (index !== -1) {
-                    state.cartItems[index] = action.payload;
+            .addCase(updateCartItem.fulfilled, (state, action: PayloadAction<{ id: string; quantity: number }>) => {
+                const item = state.cartItems.find((item) => item.id === action.payload.id);
+                if (item) {
+                    item.quantity = action.payload.quantity;
                 }
             })
             .addCase(updateCartItem.rejected, (state, action) => {
@@ -135,8 +142,10 @@ const cartSlice = createSlice({
                 state.status = 'loading';
             })
             .addCase(removeCartItem.fulfilled, (state, action: PayloadAction<string>) => {
+                console.log('Removed Cart Item ID:', action.payload); // Log the removed item ID
                 state.status = 'succeeded';
                 state.cartItems = state.cartItems.filter((item) => item.id !== action.payload);
+                console.log('Updated Cart State:', state.cartItems); // Log the updated cart state
             })
             .addCase(removeCartItem.rejected, (state, action) => {
                 state.status = 'failed';
@@ -145,6 +154,4 @@ const cartSlice = createSlice({
     },
 });
 
-// Export actions and reducer
-export const { /* synchronous actions if any */ } = cartSlice.actions;
 export default cartSlice.reducer;
