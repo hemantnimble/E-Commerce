@@ -13,6 +13,7 @@ type Inputs = {
     title: string
     price: number
     stock: number
+    category:string;
 }
 
 interface Product {
@@ -20,6 +21,7 @@ interface Product {
     title: string;
     price: number;
     stock: number;
+    category:string;
     images: string[],
 }
 
