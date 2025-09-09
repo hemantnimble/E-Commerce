@@ -10,16 +10,17 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel";
-import axios from 'axios';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useCart } from "@/components/CartContext";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import Model3d from "@/components/Model3d";
 import ProductReviews from "@/components/ProductReviews";
 import Footer from "@/components/Footer";
 import { Canvas } from "@react-three/fiber";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { fetchSingleProduct } from "@/lib/store/features/products/productSlice";
+import { addCartItem } from "@/lib/store/features/cart/cartSlice";
 
 interface Product {
     id: string;
@@ -32,32 +33,25 @@ interface Product {
 }
 
 export default function Component() {
+    const dispatch = useAppDispatch();
+    const { items, singleProduct, status, error } = useAppSelector((state) => state.products);
     const params = useParams<{ id: string }>();
     const id = params?.id;
-    const [product, setProduct] = useState<Product | null>(null);
-    const [ploading, setPloading] = useState(true);
+    const [ploading, setPloading] = useState(false);
     const [modal3d, setModal3d] = useState(false)
+    const productFromList = items.find((product) => product.id === id);
 
     useEffect(() => {
-        const fetchProduct = async (productId: string) => {
-            try {
-                const response = await axios.post<{ product: Product }>("/api/products/getsingleproduct", { id: productId });
-                setProduct(response.data.product);
-            } catch (error) {
-                console.error("Error fetching product:", error);
-            } finally {
-                setPloading(false);
-            }
-        };
-
-        // Check if id is defined and then fetch the product
-        if (id) {
-            fetchProduct(id);
+        if (!productFromList) {
+            dispatch(fetchSingleProduct(id));
         }
-    }, [id]);
+    }, [id, productFromList, dispatch]);
 
+    // Determine which product to display
+    const product = productFromList || singleProduct;
     const [loading, setLoading] = useState(false);
-    const { cartItems, setCartItems } = useCart();
+
+
 
     const handleCart = async (productId: string | undefined) => {
         if (!productId) {
@@ -67,10 +61,7 @@ export default function Component() {
 
         setLoading(true);
         try {
-            await axios.post("/api/cart/add", { productId, quantity: 1 });
-            const response = await axios.get('/api/cart/get');
-            const items = response.data.length;
-            setCartItems(items);
+            dispatch(addCartItem(productId))
             toast.success('Product added to cart');
         } catch (error) {
             console.error('Error adding to cart:', error);

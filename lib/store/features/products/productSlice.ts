@@ -12,12 +12,14 @@ export interface Product {
 
 interface ProductState {
     items: Product[];
+    singleProduct: Product | null;
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
     error: string | null;
 }
 
 const initialState: ProductState = {
     items: [],
+    singleProduct: null,
     status: 'idle',
     error: null,
 };
@@ -34,9 +36,9 @@ export const fetchProducts = createAsyncThunk(
 // Async Thunk to fetch single product
 export const fetchSingleProduct = createAsyncThunk(
     'products/fetchSingleProduct',
-    async (id: string, { rejectWithValue }) => {
+    async (productId: string, { rejectWithValue }) => {
         try {
-            const response = await axios.post<{ product: Product }>('/api/products/getsingleproduct', { id });
+            const response = await axios.post<{ product: Product }>('/api/products/getsingleproduct', { id:productId });
             return response.data.product;
         } catch (error: any) {
             return rejectWithValue(error.response?.data || 'Failed to fetch product');
@@ -109,11 +111,8 @@ const productSlice = createSlice({
             })
             .addCase(fetchSingleProduct.fulfilled, (state, action: PayloadAction<Product>) => {
                 state.status = 'succeeded';
-                // const index = state.items.findIndex((p) => p.id === action.payload.id);
-                // if (index === -1) {
-                    state.items.push(action.payload);
-                // }
-            })
+                state.singleProduct = action.payload;
+              })
             .addCase(fetchSingleProduct.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.payload as string || 'Failed to fetch product';
