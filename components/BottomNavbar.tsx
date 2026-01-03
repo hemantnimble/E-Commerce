@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
-import { useAppSelector } from '@/lib/store/hooks';
+import { useAppSelector } from '@/app/lib/store/hooks';
 
 
 export default function BottomNavBar() {

@@ -6,8 +6,8 @@ import "@uploadthing/react/styles.css";
 import { UploadButton } from "@uploadthing/react";
 import { OurFileRouter } from "../../../api/uploadthing/core";
 import { useForm, SubmitHandler } from "react-hook-form"
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { updateProduct, fetchSingleProduct } from '@/lib/store/features/products/productSlice';
+import { useAppDispatch, useAppSelector } from '@/app/lib/store/hooks';
+import { updateProduct, fetchSingleProduct } from '@/app/lib/store/features/products/productSlice';
 
 type Inputs = {
     title: string

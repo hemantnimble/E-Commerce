@@ -4,8 +4,8 @@ import Link from 'next/link';
 import toast from 'react-hot-toast';
 import CartLoading from '@/components/CartLoading';
 import WordPullUp from "@/components/magicui/word-pull-up";
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { removeCartItem,updateCartItem } from '../../../lib/store/features/cart/cartSlice';
+import { useAppDispatch, useAppSelector } from '@/app/lib/store/hooks';
+import { removeCartItem,updateCartItem } from '../../lib/store/features/cart/cartSlice';
 
 interface Product {
     id: string;

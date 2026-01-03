@@ -6,8 +6,8 @@ import "@uploadthing/react/styles.css";
 import { UploadButton } from "@uploadthing/react";
 import { OurFileRouter } from "@/app/api/uploadthing/core";
 import Link from "next/link";
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { addProduct } from '@/lib/store/features/products/productSlice';
+import { useAppDispatch, useAppSelector } from '@/app/lib/store/hooks';
+import { addProduct } from '@/app/lib/store/features/products/productSlice';
 
 type Inputs = {
     title: string

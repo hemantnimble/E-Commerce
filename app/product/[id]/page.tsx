@@ -16,9 +16,10 @@ import Link from "next/link";
 import Model3d from "@/components/Model3d";
 import ProductReviews from "@/components/ProductReviews";
 import Footer from "@/components/Footer";
-import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { fetchSingleProduct } from "@/lib/store/features/products/productSlice";
-import { addCartItem } from "@/lib/store/features/cart/cartSlice";
+import { useAppDispatch, useAppSelector } from "@/app/lib/store/hooks";
+import { fetchSingleProduct } from "@/app/lib/store/features/products/productSlice";
+// import { addCartItem } fro@/app/lib/store/features/cart/cartSliceice";
+import { addCartItem } from "@/app/lib/store/features/cart/cartSlice";
 
 interface Product {
     id: string;

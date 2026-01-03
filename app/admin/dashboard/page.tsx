@@ -42,8 +42,8 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import axios from "axios"
 import { signOut } from "next-auth/react"
-import { fetchProducts,deleteProduct } from '@/lib/store/features/products/productSlice';
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { fetchProducts,deleteProduct } from '@/app/lib/store/features/products/productSlice';
+import { useAppDispatch, useAppSelector } from '@/app/lib/store/hooks';
 
 interface Product {
   id: string;

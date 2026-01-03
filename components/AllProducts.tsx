@@ -1,8 +1,8 @@
 'use client';
 import { useEffect } from 'react';
 import Card from './Card';
-import { fetchProducts } from '@/lib/store/features/products/productSlice';
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { fetchProducts } from '@/app/lib/store/features/products/productSlice';
+import { useAppDispatch, useAppSelector } from '@/app/lib/store/hooks';
 
 
 function AllProducts({ category }: { category: string }) {

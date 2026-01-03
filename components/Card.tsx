@@ -4,8 +4,8 @@ import toast from 'react-hot-toast';
 import { useState } from 'react';
 import { useCart } from './CartContext';
 import { Star } from 'lucide-react';
-import { useAppDispatch } from '@/lib/store/hooks';
-import { addCartItem } from '@/lib/store/features/cart/cartSlice';
+import { useAppDispatch } from '@/app/lib/store/hooks';
+import { addCartItem } from '@/app/lib/store/features/cart/cartSlice';
 
 interface Item {
     id: string;

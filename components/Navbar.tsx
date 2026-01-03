@@ -6,8 +6,8 @@ import { useSession } from 'next-auth/react'
 import SearchBar from "@/components/Searchbar"
 import axios from 'axios'
 import { ShoppingCart } from "lucide-react"
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { fetchCartItems } from '@/lib/store/features/cart/cartSlice';
+import { useAppDispatch, useAppSelector } from '@/app/lib/store/hooks';
+import { fetchCartItems } from '@/app/lib/store/features/cart/cartSlice';
 
 
 export default function Example() {
