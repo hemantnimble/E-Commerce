@@ -16,7 +16,6 @@ import Link from "next/link";
 import Model3d from "@/components/Model3d";
 import ProductReviews from "@/components/ProductReviews";
 import Footer from "@/components/Footer";
-import { Canvas } from "@react-three/fiber";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { fetchSingleProduct } from "@/lib/store/features/products/productSlice";
 import { addCartItem } from "@/lib/store/features/cart/cartSlice";
