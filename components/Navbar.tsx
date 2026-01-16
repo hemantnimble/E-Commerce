@@ -42,8 +42,8 @@ export default function Example() {
         <div>
           <Link href='/'>
             <span className='flex gap-2 items-center'>
-              <img className='h-8 w-8' src="/assets/logo2.png" alt="" />
-              <h1 className='text-l'>SoundSphere</h1>
+              <img className='w-24 object-contain' src="/assets/logo-furniture.png" alt="" />
+              {/* <h1 className='text-l'>FURNICO</h1> */}
             </span>
           </Link>
         </div>
